@@ -1,10 +1,15 @@
 server:
   port: 8761
-security:
-
 eureka:
   client:
+    healthCheck:
+      enabled: true
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://panzi:123456@localhost:${server.port}/eureka
+spring:
+  security:
+    user:
+      name: panzi
+      password: 123456
