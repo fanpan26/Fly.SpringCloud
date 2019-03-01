@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: eureka-server
+  profiles: eureka2
+server:
+  port: 8762
+eureka:
+  instance:
+    hostname: eureka2
+  client:
+    service-url:
+    # server2 注册到server1 上
+      defaultZone: http://panzi:123456@eureka1:8761/eureka/
+    register-with-eureka: true
