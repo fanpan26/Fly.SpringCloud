@@ -12,6 +12,7 @@
    * services/fly-services-parent 公共依赖pom
    * services/fly-services-discovery eureka服务注册和发现
  
-   
+ ## 项目Wiki
+ [https://github.com/fanpan26/Fly.SpringCloud/wiki](https://github.com/fanpan26/Fly.SpringCloud/wiki)  
  ## Fly模板
  [Fly模板：https://github.com/layui/fly](https://github.com/layui/fly)
