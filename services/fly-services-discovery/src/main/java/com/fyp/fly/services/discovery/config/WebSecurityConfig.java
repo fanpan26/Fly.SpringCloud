@@ -13,7 +13,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //关闭csrf
-        http.csrf().disable();
+        http.csrf().ignoringAntMatchers("/eureka/**");
         //开启认证
         http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
     }

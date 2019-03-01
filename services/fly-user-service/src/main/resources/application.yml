@@ -6,7 +6,12 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://panzi:123456@localhost:8761/eureka
+      defaultZone: ${fly.eurekaClientServiceUrlDefaultZone}
   instance:
     prefer-ip-address: true
     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
