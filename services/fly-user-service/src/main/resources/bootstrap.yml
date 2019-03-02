@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    config:
+      discovery:
+        service-id: fly-config-server
+        enabled: true
+      label: master
+      profile: default
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8762/eureka/
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    metadata-map:
+      description: user service：base api，account api
