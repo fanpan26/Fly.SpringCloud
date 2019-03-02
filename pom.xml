@@ -25,6 +25,7 @@
         <module>fly-web</module>
         <module>fly-gateway</module>
         <module>fly-common</module>
+        <module>fly-config</module>
     </modules>
 
     <dependencyManagement>
