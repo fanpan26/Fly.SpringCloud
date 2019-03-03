@@ -14,12 +14,8 @@ spring:
           uri: https://github.com/fanpan26/spring-cloud-config.git
           #search-paths: fly-*-service
           clone-on-start: true
-        health:
-          repositories:
-            fly-user-service:
-              lable: master
-              name: fly-user-service
-              profiles: default
+        encrypt:
+          enabled: false
 management:
   endpoint:
     health:
