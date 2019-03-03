@@ -21,7 +21,7 @@ import java.util.List;
 @RefreshScope
 public class ApplicationController {
 
-    @Value("${current.profile}")
+    @Value("${current.profile1}")
     private String profile;
 
     private static final String SERVICE_ID = "fly-user-service";
