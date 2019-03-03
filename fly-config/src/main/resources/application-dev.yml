@@ -3,10 +3,6 @@ server:
 spring:
   application:
     name: fly-config-server
-  security:
-    user:
-      name: panzi
-      password: 123456
   cloud:
     config:
       server:
