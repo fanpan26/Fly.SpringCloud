@@ -11,7 +11,13 @@ spring:
       name: ${spring.application.name}
       username: panzi
       password: 123456
+      fail-fast: true
 eureka:
   client:
     serviceUrl:
       defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8762/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
