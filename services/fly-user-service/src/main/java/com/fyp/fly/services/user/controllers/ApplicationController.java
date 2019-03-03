@@ -19,8 +19,10 @@ import java.util.List;
 @RequestMapping("/api")
 public class ApplicationController {
 
-    @Value("${spring.application.name}")
-    private String serviceId;
+    @Value("${current.profile}")
+    private String profile;
+
+    private static final String SERVICE_ID = "fly-user-service";
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -30,6 +32,11 @@ public class ApplicationController {
      * */
     @GetMapping("/user-service")
     public List<ServiceInstance> userServiceInfo(){
-       return this.discoveryClient.getInstances(serviceId);
+       return this.discoveryClient.getInstances(SERVICE_ID);
+    }
+
+    @GetMapping("/profile")
+    public String getProfile() {
+        return "current profile:" + profile;
     }
 }
