@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: fly-user-service
   cloud:
     config:
       discovery:
@@ -6,12 +8,8 @@ spring:
         enabled: true
       label: master
       profile: default
+      name: ${spring.application.name}
 eureka:
   client:
     serviceUrl:
       defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8762/eureka/
-  instance:
-    prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
-    metadata-map:
-      description: user service：base api，account api
