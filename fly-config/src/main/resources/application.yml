@@ -3,13 +3,29 @@ server:
 spring:
   application:
     name: fly-config-server
+  security:
+    basic:
+      enabled: true
+    user:
+      name: panzi
+      password: 123456
   cloud:
     config:
       server:
         git:
           uri: https://github.com/fanpan26/spring-cloud-config.git
-          search-paths: fly-*-service
+          #search-paths: fly-*-service
           clone-on-start: true
+        health:
+          repositories:
+            fly-user-service:
+              lable: master
+              name: fly-user-service
+              profiles: default
+management:
+  endpoint:
+    health:
+      show-details: always
 eureka:
   client:
     serviceUrl:

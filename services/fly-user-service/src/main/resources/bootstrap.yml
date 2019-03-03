@@ -9,6 +9,8 @@ spring:
       label: master
       profile: default
       name: ${spring.application.name}
+      username: panzi
+      password: 123456
 eureka:
   client:
     serviceUrl:
