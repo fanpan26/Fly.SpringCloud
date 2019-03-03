@@ -1,0 +1,13 @@
+server:
+  port: 8081
+eureka:
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    metadata-map:
+      description: user service,base api,account api
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
