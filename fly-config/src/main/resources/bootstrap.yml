@@ -1,2 +1,7 @@
 encrypt:
   key: fly
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
