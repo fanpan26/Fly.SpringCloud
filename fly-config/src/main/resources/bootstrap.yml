@@ -1,7 +1,14 @@
 encrypt:
   key: fly
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+spring:
+  rabbitmq:
+    host: 192.168.187.129
+    port: 5672
+    username: panzi
+    password: 123456
+    virtual-host: fly
