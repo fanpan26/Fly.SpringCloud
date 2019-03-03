@@ -8,6 +8,8 @@ spring:
       server:
         git:
           uri: https://github.com/fanpan26/spring-cloud-config.git
+          search-paths: fly-*-service
+          clone-on-start: true
 eureka:
   client:
     serviceUrl:
@@ -16,4 +18,4 @@ eureka:
     prefer-ip-address: true
     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
     metadata-map:
-      description: user service：base api，account api
+      description: config center
