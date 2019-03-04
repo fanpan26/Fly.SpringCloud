@@ -9,7 +9,7 @@
    * services/fly-notice-service 消息服务
    * services/fly-user-service 用户服务
    * services/fly-comment-service 评论(点赞)服务
-   * services/fly-services-parent 公共依赖pom
+   * services/fly-services-parent 微服务公共依赖pom
    * services/fly-services-discovery eureka服务注册和发现
  
  ## 项目Wiki
