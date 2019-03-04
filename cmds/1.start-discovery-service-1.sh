@@ -1,3 +1,2 @@
 echo ---Fly.SpringCloud.DiscoveryService----
-cd ../services/fly-services-discovery/target/
-java -jar fly-services-discovery-1.0-SNAPSHOT.jar --spring.profiles.active=eureka1
+java -jar fly-discovery-service.jar --spring.profiles.active=eureka1 >log-eureka1.file &
