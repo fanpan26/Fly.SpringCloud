@@ -8,7 +8,7 @@ spring:
         enabled: true
       label: master
       profile: default
-      name: ${spring.application.name}
+      name: ${spring.application.name},rabbitmq
       username: panzi
       password: 123456
       fail-fast: true
