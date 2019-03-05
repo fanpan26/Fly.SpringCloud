@@ -13,9 +13,3 @@ spring:
     username: ${rabbitmq.username}
     password: ${rabbitmq.password}
     virtual-host: ${rabbitmq.virtual-host}
-logging:
-  level:
-    org:
-      springframework:
-        security: INFO
-        boot: INFO
