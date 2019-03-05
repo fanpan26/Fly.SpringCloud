@@ -1,2 +1,20 @@
 server:
-  port: 8084
+  port: 8082
+eureka:
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    metadata-map:
+      description: account service
+spring:
+  rabbitmq:
+    host: ${rabbitmq.host}
+    port: ${rabbitmq.port}
+    username: ${rabbitmq.username}
+    password: ${rabbitmq.password}
+    virtual-host: ${rabbitmq.virtual-host}
+  datasource:
+    driver-class-name: ${mysql.driver-class-name}
+    url: ${mysql.url}
+    username: ${mysql.username}
+    password: ${mysql.password}
