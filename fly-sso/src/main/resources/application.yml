@@ -4,3 +4,7 @@ logging:
   level:
     spring:
       thymeleaf: INFO
+fly:
+  sso:
+    default:
+      redirect_url: http://localhost:8888/

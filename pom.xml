@@ -16,6 +16,7 @@
     </properties>
 
     <modules>
+        <module>services/fly-account-service</module>
         <module>services/fly-user-service</module>
         <module>services/fly-article-service</module>
         <module>services/fly-notice-service</module>
@@ -27,6 +28,7 @@
         <module>fly-common</module>
         <module>fly-config</module>
         <module>fly-sso</module>
+
     </modules>
 
     <dependencyManagement>
