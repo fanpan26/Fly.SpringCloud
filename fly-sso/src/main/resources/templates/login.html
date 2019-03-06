@@ -53,6 +53,17 @@
             </div>
         </div>
     </div>
+
+
+</div>
+<div layout:fragment="body_script">
+    <script th:inline="javascript">
+        layui.use('layer',function () {
+            var layer = layui.layer;
+            var errMsg = [[${#httpServletRequest.getAttribute('errMsg')}]];
+            errMsg? layer.msg(errMsg):'';
+        });
+    </script>
 </div>
 </body>
 </html>
