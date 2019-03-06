@@ -2,18 +2,22 @@ package com.fyp.fly.services.account.services;
 
 import com.fyp.fly.common.api.result.JsonResult;
 import com.fyp.fly.common.api.result.ResultUtils;
+import com.fyp.fly.common.tools.SafeEncoder;
 import com.fyp.fly.services.account.domain.Account;
 import com.fyp.fly.services.account.domain.SsoTicketResult;
 import com.fyp.fly.services.account.repositories.mapper.AccountMapper;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +32,9 @@ public class AccountServiceImpl implements AccountService {
     private static final int LOGIN_TICKET_EXPIRE = 60;
     //登录信息过期时间 7天
     private static final int LOGIN_STATUS_EXPIRE = 7;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -48,35 +55,35 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
         if (account.isCorrectPassword(loginPwd)) {
-            String ticket = afterLoginSuccess(account.getId());
-            return createTicketResult(ticket);
+            String ticket = createTicket(account.getId());
+            String token = createToken(account.getId());
+            return createTicketResult(ticket,token);
         }
         return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
     }
 
+    /**
+     * 根据JWT来校验是否登录，并返回应用端的ticket
+     *
+     * @param token jwtToken
+     */
     @Override
-    public JsonResult verifyTicket(String ssoKey) {
-        // verify session
-        String loginInfo = ops().get("sso:" + ssoKey);
-        if (StringUtils.isEmpty(loginInfo)) {
-            return ResultUtils.success(SsoTicketResult.SHOULD_LOGIN_RESULT);
-        }
-
-        String ticket = generateTicket(ssoKey);
-        return createTicketResult(ticket);
+    public JsonResult generateTicket(String token) {
+        return null;
     }
 
-    private JsonResult createTicketResult(String ticket){
-        return ResultUtils.success(new SsoTicketResult(ticket, System.currentTimeMillis() / 1000 + LOGIN_TICKET_EXPIRE));
+
+    private JsonResult createTicketResult(String ticket,String token){
+        return ResultUtils.success(new SsoTicketResult(ticket, token));
     }
     /**
      * 重新创建一个ticket
      * */
-    private String generateTicket(String ssoKey) {
+    private String generateTicket(Long userId) {
         String ticket = UUID.randomUUID().toString();
-        ops().set("sso:ticket:" + ticket, ssoKey, LOGIN_TICKET_EXPIRE, TimeUnit.SECONDS);
+        ops().set("sso:ticket:" + ticket, userId.toString(), LOGIN_TICKET_EXPIRE, TimeUnit.SECONDS);
         if (logger.isDebugEnabled()) {
-            logger.debug("generate ticket for ssokey:{},ticket:{}", ssoKey, ticket);
+            logger.debug("generate ticket for ssokey:{},ticket:{}", userId, ticket);
         }
         return ticket;
     }
@@ -84,12 +91,17 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 登录成功之后，写入 登录信息，并且新建一个ticket 返回
      */
-    private String afterLoginSuccess(Long userId) {
-        String ssoKey = UUID.randomUUID().toString();
-        ops().set("sso:" + ssoKey, userId.toString(), LOGIN_STATUS_EXPIRE, TimeUnit.DAYS);
-        if (logger.isDebugEnabled()) {
-            logger.debug("save login status:ssoKey:{},value:{}", ssoKey, userId.toString());
-        }
-        return generateTicket(ssoKey);
+    private String createTicket(Long userId) {
+        //使用bit保存用户是否已经登录
+        ops().setBit("sso:user", userId, true);
+        return generateTicket(userId);
+    }
+    /**
+     * 创建 jwtToken
+     * */
+    private String createToken(Long userId) {
+        Date expireDate = DateUtils.addDays(new Date(), LOGIN_STATUS_EXPIRE);
+        String token = SafeEncoder.jwtToken(jwtSecret, expireDate, userId, "fly-web", "fly-admin");
+        return token;
     }
 }

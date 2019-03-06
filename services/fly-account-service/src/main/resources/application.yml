@@ -18,6 +18,8 @@ spring:
     url: ${mysql.url}
     username: ${mysql.username}
     password: ${mysql.password}
+jwt:
+  secret: 123456
 logging:
   level:
     com:

@@ -10,33 +10,28 @@ public class SsoTicketResult implements Serializable {
     public static final SsoTicketResult SHOULD_LOGIN_RESULT = new SsoTicketResult();
 
     private String ticket;
-    private long expireAt;
-    private boolean isLoggedIn;
+    private String token;
 
-    public SsoTicketResult(String ticket,long expires) {
+    public SsoTicketResult(String ticket,String token) {
         if(StringUtils.isEmpty(ticket)){
             throw new IllegalArgumentException("ticket must not be null or empty");
         }
         this.ticket = ticket;
-        this.expireAt = expires;
-        this.isLoggedIn = true;
     }
 
     public SsoTicketResult() {
-        this.ticket = null;
-        this.expireAt = -1;
-        this.isLoggedIn = false;
+
     }
 
     public String getTicket(){
         return ticket;
     }
 
-    public long getExpireAt(){
-        return expireAt;
+    public String getToken(){
+        return token;
     }
 
     public boolean isLoggedIn(){
-        return isLoggedIn;
+        return StringUtils.isEmpty(token);
     }
 }

@@ -2,25 +2,17 @@ package com.fyp.fly.sso.controllers;
 
 import com.fyp.fly.common.api.result.JsonResult;
 import com.fyp.fly.common.api.result.ResultUtils;
-import com.fyp.fly.common.tools.SafeEncoder;
 import com.fyp.fly.sso.api.client.AccountApiClient;
 import com.fyp.fly.sso.api.results.SsoTicketApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
-
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Controller
 @RequestMapping("/account")
@@ -30,6 +22,7 @@ public class AccountController {
     private String defaultRedirectUrl;
 
     private static final String REDIRECT_URL_SESSION_ATTRIBUTE = "redirectUrl";
+    private static final String REDIRECT_TO_ERROR_MSG = "errMsg";
 
     @Autowired
     private AccountApiClient accountApiClient;
@@ -40,9 +33,9 @@ public class AccountController {
     public String login(@Nullable @RequestParam("redirect_url") String redirectUrl,HttpServletRequest request) {
         java.util.Map<String,?> map = RequestContextUtils.getInputFlashMap(request);
         if(map != null) {
-            Object errMsg = map.get("errMsg");
+            Object errMsg = map.get(REDIRECT_TO_ERROR_MSG);
             if (errMsg != null) {
-                request.setAttribute("errMsg", errMsg);
+                request.setAttribute(REDIRECT_TO_ERROR_MSG, errMsg);
             }
         }
         if (redirectUrl != null) {
@@ -66,13 +59,12 @@ public class AccountController {
                         HttpServletRequest request,
                         RedirectAttributes redirect) {
 
-
         JsonResult<SsoTicketApiResult> result = accountApiClient.login(account, password);
 
         if (ResultUtils.isSuccess(result)) {
             return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
         } else {
-            redirect.addFlashAttribute("errMsg", result.getMsg());
+            redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());
             Object redirectUrl = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE);
             return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + redirectUrl);
         }

@@ -28,7 +28,7 @@ public final class ResultUtils {
     }
 
     public static JsonResult failed(String msg){
-        return new JsonResult(-1,msg);
+        return failed(-1,msg);
     }
 
     public static JsonResult failed(int code, String msg){

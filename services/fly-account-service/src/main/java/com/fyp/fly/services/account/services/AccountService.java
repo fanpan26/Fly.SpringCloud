@@ -12,5 +12,8 @@ public interface AccountService {
      */
     JsonResult login(String loginName, String loginPwd);
 
-    JsonResult verifyTicket(String ssoKey);
+    /**
+     * 根据JWT来校验是否登录，并返回应用端的ticket
+     * */
+    JsonResult generateTicket(String token);
 }
