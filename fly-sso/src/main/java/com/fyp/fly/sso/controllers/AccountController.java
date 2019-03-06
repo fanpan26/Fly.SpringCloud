@@ -1,12 +1,26 @@
 package com.fyp.fly.sso.controllers;
 
+import com.fyp.fly.common.api.result.JsonResult;
+import com.fyp.fly.common.api.result.ResultUtils;
+import com.fyp.fly.common.tools.SafeEncoder;
+import com.fyp.fly.sso.api.client.AccountApiClient;
+import com.fyp.fly.sso.api.results.SsoTicketApiResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
+
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/account")
@@ -17,21 +31,51 @@ public class AccountController {
 
     private static final String REDIRECT_URL_SESSION_ATTRIBUTE = "redirectUrl";
 
+    @Autowired
+    private AccountApiClient accountApiClient;
+    /**
+     * login page
+     * */
     @GetMapping("/login")
-    public String login(@Nullable @RequestParam("redirect_url") String redirectUrl, HttpServletRequest request) {
+    public String login(@Nullable @RequestParam("redirect_url") String redirectUrl,HttpServletRequest request) {
+        java.util.Map<String,?> map = RequestContextUtils.getInputFlashMap(request);
+        if(map != null) {
+            Object errMsg = map.get("errMsg");
+            if (errMsg != null) {
+                request.setAttribute("errMsg", errMsg);
+            }
+        }
         if (redirectUrl != null) {
             request.getSession().setAttribute(REDIRECT_URL_SESSION_ATTRIBUTE, redirectUrl);
         }
         return "login";
     }
 
+    /**
+     * 用户登录，gate-way-server/account/login
+     * @param account 用户名
+     * @param password 密码
+     * @param code 验证码
+     * @param request HttpServletRequest 对象
+     * @return 登录成功直接跳转回 redirectUrl
+     * */
     @PostMapping("/login")
     public String login(@RequestParam("account") String account,
                         @RequestParam("password") String password,
                         @RequestParam("code") String code,
-                        HttpServletRequest request) {
-        System.out.println("account:" + account + " password:" + password + " vercode:" + code);
-        return "redirect:" + getRedirectUrl(request,"123456789");
+                        HttpServletRequest request,
+                        RedirectAttributes redirect) {
+
+
+        JsonResult<SsoTicketApiResult> result = accountApiClient.login(account, password);
+
+        if (ResultUtils.isSuccess(result)) {
+            return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
+        } else {
+            redirect.addFlashAttribute("errMsg", result.getMsg());
+            Object redirectUrl = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE);
+            return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + redirectUrl);
+        }
     }
 
     private String getRedirectUrl(HttpServletRequest request,String ticket) {
