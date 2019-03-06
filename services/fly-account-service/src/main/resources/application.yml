@@ -18,3 +18,11 @@ spring:
     url: ${mysql.url}
     username: ${mysql.username}
     password: ${mysql.password}
+logging:
+  level:
+    com:
+      fyp:
+        fly:
+          services:
+            account: debug
+
