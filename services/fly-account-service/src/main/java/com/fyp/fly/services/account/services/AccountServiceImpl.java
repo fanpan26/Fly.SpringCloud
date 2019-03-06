@@ -17,8 +17,8 @@ import org.springframework.util.StringUtils;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.fyp.fly.services.account.domain.Account.ERROR_MSG_NOT_EXIST;
-import static com.fyp.fly.services.account.domain.Account.ERROR_MSG_WRONG_PWD;
+import static com.fyp.fly.services.account.domain.Account.AccountType.NOT_EXISTS;
+import static com.fyp.fly.services.account.domain.Account.AccountType.WRONG_PASSWORD;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -45,13 +45,13 @@ public class AccountServiceImpl implements AccountService {
             logger.debug("login result:{}",account);
         }
         if (Account.notExists(account)) {
-            return ResultUtils.failed(ERROR_MSG_NOT_EXIST);
+            return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
         if (account.isCorrectPassword(loginPwd)) {
             String ticket = afterLoginSuccess(account.getId());
             return createTicketResult(ticket);
         }
-        return ResultUtils.failed(ERROR_MSG_WRONG_PWD);
+        return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
     }
 
     @Override
