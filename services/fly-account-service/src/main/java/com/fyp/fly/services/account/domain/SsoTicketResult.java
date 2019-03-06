@@ -17,6 +17,7 @@ public class SsoTicketResult implements Serializable {
             throw new IllegalArgumentException("ticket must not be null or empty");
         }
         this.ticket = ticket;
+        this.token = token;
     }
 
     public SsoTicketResult() {
@@ -32,6 +33,6 @@ public class SsoTicketResult implements Serializable {
     }
 
     public boolean isLoggedIn(){
-        return StringUtils.isEmpty(token);
+        return !StringUtils.isEmpty(token);
     }
 }
