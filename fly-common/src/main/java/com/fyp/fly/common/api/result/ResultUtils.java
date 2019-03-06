@@ -32,6 +32,15 @@ public final class ResultUtils {
     }
 
     public static JsonResult failed(int code, String msg){
+        return newResult(code,msg);
+    }
+
+    public static boolean isSuccess(JsonResult result){
+        return result.getCode() == 0;
+    }
+
+    public static JsonResult newResult(int code,String msg){
         return new JsonResult(code,msg);
     }
+
 }
