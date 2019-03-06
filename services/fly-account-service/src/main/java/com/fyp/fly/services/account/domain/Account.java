@@ -44,4 +44,10 @@ public class Account {
     private String loginName;
     private String loginPwd;
     private long id;
+
+    @Override
+    public String toString(){
+        return "loginName:"+loginName
+                +".loginPwd:"+loginPwd;
+    }
 }
