@@ -1,7 +1,7 @@
 package com.fyp.fly.sso.controllers;
 
-import com.fyp.fly.common.api.result.JsonResult;
-import com.fyp.fly.common.api.result.ResultUtils;
+import com.fyp.fly.common.result.api.JsonResult;
+import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
 import com.fyp.fly.sso.api.results.SsoTicketApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
