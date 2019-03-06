@@ -74,8 +74,11 @@ public class Account {
         /**
          * 账号被拉黑
          * */
-        BLACKED(10005,"账号已被禁止登录");
-
+        BLACKED(10005,"账号已被禁止登录"),
+        /**
+         * 未登录
+         * */
+        OFFLINE(10006,"未登录");
         AccountType(int code, String msg) {
             this.code = code;
             this.msg = msg;
