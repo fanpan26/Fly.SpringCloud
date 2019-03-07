@@ -80,10 +80,8 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
         if (account.isCorrectPassword(loginPwd)) {
-            String ticket = createTicket(account.getId());
-            String token = createToken(account.getId());
-
-            return createTicketResult(ticket,token);
+            saveUserCache(account.getId());
+            return createTicketResult(account.getId());
         }
         return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
     }
@@ -99,13 +97,16 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
         }
         JwtVerifyResult result = SafeEncoder.verifyToken(jwtSecret, token);
+        Long userId = Long.valueOf(result.getResult().getSubject());
         if (result.isVerified()) {
-            Long userId = Long.valueOf(result.getResult().getSubject());
             if (isLogged(userId)) {
-                //重新生成一张ticket
-                String ticket = createTicket(userId);
+                //create a new ticket
+                String ticket = generateTicket(userId);
                 return createTicketResult(ticket, token);
             }
+        }else{
+            //remove user login cache
+            clearUserCache(userId);
         }
         return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
     }
@@ -130,6 +131,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    private JsonResult createTicketResult(Long userId){
+        String ticket = generateTicket(userId);
+        String token = createToken(userId);
+        return createTicketResult(ticket,token);
+    }
     private JsonResult createTicketResult(String ticket,String token){
         return ResultUtils.success(new SsoTicketResult(ticket, token));
     }
@@ -152,10 +158,13 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 登录成功之后，写入 登录信息，并且新建一个ticket 返回
      */
-    private String createTicket(Long userId) {
+    private void saveUserCache(Long userId) {
         //使用bit保存用户是否已经登录
         ops().setBit(SSO_LOGGED_USER, userId, true);
-        return generateTicket(userId);
+    }
+
+    private void clearUserCache(Long userId){
+        ops().setBit(SSO_LOGGED_USER,userId,false);
     }
 
     private boolean isLogged(Long userId){
