@@ -11,10 +11,6 @@ public class Account {
         return account == null;
     }
 
-    public boolean isCorrectPassword(final String userInputPwd){
-        return loginPwd.equals(userInputPwd);
-    }
-
     public String getLoginName() {
         return loginName;
     }
