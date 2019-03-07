@@ -80,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
         if (account.isCorrectPassword(loginPwd)) {
-            saveUserCache(account.getId());
+            setUserLoginStatus(account.getId(),true);
             return createTicketResult(account.getId());
         }
         return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
@@ -106,7 +106,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }else{
             //remove user login cache
-            clearUserCache(userId);
+            setUserLoginStatus(userId,false);
         }
         return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
     }
@@ -158,13 +158,9 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 登录成功之后，写入 登录信息，并且新建一个ticket 返回
      */
-    private void saveUserCache(Long userId) {
+    private void setUserLoginStatus(Long userId,boolean isLoggedIn) {
         //使用bit保存用户是否已经登录
-        ops().setBit(SSO_LOGGED_USER, userId, true);
-    }
-
-    private void clearUserCache(Long userId){
-        ops().setBit(SSO_LOGGED_USER,userId,false);
+        ops().setBit(SSO_LOGGED_USER, userId, isLoggedIn);
     }
 
     private boolean isLogged(Long userId){
