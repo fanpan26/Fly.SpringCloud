@@ -2,8 +2,10 @@ package com.fyp.fly.sso.controllers;
 
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
+import com.fyp.fly.common.tools.SafeEncoder;
 import com.fyp.fly.sso.api.client.AccountApiClient;
 import com.fyp.fly.sso.api.results.SsoTicketApiResult;
+import com.fyp.fly.sso.config.Sso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -12,7 +14,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/account")
@@ -57,11 +62,13 @@ public class AccountController {
                         @RequestParam("password") String password,
                         @RequestParam("code") String code,
                         HttpServletRequest request,
+                        HttpServletResponse response,
                         RedirectAttributes redirect) {
 
         JsonResult<SsoTicketApiResult> result = accountApiClient.login(account, password);
 
         if (ResultUtils.isSuccess(result)) {
+            setCookie(response, Sso.COOKIE_KEY,result.getData().getToken());
             return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
         } else {
             redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());
@@ -77,5 +84,13 @@ public class AccountController {
         }
         String redirectUrl = redirectUrlFromSession.toString();
         return redirectUrl + (redirectUrl.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ticket;
+    }
+
+    private void setCookie(HttpServletResponse response,String name,String value) {
+        Cookie cookie = new Cookie(name, SafeEncoder.encodeUrl(value));
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(86400 * 7);
+        response.addCookie(cookie);
     }
 }
