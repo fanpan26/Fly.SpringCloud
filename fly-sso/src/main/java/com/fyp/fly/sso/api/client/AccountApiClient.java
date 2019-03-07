@@ -14,7 +14,9 @@ import org.springframework.web.client.RestTemplate;
 public final class AccountApiClient {
 
     private static final String API_ACCOUNT_SERVICE_HOST = "http://localhost:8082";
-    protected static final String API_LOGIN = "/account/login";
+    private static final String API_LOGIN = "/account/login";
+    private static final String API_TICKET = "/account/ticket";
+    private static final String API_TICKET_VERIFY = "/account/ticket/verify";
 
     private static final HttpHeaders POST_FORM_URLENCODED_HEADER = new HttpHeaders();
     static {
@@ -38,6 +40,22 @@ public final class AccountApiClient {
 
         });
         return result;
+    }
+
+    public JsonResult<SsoTicketApiResult> getTicketByToken(String token) {
+        MultiValueMap<String, Object> parameter = new LinkedMultiValueMap<>();
+        parameter.add("token", token);
+        return postForObjectWithFormHeader(getApiUrl(API_TICKET), parameter, new ParameterizedTypeReference<JsonResult<SsoTicketApiResult>>() {
+
+        });
+    }
+
+    public JsonResult<SsoTicketApiResult> verifyTicket(String ticket) {
+        MultiValueMap<String, Object> parameter = new LinkedMultiValueMap<>();
+        parameter.add("ticket", ticket);
+        return postForObjectWithFormHeader(getApiUrl(API_TICKET_VERIFY), parameter, new ParameterizedTypeReference<JsonResult<SsoTicketApiResult>>() {
+
+        });
     }
 
     /**
