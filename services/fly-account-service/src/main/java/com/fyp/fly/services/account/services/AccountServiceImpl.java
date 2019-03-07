@@ -67,6 +67,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountMapper accountRepository;
 
+    @Autowired
+    private PasswordHashing passwordHashing;
+
     private ValueOperations<String, String> ops() {
         return redisTemplate.opsForValue();
     }
@@ -79,7 +82,8 @@ public class AccountServiceImpl implements AccountService {
         if (Account.notExists(account)) {
             return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
-        if (account.isCorrectPassword(loginPwd)) {
+        String hashedPassword = passwordHashing.hash(loginName,loginPwd);
+        if (account.getLoginPwd().equals(hashedPassword)) {
             setUserLoginStatus(account.getId(),true);
             return createTicketResult(account.getId());
         }
