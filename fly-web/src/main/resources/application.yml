@@ -1,5 +1,7 @@
 server:
-  port: 8888
+  port: 8089
+sso:
+  url: http://localhost:9000
 logging:
   level:
     spring:
