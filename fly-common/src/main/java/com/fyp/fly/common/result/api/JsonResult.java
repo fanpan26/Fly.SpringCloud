@@ -1,4 +1,4 @@
-package com.fyp.fly.common.api.result;
+package com.fyp.fly.common.result.api;
 
 /**
  * @author fyp

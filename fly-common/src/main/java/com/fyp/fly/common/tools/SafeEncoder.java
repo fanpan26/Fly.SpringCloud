@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fyp.fly.common.result.token.JwtVerifyResult;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -56,7 +57,7 @@ public final class SafeEncoder {
     /**
      * 校验TOKEN
      * */
-    public static DecodedJWT verifyToken(String secret,String token,String... audience) {
+    public static JwtVerifyResult verifyToken(String secret,String token,String... audience) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -64,20 +65,13 @@ public final class SafeEncoder {
                     .withAudience(audience)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(token);
-            return jwt;
+            return new JwtVerifyResult(null, jwt);
         } catch (JWTVerificationException exception) {
-            return  null;
+            return new JwtVerifyResult(exception, null);
         }
     }
 
     public static void main(String[] args) {
-        String secret = "123456";
-//        String token = jwtToken(secret, new Date(), 123456, "fly-web", "fly-admin");
-//        System.out.println(token);
 
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOlsiZmx5LXdlYiIsImZseS1hZG1pbiJdLCJzdWIiOiIxMjM0NTYiLCJpc3MiOiJhdXRoMCIsImV4cCI6MTU1MTg2MzA2NCwiaWF0IjoxNTUxODYzMDY0fQ.pJk5Mtve6gfEQes5QDH2zHjRV39m46mxVLVATsknw84";
-
-        DecodedJWT result = verifyToken(secret, token, "fly-web", "fly-admin");
-        Object res = result.getPayload();
     }
 }

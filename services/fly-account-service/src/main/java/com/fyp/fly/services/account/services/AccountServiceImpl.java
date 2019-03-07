@@ -1,11 +1,14 @@
 package com.fyp.fly.services.account.services;
 
-import com.fyp.fly.common.api.result.JsonResult;
-import com.fyp.fly.common.api.result.ResultUtils;
+import com.fyp.fly.common.result.api.JsonResult;
+import com.fyp.fly.common.result.api.ResultUtils;
+import com.fyp.fly.common.result.token.JwtVerifyResult;
 import com.fyp.fly.common.tools.SafeEncoder;
 import com.fyp.fly.services.account.domain.Account;
+import com.fyp.fly.services.account.domain.JwtResult;
 import com.fyp.fly.services.account.domain.SsoTicketResult;
 import com.fyp.fly.services.account.repositories.mapper.AccountMapper;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 
 import java.util.Date;
@@ -22,16 +24,39 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.fyp.fly.services.account.domain.Account.AccountType.NOT_EXISTS;
+import static com.fyp.fly.services.account.domain.Account.AccountType.OFFLINE;
 import static com.fyp.fly.services.account.domain.Account.AccountType.WRONG_PASSWORD;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
-    //ticket过期时间 60 秒
-    private static final int LOGIN_TICKET_EXPIRE = 60;
-    //登录信息过期时间 7天
+
+    /**
+     * ticket过期时间 60 秒
+     */
+    private static final int SSO_TICKET_EXPIRE = 60;
+
+    /**
+     *   登录信息过期时间 7天
+     */
     private static final int LOGIN_STATUS_EXPIRE = 7;
+    /**
+     *   已经登录的用户缓存 KEY
+     */
+    private static final String SSO_LOGGED_USER = "sso:user";
+    /**
+     * ticket 缓存KEY
+     * */
+    private static final String SSO_TICKET_PREFIX = "sso:ticket:";
+    /**
+     * invalid ticket
+     * */
+    private static final String SSO_TICKET_INVALID = "invalid ticket";
+    /**
+     * 7 * 24 * 60 * 60
+     * */
+    private static final int SSO_TOKEN_EXPIRE_TIMESTAMP = 86400 * LOGIN_STATUS_EXPIRE;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -57,6 +82,7 @@ public class AccountServiceImpl implements AccountService {
         if (account.isCorrectPassword(loginPwd)) {
             String ticket = createTicket(account.getId());
             String token = createToken(account.getId());
+
             return createTicketResult(ticket,token);
         }
         return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
@@ -69,7 +95,38 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public JsonResult generateTicket(String token) {
-        return null;
+        if (StringUtils.isEmpty(token)) {
+            return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
+        }
+        JwtVerifyResult result = SafeEncoder.verifyToken(jwtSecret, token);
+        if (result.isVerified()) {
+            Long userId = Long.valueOf(result.getResult().getSubject());
+            if (isLogged(userId)) {
+                //重新生成一张ticket
+                String ticket = createTicket(userId);
+                return createTicketResult(ticket, token);
+            }
+        }
+        return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
+    }
+
+    @Override
+    public JsonResult verifyTicket(String ticket) {
+        if (StringUtils.isEmpty(ticket)) {
+            return ResultUtils.failed(SSO_TICKET_INVALID);
+        }
+        String userId = ops().get(SSO_TICKET_PREFIX + ticket);
+        if (StringUtils.isEmpty(userId)) {
+            return ResultUtils.failed(SSO_TICKET_INVALID);
+        }
+        Long userIdLong = Long.valueOf(userId);
+        if (isLogged(userIdLong)) {
+            clearTicket(ticket);
+            //这个token是给应用端的
+            String token = createToken(userIdLong);
+            return ResultUtils.success(JwtResult.tokenResult(token,SSO_TOKEN_EXPIRE_TIMESTAMP));
+        }
+        return ResultUtils.failed(SSO_TICKET_INVALID);
     }
 
 
@@ -81,11 +138,15 @@ public class AccountServiceImpl implements AccountService {
      * */
     private String generateTicket(Long userId) {
         String ticket = UUID.randomUUID().toString();
-        ops().set("sso:ticket:" + ticket, userId.toString(), LOGIN_TICKET_EXPIRE, TimeUnit.SECONDS);
+        ops().set(SSO_TICKET_PREFIX + ticket, userId.toString(), SSO_TICKET_EXPIRE, TimeUnit.SECONDS);
         if (logger.isDebugEnabled()) {
             logger.debug("generate ticket for ssokey:{},ticket:{}", userId, ticket);
         }
         return ticket;
+    }
+
+    private void clearTicket(String ticket) {
+        ops().set(SSO_TICKET_PREFIX + ticket, "0", 1, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -93,8 +154,12 @@ public class AccountServiceImpl implements AccountService {
      */
     private String createTicket(Long userId) {
         //使用bit保存用户是否已经登录
-        ops().setBit("sso:user", userId, true);
+        ops().setBit(SSO_LOGGED_USER, userId, true);
         return generateTicket(userId);
+    }
+
+    private boolean isLogged(Long userId){
+        return ops().getBit(SSO_LOGGED_USER,userId);
     }
     /**
      * 创建 jwtToken
