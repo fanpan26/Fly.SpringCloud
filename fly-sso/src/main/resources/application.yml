@@ -7,4 +7,4 @@ logging:
 fly:
   sso:
     default:
-      redirect_url: http://localhost:8888/
+      redirect_url: http://localhost:8089/
