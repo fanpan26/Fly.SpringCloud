@@ -67,11 +67,7 @@ public final class SafeEncoder {
             DecodedJWT jwt = verifier.verify(token);
             return new JwtVerifyResult(null, jwt);
         } catch (JWTVerificationException exception) {
-            return new JwtVerifyResult(exception, null);
+            return new JwtVerifyResult(exception, JWT.decode(token));
         }
-    }
-
-    public static void main(String[] args) {
-
     }
 }
