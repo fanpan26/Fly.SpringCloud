@@ -6,5 +6,6 @@ logging:
       thymeleaf: INFO
 fly:
   sso:
-    default:
-      redirect_url: http://localhost:8089/
+    redirect_url:
+      fly_web: http://localhost:8089/
+      fly_admin: http://localhost:8090/

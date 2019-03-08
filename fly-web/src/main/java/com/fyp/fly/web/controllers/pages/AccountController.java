@@ -19,6 +19,6 @@ public class AccountController {
 
     @GetMapping("/login")
     public String redirectToSSO() {
-        return "redirect:" + ssoUrl;
+        return "redirect:" + ssoUrl+"?from=fly-web";
     }
 }

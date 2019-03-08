@@ -1,11 +1,11 @@
 package com.fyp.fly.sso.interceptors;
 
+import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
+import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import com.fyp.fly.common.tools.SafeEncoder;
 import com.fyp.fly.sso.api.client.AccountApiClient;
-import com.fyp.fly.sso.api.results.SsoTicketApiResult;
-import com.fyp.fly.sso.config.Sso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +26,11 @@ import java.util.Enumeration;
 @Component
 public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
-    @Value("${fly.sso.default.redirect_url}")
-    private String defaultRedirectUrl;
+    @Value("${fly.sso.redirect_url.fly_web}")
+    private String flyWebHost;
+
+    @Value("${fly.sso.redirect_url.fly_admin}")
+    private String flyAdminHost;
 
     @Autowired
     private AccountApiClient accountApiClient;
@@ -35,33 +38,34 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = getAuthenticationToken(request);
-        String from = getReferer(request);
+        String from = request.getParameter("from");
         if (StringUtils.isEmpty(token)) {
-            response.sendRedirect("/account/login?redirect_url=" + SafeEncoder.encodeUrl(from));
+            response.sendRedirect("/account/login?redirect_url=" + SafeEncoder.encodeUrl(getUrl(from)));
         } else {
             //TODO get ticket by token
             JsonResult<SsoTicketApiResult> ssoTicket = accountApiClient.getTicketByToken(token);
             if (ResultUtils.isSuccess(ssoTicket)) {
                 response.sendRedirect(from + (from.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket());
             } else {
-                response.sendRedirect("/account/login?redirect_url=" + getReferer(request));
+                response.sendRedirect("/account/login?redirect_url=" + SafeEncoder.encodeUrl(getUrl(from)));
             }
         }
         return false;
     }
 
-    private String getReferer(HttpServletRequest request){
-        Enumeration<String> referers = request.getHeaders(HttpHeaders.REFERER);
-        String from = null;
-        if (referers.hasMoreElements()) {
-            from = referers.nextElement();
+    private String getUrl(String from){
+        if(StringUtils.isEmpty(from)){
+            return flyWebHost;
         }
-        //TODO 判断referer 是否是本网站
-       if (StringUtils.isEmpty(from)){
-            from = defaultRedirectUrl;
-       }
-       return from;
+        switch (from.toLowerCase()){
+            case "fly-web":
+                return flyWebHost;
+            case "fly-admin":
+                return flyAdminHost;
+        }
+        return flyWebHost;
     }
+
 
     protected String getAuthenticationToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -69,7 +73,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
             return null;
         }
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(Sso.COOKIE_KEY)) {
+            if (cookie.getName().equals(Fly.SSO_COOKIE_KEY)) {
                 return cookie.getValue();
             }
         }

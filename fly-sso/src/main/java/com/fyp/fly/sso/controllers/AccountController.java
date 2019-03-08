@@ -1,11 +1,11 @@
 package com.fyp.fly.sso.controllers;
 
+import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
+import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import com.fyp.fly.common.tools.SafeEncoder;
 import com.fyp.fly.sso.api.client.AccountApiClient;
-import com.fyp.fly.sso.api.results.SsoTicketApiResult;
-import com.fyp.fly.sso.config.Sso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/account")
 public class AccountController {
 
-    @Value("${fly.sso.default.redirect_url}")
+    @Value("${fly.sso.redirect_url.fly_web}")
     private String defaultRedirectUrl;
 
     private static final String REDIRECT_URL_SESSION_ATTRIBUTE = "redirectUrl";
@@ -68,12 +68,12 @@ public class AccountController {
         JsonResult<SsoTicketApiResult> result = accountApiClient.login(account, password);
 
         if (ResultUtils.isSuccess(result)) {
-            setCookie(response, Sso.COOKIE_KEY,result.getData().getToken());
+            setCookie(response, Fly.SSO_COOKIE_KEY,result.getData().getToken());
             return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
         } else {
             redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());
             Object redirectUrl = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE);
-            return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + redirectUrl);
+            return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + SafeEncoder.encodeUrl(redirectUrl.toString()));
         }
     }
 

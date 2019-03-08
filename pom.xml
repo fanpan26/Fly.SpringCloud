@@ -28,6 +28,7 @@
         <module>fly-common</module>
         <module>fly-config</module>
         <module>fly-sso</module>
+        <module>fly-sso-client</module>
 
     </modules>
 

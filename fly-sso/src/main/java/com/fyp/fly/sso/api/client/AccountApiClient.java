@@ -1,7 +1,7 @@
 package com.fyp.fly.sso.api.client;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.sso.api.results.SsoTicketApiResult;
+import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
