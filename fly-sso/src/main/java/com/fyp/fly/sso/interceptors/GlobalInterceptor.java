@@ -39,10 +39,13 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
+
         if (StringUtils.isEmpty(token)) {
             response.sendRedirect("/account/login?redirect_url=" + SafeEncoder.encodeUrl(getUrl(from)));
         } else {
-            //TODO get ticket by token
+            if(StringUtils.isEmpty(from)){
+                from = flyWebHost;
+            }
             JsonResult<SsoTicketApiResult> ssoTicket = accountApiClient.getTicketByToken(token);
             if (ResultUtils.isSuccess(ssoTicket)) {
                 response.sendRedirect(from + (from.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket());
