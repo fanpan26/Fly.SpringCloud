@@ -53,4 +53,9 @@ public class AccountController {
         return accountService.verifyTicket(ticket);
     }
 
+    @GetMapping("/testZuul")
+    public  String getZuulConfig(){
+        return "zuul test";
+    }
+
 }
