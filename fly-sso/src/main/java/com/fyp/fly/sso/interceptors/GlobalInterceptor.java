@@ -4,11 +4,10 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
-import com.fyp.fly.common.tools.SafeEncoder;
+import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 /**
  * @author fyp
@@ -40,17 +38,15 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
 
+        String fromUrl = getUrl(from);
         if (StringUtils.isEmpty(token)) {
-            response.sendRedirect("/account/login?redirect_url=" + SafeEncoder.encodeUrl(getUrl(from)));
+            response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(fromUrl));
         } else {
-            if(StringUtils.isEmpty(from)){
-                from = flyWebHost;
-            }
             JsonResult<SsoTicketApiResult> ssoTicket = accountApiClient.getTicketByToken(token);
             if (ResultUtils.isSuccess(ssoTicket)) {
-                response.sendRedirect(from + (from.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket());
+                response.sendRedirect(fromUrl + (fromUrl.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket());
             } else {
-                response.sendRedirect("/account/login?redirect_url=" + SafeEncoder.encodeUrl(getUrl(from)));
+                response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(getUrl(from)));
             }
         }
         return false;
