@@ -1,0 +1,26 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: fly-gateway
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8762/eureka/
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    metadata-map:
+      description: account service
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+zuul:
+  # 忽略 config-server eureka server
+  ignored-services: fly-config-server,eureka-server
+logging:
+  level:
+    com:
+      netflix: debug
