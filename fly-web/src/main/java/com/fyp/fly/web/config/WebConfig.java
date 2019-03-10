@@ -30,8 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/**")
+                .excludePathPatterns("/account/**")
                 .excludePathPatterns("/res/css/**")
                 .excludePathPatterns("/res/images/**")
+                .excludePathPatterns("/res/mods/**")
                 .excludePathPatterns("/res/layui/**");
     }
 }
