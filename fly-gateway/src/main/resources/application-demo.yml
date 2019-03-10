@@ -1,0 +1,40 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: fly-gateway
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8762/eureka/
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    metadata-map:
+      description: account service
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+zuul:
+  routes:
+    # 这样配置会使 ribbon负载均衡失效
+    account:
+      path: /account/**
+      serviceId: fly-account-service
+      # 是否使用前缀 是： /account/account/testZuul  否： /account/testZuul
+      stripPrefix: false
+  # 忽略 config-server eureka server
+  ignored-services: fly-config-server,eureka-server
+# 解决 ribbon 负载均衡失效的方式，指定 url
+ribbon:
+  eureka:
+    enabled: false
+fly-user-service:
+  ribbon:
+    listOfServers: http://localhost:9000
+logging:
+  level:
+    com:
+      netflix: debug
