@@ -13,3 +13,8 @@ spring:
     username: ${rabbitmq.username}
     password: ${rabbitmq.password}
     virtual-host: ${rabbitmq.virtual-host}
+  datasource:
+    driver-class-name: ${mysql.driver-class-name}
+    url: ${mysql.url}
+    username: ${mysql.username}
+    password: ${mysql.password}
