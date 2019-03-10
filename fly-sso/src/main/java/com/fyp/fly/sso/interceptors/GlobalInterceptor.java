@@ -6,6 +6,8 @@ import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
+    private static final Logger logger = LoggerFactory.getLogger(GlobalInterceptor.class);
+
     @Value("${fly.sso.redirect_url.fly_web}")
     private String flyWebHost;
 
@@ -35,6 +39,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        logger.info("被拦截："+request.getRequestURI());
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
 
