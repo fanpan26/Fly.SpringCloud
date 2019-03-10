@@ -11,9 +11,16 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * @author fanpan26
+ * */
 public final class AccountApiClient {
+    /**
+     * eureka [account service] id:fly-account-service
+     * */
+    private static final String API_ACCOUNT_SERVICE_ID = "fly-account-service";
 
-    private static final String API_ACCOUNT_SERVICE_HOST = "http://localhost:8082";
+    private static final String API_ACCOUNT_SERVICE_HOST = "http://localhost:8082/";
     private static final String API_LOGIN = "/account/login";
     private static final String API_TICKET = "/account/ticket";
     private static final String API_TICKET_VERIFY = "/account/ticket/verify";
