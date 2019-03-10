@@ -4,8 +4,12 @@ logging:
   level:
     spring:
       thymeleaf: INFO
+# 自定义配置
 fly:
   sso:
+    # 网关地址
+    getway_url: http://localhost:9001
+    # 跳转地址
     redirect_url:
       fly_web: http://localhost:8089/
       fly_admin: http://localhost:8090/
