@@ -4,7 +4,7 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
-import com.fyp.fly.common.tools.SafeEncoder;
+import com.fyp.fly.common.tools.EncodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -58,7 +58,7 @@ public class IndexController {
     }
 
     private void setCookie(HttpServletResponse response,String name,String value) {
-        Cookie cookie = new Cookie(name, SafeEncoder.encodeUrl(value));
+        Cookie cookie = new Cookie(name, EncodeUtils.encodeUrl(value));
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(86400 * 7);
