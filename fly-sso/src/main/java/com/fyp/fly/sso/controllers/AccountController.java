@@ -4,7 +4,7 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
-import com.fyp.fly.common.tools.SafeEncoder;
+import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +60,7 @@ public class AccountController {
     @PostMapping("/login")
     public String login(@RequestParam("account") String account,
                         @RequestParam("password") String password,
-                        @RequestParam("code") String code,
+                        @Nullable @RequestParam("code") String code,
                         HttpServletRequest request,
                         HttpServletResponse response,
                         RedirectAttributes redirect) {
@@ -73,7 +73,7 @@ public class AccountController {
         } else {
             redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());
             Object redirectUrl = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE);
-            return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + SafeEncoder.encodeUrl(redirectUrl.toString()));
+            return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + EncodeUtils.encodeUrl(redirectUrl.toString()));
         }
     }
 
@@ -87,7 +87,7 @@ public class AccountController {
     }
 
     private void setCookie(HttpServletResponse response,String name,String value) {
-        Cookie cookie = new Cookie(name, SafeEncoder.encodeUrl(value));
+        Cookie cookie = new Cookie(name, EncodeUtils.encodeUrl(value));
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(86400 * 7);
