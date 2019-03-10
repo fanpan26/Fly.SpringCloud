@@ -21,9 +21,6 @@ import java.util.List;
 @RefreshScope
 public class ApplicationController {
 
-    @Value("${current.profile}")
-    private String profile;
-
     private static final String SERVICE_ID = "fly-user-service";
 
     @Autowired
@@ -35,10 +32,5 @@ public class ApplicationController {
     @GetMapping("/user-service")
     public List<ServiceInstance> userServiceInfo(){
        return this.discoveryClient.getInstances(SERVICE_ID);
-    }
-
-    @GetMapping("/profile")
-    public String getProfile() {
-        return "current profile:" + profile;
     }
 }
