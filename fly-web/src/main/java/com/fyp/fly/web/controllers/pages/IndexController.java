@@ -5,6 +5,7 @@ import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import com.fyp.fly.common.tools.EncodeUtils;
+import com.fyp.fly.web.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -36,12 +38,16 @@ public class IndexController {
      * @param ticket SSO
      * */
     @RequestMapping("/")
-    public String index(@Nullable String ticket, HttpServletResponse response) {
+    public String index(@Nullable String ticket, HttpServletResponse response, HttpServletRequest request) {
+       Object res =  request.getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
+       if (res!=null){
+
+       }
         if (!StringUtils.isEmpty(ticket)) {
             String token = verifyTicket(ticket);
             //假冒伪劣 ticket 不予理会
             if (token != null) {
-                setCookie(response, Fly.WEB_COOKIE_KEY, token);
+              CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token,Fly.WEB_COOKIE_USER_EXPIRE);
             }
             return "redirect:/";
         }
@@ -55,13 +61,5 @@ public class IndexController {
             return response.getData().getToken();
         }
         return null;
-    }
-
-    private void setCookie(HttpServletResponse response,String name,String value) {
-        Cookie cookie = new Cookie(name, EncodeUtils.encodeUrl(value));
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(86400 * 7);
-        response.addCookie(cookie);
     }
 }
