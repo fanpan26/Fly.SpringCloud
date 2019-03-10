@@ -28,4 +28,9 @@ public interface AccountService {
      * @return 返回 是否校验通过
      * */
     JsonResult verifyTicket(String ticket);
+
+    /**
+     * 获取用户信息
+     * */
+    JsonResult getUser(String token);
 }

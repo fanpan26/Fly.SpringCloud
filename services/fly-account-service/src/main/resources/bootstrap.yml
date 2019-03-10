@@ -1,6 +1,6 @@
 spring:
   application:
-    name: fly-user-service
+    name: fly-account-service
   cloud:
     config:
       discovery:

@@ -4,6 +4,7 @@ import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.token.JwtVerifyResult;
 import com.fyp.fly.common.tools.EncodeUtils;
+import com.fyp.fly.services.account.client.UserFeignClient;
 import com.fyp.fly.services.account.domain.Account;
 import com.fyp.fly.services.account.domain.JwtResult;
 import com.fyp.fly.services.account.domain.SsoTicketResult;
@@ -65,6 +66,9 @@ public class AccountServiceImpl implements AccountService {
     private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
+    private UserFeignClient userClient;
+
+    @Autowired
     private AccountMapper accountRepository;
 
     @Autowired
@@ -97,22 +101,10 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public JsonResult generateTicket(String token) {
-        if (StringUtils.isEmpty(token)) {
-            return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
-        }
-        JwtVerifyResult result = EncodeUtils.verifyToken(jwtSecret, token);
-        Long userId = Long.valueOf(result.getResult().getSubject());
-        if (result.isVerified()) {
-            if (isLogged(userId)) {
-                //create a new ticket
-                String ticket = generateTicket(userId);
-                return createTicketResult(ticket, token);
-            }
-        }else{
-            //remove user login cache
-            setUserLoginStatus(userId,false);
-        }
-        return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
+        return getJsonResultByToken(token, userId -> {
+            String ticket = generateTicket(userId);
+            return createTicketResult(ticket, token);
+        });
     }
 
     @Override
@@ -133,6 +125,31 @@ public class AccountServiceImpl implements AccountService {
         }
         return ResultUtils.failed(SSO_TICKET_INVALID);
     }
+
+    @Override
+    public JsonResult getUser(String token){
+        return getJsonResultByToken(token, uid -> userClient.getUserById(uid));
+    }
+
+    private JsonResult getJsonResultByToken(String token,JsonResultCreator jsonResultCreator){
+        if (StringUtils.isEmpty(token)) {
+            return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
+        }
+        JwtVerifyResult result = EncodeUtils.verifyToken(jwtSecret, token);
+        Long userId = Long.valueOf(result.getResult().getSubject());
+        if (result.isVerified()) {
+            if (isLogged(userId)) {
+                //getUserInfo
+                return jsonResultCreator.createJsonResult(userId);
+            }
+        }else{
+            //remove user login cache
+            setUserLoginStatus(userId,false);
+        }
+        return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
+    }
+
+
 
 
     private JsonResult createTicketResult(Long userId){
@@ -177,5 +194,9 @@ public class AccountServiceImpl implements AccountService {
         Date expireDate = DateUtils.addDays(new Date(), LOGIN_STATUS_EXPIRE);
         String token = EncodeUtils.jwtToken(jwtSecret, expireDate, userId, "fly-web", "fly-admin");
         return token;
+    }
+
+    interface JsonResultCreator{
+        JsonResult createJsonResult(Long userId);
     }
 }

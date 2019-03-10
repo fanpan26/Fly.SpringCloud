@@ -53,6 +53,11 @@ public class AccountController {
         return accountService.verifyTicket(ticket);
     }
 
+    @GetMapping("/user")
+    public JsonResult getUserByToken(String token){
+        return accountService.getUser(token);
+    }
+
     @GetMapping("/testZuul")
     public  String getZuulConfig(){
         return "zuul test";
