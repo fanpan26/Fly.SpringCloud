@@ -3,7 +3,7 @@ package com.fyp.fly.services.account.services;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.token.JwtVerifyResult;
-import com.fyp.fly.common.tools.SafeEncoder;
+import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.services.account.domain.Account;
 import com.fyp.fly.services.account.domain.JwtResult;
 import com.fyp.fly.services.account.domain.SsoTicketResult;
@@ -100,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
         if (StringUtils.isEmpty(token)) {
             return ResultUtils.newResult(OFFLINE.getCode(), OFFLINE.getMsg());
         }
-        JwtVerifyResult result = SafeEncoder.verifyToken(jwtSecret, token);
+        JwtVerifyResult result = EncodeUtils.verifyToken(jwtSecret, token);
         Long userId = Long.valueOf(result.getResult().getSubject());
         if (result.isVerified()) {
             if (isLogged(userId)) {
@@ -175,7 +175,7 @@ public class AccountServiceImpl implements AccountService {
      * */
     private String createToken(Long userId) {
         Date expireDate = DateUtils.addDays(new Date(), LOGIN_STATUS_EXPIRE);
-        String token = SafeEncoder.jwtToken(jwtSecret, expireDate, userId, "fly-web", "fly-admin");
+        String token = EncodeUtils.jwtToken(jwtSecret, expireDate, userId, "fly-web", "fly-admin");
         return token;
     }
 }
