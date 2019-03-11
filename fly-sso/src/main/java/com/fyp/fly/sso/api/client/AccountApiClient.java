@@ -25,6 +25,7 @@ public final class AccountApiClient {
     private static final String API_ACCOUNT_SERVICE_ID = "fly-account-service";
 
     private static final String API_LOGIN = "/account/login";
+    private static final String API_LOGOUT = "/account/logout";
     private static final String API_TICKET = "/account/ticket";
     private static final String API_TICKET_VERIFY = "/account/ticket/verify";
     private static final String API_USER = "/account/user";
@@ -63,6 +64,12 @@ public final class AccountApiClient {
     }
 
     /**
+     * 登出
+     * */
+    public JsonResult logout(String token) {
+        return postForObject(getApiUrl(API_LOGOUT) + "?token=" + token);
+    }
+    /**
      *
      * */
     public JsonResult<SsoTicketApiResult> getTicketByToken(String token) {
@@ -90,6 +97,10 @@ public final class AccountApiClient {
         HttpEntity<MultiValueMap<String, Object>> requestBody = new HttpEntity<>(parameters, POST_FORM_URLENCODED_HEADER);
         JsonResult<T> apiResult = restTemplate.exchange(apiUrl, HttpMethod.POST, requestBody, parameterizedTypeReference).getBody();
         return apiResult;
+    }
+
+    private JsonResult postForObject(String url){
+        return restTemplate.postForObject(url,null,JsonResult.class);
     }
 
     private  <T> JsonResult<T> getForObject(String apiUrl, ParameterizedTypeReference<JsonResult<T>> typeReference) {

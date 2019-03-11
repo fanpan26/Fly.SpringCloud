@@ -34,6 +34,14 @@ public class AccountController {
         return accountService.login(loginName, loginPwd);
     }
 
+    /**
+     * 用户退出
+     * */
+    @PostMapping("/logout")
+    public JsonResult logout(String token){
+        return accountService.logout(token);
+    }
+
     @ApiOperation(value = "根据token生成ticket")
     /**
      * @param token 待生成ticket的token

@@ -20,6 +20,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 
+import javax.xml.transform.Result;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +55,10 @@ public class AccountServiceImpl implements AccountService {
      * invalid ticket
      * */
     private static final String SSO_TICKET_INVALID = "invalid ticket";
+    /**
+     * invalid token
+     * */
+    private static final String SSO_TOKEN_INVALID = "invalid ticket";
     /**
      * 7 * 24 * 60 * 60
      * */
@@ -92,6 +97,17 @@ public class AccountServiceImpl implements AccountService {
             return createTicketResult(account.getId());
         }
         return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
+    }
+
+    @Override
+    public JsonResult logout(String token) {
+        if(StringUtils.isEmpty(token)){
+            return ResultUtils.failed(SSO_TOKEN_INVALID);
+        }
+        JwtVerifyResult result = EncodeUtils.verifyToken(jwtSecret, token);
+        Long userId = Long.valueOf(result.getResult().getSubject());
+        setUserLoginStatus(userId,false);
+        return ResultUtils.success();
     }
 
     /**

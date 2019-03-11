@@ -8,7 +8,7 @@ logging:
 fly:
   sso:
     # 网关地址
-    gateway_url: http://localhost:9001
+    gateway_url: http://localhost:9001/
     # 跳转地址
     redirect_url:
       fly_web: http://localhost:8089/

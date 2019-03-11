@@ -1,4 +1,4 @@
-package com.fyp.fly.web.utils;
+package com.fyp.fly.sso.utils;
 
 import com.fyp.fly.common.tools.EncodeUtils;
 
@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author fyp
- * @crate 2019/3/11 0:18
+ * @crate 2019/3/11 22:40
  * @project fly
  */
 public final class CookieUtils {
 
-    private static Cookie getCookieInternal(HttpServletRequest request,String name){
+    private static Cookie getCookieInternal(HttpServletRequest request, String name){
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return null;
@@ -26,14 +26,14 @@ public final class CookieUtils {
         return null;
     }
     public static String getCookie(HttpServletRequest request, String name) {
-       Cookie cookie = getCookieInternal(request,name);
-       if(cookie!=null){
-           return cookie.getValue();
-       }
-       return null;
+        Cookie cookie = getCookieInternal(request,name);
+        if(cookie!=null){
+            return cookie.getValue();
+        }
+        return null;
     }
 
-    public static void deleteCookie(HttpServletRequest request,HttpServletResponse response,String name) {
+    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Cookie cookie = getCookieInternal(request, name);
         cookie.setMaxAge(0);
         cookie.setValue("");

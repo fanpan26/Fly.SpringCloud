@@ -39,10 +39,6 @@ public class IndexController {
      * */
     @RequestMapping("/")
     public String index(@Nullable String ticket, HttpServletResponse response, HttpServletRequest request) {
-       Object res =  request.getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
-       if (res!=null){
-
-       }
         if (!StringUtils.isEmpty(ticket)) {
             String token = verifyTicket(ticket);
             //假冒伪劣 ticket 不予理会

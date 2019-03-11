@@ -6,6 +6,8 @@ import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
+import com.fyp.fly.sso.config.SsoConfig;
+import com.fyp.fly.sso.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -68,13 +70,25 @@ public class AccountController {
         JsonResult<SsoTicketApiResult> result = accountApiClient.login(account, password);
 
         if (ResultUtils.isSuccess(result)) {
-            setCookie(response, Fly.SSO_COOKIE_KEY,result.getData().getToken());
+            CookieUtils.setCookie(response, Fly.SSO_COOKIE_KEY, result.getData().getToken(), Fly.WEB_COOKIE_USER_EXPIRE);
             return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
         } else {
             redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());
             Object redirectUrl = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE);
             return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + EncodeUtils.encodeUrl(redirectUrl.toString()));
         }
+    }
+
+    /**
+     * 退出登录
+     * */
+    @GetMapping("/logout")
+    public String logout(String token,String from,HttpServletRequest request,HttpServletResponse response){
+        JsonResult logoutRes = accountApiClient.logout(token);
+        if(logoutRes.getCode() == 0) {
+            CookieUtils.deleteCookie(request, response, Fly.SSO_COOKIE_KEY);
+        }
+        return "redirect:" + SsoConfig.getUrl(from);
     }
 
     private String getRedirectUrl(HttpServletRequest request,String ticket) {
@@ -84,13 +98,5 @@ public class AccountController {
         }
         String redirectUrl = redirectUrlFromSession.toString();
         return redirectUrl + (redirectUrl.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ticket;
-    }
-
-    private void setCookie(HttpServletResponse response,String name,String value) {
-        Cookie cookie = new Cookie(name, EncodeUtils.encodeUrl(value));
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(86400 * 7);
-        response.addCookie(cookie);
     }
 }

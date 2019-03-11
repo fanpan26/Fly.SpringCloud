@@ -16,6 +16,11 @@ public interface AccountService {
     JsonResult login(String loginName, String loginPwd);
 
     /**
+     * 根据token退出
+     * */
+    JsonResult logout(String token);
+
+    /**
      * 根据JWT来校验是否登录，并返回应用端的ticket
      * @param token 根据SSO存储的token重新生成一个ticket
      * @return 返回ticket result

@@ -6,6 +6,7 @@ import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
+import com.fyp.fly.sso.config.SsoConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +40,10 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("被拦截："+request.getRequestURI());
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
 
-        String fromUrl = getUrl(from);
+        String fromUrl = SsoConfig.getUrl(from);
         if (StringUtils.isEmpty(token)) {
             response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(fromUrl));
         } else {
@@ -51,23 +51,10 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
             if (ResultUtils.isSuccess(ssoTicket)) {
                 response.sendRedirect(fromUrl + (fromUrl.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket());
             } else {
-                response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(getUrl(from)));
+                response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(SsoConfig.getUrl(from)));
             }
         }
         return false;
-    }
-
-    private String getUrl(String from){
-        if(StringUtils.isEmpty(from)){
-            return flyWebHost;
-        }
-        switch (from.toLowerCase()){
-            case "fly-web":
-                return flyWebHost;
-            case "fly-admin":
-                return flyAdminHost;
-        }
-        return flyWebHost;
     }
 
 

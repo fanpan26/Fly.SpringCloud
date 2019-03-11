@@ -1,9 +1,14 @@
 package com.fyp.fly.web.controllers.pages;
 
+import com.fyp.fly.common.constants.Fly;
+import com.fyp.fly.web.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author fyp
@@ -18,7 +23,15 @@ public class AccountController {
     private String ssoUrl;
 
     @GetMapping("/login")
-    public String redirectToSSO() {
-        return "redirect:" + ssoUrl+"?from=fly-web";
+    public String ssoLogin() {
+        return "redirect:" + ssoUrl + "?from=fly-web";
+    }
+
+    @GetMapping("/logout")
+    public String ssoLogout(HttpServletRequest request, HttpServletResponse response) {
+        String token = CookieUtils.getCookie(request, Fly.WEB_COOKIE_KEY);
+        CookieUtils.deleteCookie(request,response,Fly.WEB_COOKIE_USER_KEY);
+        CookieUtils.deleteCookie(request,response,Fly.WEB_COOKIE_KEY);
+        return "redirect:" + ssoUrl + "/account/logout?token=" + token + "&from=fly-web";
     }
 }
