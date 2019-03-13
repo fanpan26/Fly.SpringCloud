@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     public AuthenticationInterceptor(){
-        
+
     }
     @Value("${sso.url}")
     private String ssoUrl;
