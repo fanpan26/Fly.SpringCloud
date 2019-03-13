@@ -36,14 +36,14 @@ public class IndexController {
      * @param ticket SSO
      * */
     @RequestMapping("/")
-    public String index(@Nullable String ticket, HttpServletResponse response, HttpServletRequest request) {
+    public String index(@Nullable String ticket,@Nullable String redirect, HttpServletResponse response, HttpServletRequest request) {
         if (!StringUtils.isEmpty(ticket)) {
             String token = verifyTicket(ticket);
             //假冒伪劣 ticket 不予理会
             if (token != null) {
-              CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token,Fly.WEB_TOKEN_EXPIRE);
+                CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token, Fly.WEB_TOKEN_EXPIRE);
             }
-            return "redirect:/";
+            return StringUtils.isEmpty(redirect) ? "redirect:/" : "redirect:" + redirect;
         }
         return "index";
     }

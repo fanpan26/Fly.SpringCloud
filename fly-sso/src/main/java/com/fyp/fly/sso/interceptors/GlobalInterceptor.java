@@ -43,11 +43,10 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
         String url = request.getParameter("url");
-        url=null;
 
         String fromUrl = SsoConfig.getUrl(from);
         if (StringUtils.isEmpty(token)) {
-            response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(StringUtils.isEmpty(url)? fromUrl:url));
+            response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(StringUtils.isEmpty(url)? fromUrl:(fromUrl+"?redirect="+url)));
         } else {
             JsonResult<SsoTicketApiResult> ssoTicket = accountApiClient.getTicketByToken(token);
             if (ResultUtils.isSuccess(ssoTicket)) {

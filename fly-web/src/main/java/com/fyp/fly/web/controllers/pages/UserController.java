@@ -30,8 +30,6 @@ public class UserController extends BaseController{
         JsonResult<FlyUserDto> userRes = userApiClient.getUserById(getUserId());
         if (ResultUtils.isSuccess(userRes)) {
             request.setAttribute("homeUser",userRes.getData());
-        } else {
-            throw new Exception("can't get user from user service");
         }
         return "/user/home";
     }

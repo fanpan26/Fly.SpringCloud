@@ -4,6 +4,7 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
+import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.common.tools.JSONUtils;
 import com.fyp.fly.web.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +77,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 CookieUtils.setCookie(response, Fly.WEB_COOKIE_USER_KEY, userRes.getData().getId() + "", Fly.WEB_TOKEN_EXPIRE);
                 request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, userRes.getData());
             }
-        } else {
-
+        }else{
+            if (!(request.getRequestURI().equals("/")||request.getRequestURI().startsWith("/account"))){
+                response.sendRedirect(ssoUrl+"?from=fly-web&url="+ EncodeUtils.encodeUrl(request.getRequestURI()));
+                return false;
+            }
         }
         return true;
     }

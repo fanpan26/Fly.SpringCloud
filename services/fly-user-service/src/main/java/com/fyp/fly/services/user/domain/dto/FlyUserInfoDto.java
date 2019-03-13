@@ -11,6 +11,9 @@ public class FlyUserInfoDto {
 
     public static FlyUserInfoDto createByUser(FlyUser user) {
         FlyUserInfoDto dto = new FlyUserInfoDto();
+        if(user == null){
+            return dto;
+        }
         dto.id = user.getId();
         dto.address = user.getAddress();
         dto.auth = user.getAuth();

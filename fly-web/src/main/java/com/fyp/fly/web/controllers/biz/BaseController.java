@@ -30,16 +30,22 @@ public abstract class BaseController {
     @Value("${sso.url}")
     private String ssoUrl;
 
-    protected FlyUserDto getUser(){
-        final String key = Fly.WEB_CACHE_USER_KEY + CookieUtils.getCookie(request, Fly.WEB_COOKIE_USER_KEY);
-        String userJSON = redisTemplate.opsForValue().get(key);
-        if (userJSON != null) {
-            return JSONUtils.parseObject(userJSON, FlyUserDto.class);
-        }
-        try {
-            response.sendRedirect(ssoUrl + "?from=fly-web");
-        }catch (IOException e){
-            e.printStackTrace();
+    protected FlyUserDto getUser() {
+        FlyUserDto userFromAttribute = (FlyUserDto) request.getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
+        if (userFromAttribute == null) {
+            try {
+                response.sendRedirect(ssoUrl + "?from=fly-web");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            final String key = Fly.WEB_CACHE_USER_KEY + userFromAttribute.getId();
+            String userJSON = redisTemplate.opsForValue().get(key);
+            if (userJSON != null) {
+                return JSONUtils.parseObject(userJSON, FlyUserDto.class);
+            }
+
         }
         return new FlyUserDto();
     }
