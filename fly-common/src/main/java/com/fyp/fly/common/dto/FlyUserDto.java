@@ -6,15 +6,6 @@ package com.fyp.fly.common.dto;
  * @project fly
  */
 public class FlyUserDto {
-    private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -33,7 +24,11 @@ public class FlyUserDto {
     }
 
     public int getVip() {
-        return vip;
+        return  vip;
+    }
+
+    public String getVipString(){
+        return "VIP" + getVip();
     }
 
     public void setVip(int vip) {
@@ -43,4 +38,14 @@ public class FlyUserDto {
     private String name;
     private String avatar;
     private int vip;
+
+    public boolean isAuth() {
+        return auth;
+    }
+
+    public void setAuth(boolean auth) {
+        this.auth = auth;
+    }
+
+    private boolean auth;
 }
