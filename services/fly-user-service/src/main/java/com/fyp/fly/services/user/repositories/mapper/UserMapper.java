@@ -15,9 +15,10 @@ public interface UserMapper {
     /**
      * 获取基础用户信息
      * */
-    @Select("select name,avatar,sex,vip,auth,address,sign,auth_str,create_at from fly_user where id=#{id}")
+    @Select("select id, name,avatar,sex,vip,auth,address,sign,auth_str,create_at from fly_user where id=#{id}")
     @Results({
-            @Result(property = "authStr",  column = "auth_str")
+            @Result(property = "authStr",  column = "auth_str"),
+            @Result(property = "createAt",column="create_at")
     })
     FlyUser getUserById(@Param("id") Long id);
 }

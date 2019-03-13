@@ -35,10 +35,12 @@ public final class CookieUtils {
 
     public static void deleteCookie(HttpServletRequest request,HttpServletResponse response,String name) {
         Cookie cookie = getCookieInternal(request, name);
-        cookie.setMaxAge(0);
-        cookie.setValue("");
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        if (cookie != null) {
+            cookie.setMaxAge(0);
+            cookie.setValue("");
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
     }
 
     public static void setCookie(HttpServletResponse response, String name, String value,int maxAge) {

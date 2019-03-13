@@ -41,7 +41,7 @@ public class IndexController {
             String token = verifyTicket(ticket);
             //假冒伪劣 ticket 不予理会
             if (token != null) {
-              CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token,Fly.WEB_CACHE_USER_EXPIRE);
+              CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token,Fly.WEB_TOKEN_EXPIRE);
             }
             return "redirect:/";
         }

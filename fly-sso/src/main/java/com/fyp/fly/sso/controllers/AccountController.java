@@ -70,7 +70,7 @@ public class AccountController {
         JsonResult<SsoTicketApiResult> result = accountApiClient.login(account, password);
 
         if (ResultUtils.isSuccess(result)) {
-            CookieUtils.setCookie(response, Fly.SSO_COOKIE_KEY, result.getData().getToken(), Fly.WEB_COOKIE_USER_EXPIRE);
+            CookieUtils.setCookie(response, Fly.SSO_COOKIE_KEY, result.getData().getToken(), Fly.WEB_TOKEN_EXPIRE);
             return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
         } else {
             redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());

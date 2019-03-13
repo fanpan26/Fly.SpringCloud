@@ -15,6 +15,10 @@ spring:
     timeout: 1000
 sso:
   url: http://localhost:9000
+gateway:
+  url: http://localhost:9001
+  services:
+    user: fly-user-service
 logging:
   level:
     spring:

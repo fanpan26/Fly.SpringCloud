@@ -42,14 +42,20 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
+        String url = request.getParameter("url");
+        url=null;
 
         String fromUrl = SsoConfig.getUrl(from);
         if (StringUtils.isEmpty(token)) {
-            response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(fromUrl));
+            response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(StringUtils.isEmpty(url)? fromUrl:url));
         } else {
             JsonResult<SsoTicketApiResult> ssoTicket = accountApiClient.getTicketByToken(token);
             if (ResultUtils.isSuccess(ssoTicket)) {
-                response.sendRedirect(fromUrl + (fromUrl.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket());
+                String location = fromUrl + (fromUrl.indexOf("?") > -1 ? "&" : "?") + "ticket=" + ssoTicket.getData().getTicket();
+                if(!StringUtils.isEmpty(url)){
+                    location+="&redirectUrl="+url;
+                }
+                response.sendRedirect(location);
             } else {
                 response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(SsoConfig.getUrl(from)));
             }

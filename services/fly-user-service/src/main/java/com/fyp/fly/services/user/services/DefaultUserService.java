@@ -7,6 +7,7 @@ import com.fyp.fly.common.tools.JSONUtils;
 import com.fyp.fly.services.user.cache.Cache;
 import com.fyp.fly.services.user.domain.FlyUser;
 import com.fyp.fly.services.user.domain.dto.FlyUserBaseInfoDto;
+import com.fyp.fly.services.user.domain.dto.FlyUserInfoDto;
 import com.fyp.fly.services.user.repositories.mapper.UserMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public JsonResult<FlyUserBaseInfoDto> getUserBaseInfo(Long userId) {
+    public JsonResult<FlyUserInfoDto> getUserInfo(Long userId) {
         FlyUser user = getUserFromCache(userId);
-        return ResultUtils.success(FlyUserBaseInfoDto.createByUser(user));
+        return ResultUtils.success(FlyUserInfoDto.createByUser(user));
     }
 }

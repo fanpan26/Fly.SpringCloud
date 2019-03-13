@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
@@ -42,8 +43,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         return redisTemplate.opsForValue();
     }
 
-    private String cacheKey(HttpServletRequest request){
-        return Fly.WEB_CACHE_USER_KEY+request.getSession().getId();
+    private String cacheKey(Long userId){
+        return Fly.WEB_CACHE_USER_KEY + userId;
     }
 
 
@@ -56,27 +57,33 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         String token = CookieUtils.getCookie(request, Fly.WEB_COOKIE_KEY);
         if (!StringUtils.isEmpty(token)) {
-            String userJson = ops().get(cacheKey(request));
-            if (!StringUtils.isEmpty(userJson)) {
-                FlyUserDto user = JSONUtils.parseObject(userJson, FlyUserDto.class);
-                if (user != null) {
-                    request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, user);
-                    return true;
+            String uid = CookieUtils.getCookie(request, Fly.WEB_COOKIE_USER_KEY);
+            if (uid != null) {
+                String userJson = ops().get(cacheKey(Long.valueOf(uid)));
+                if (!StringUtils.isEmpty(userJson)) {
+                    FlyUserDto user = JSONUtils.parseObject(userJson, FlyUserDto.class);
+                    if (user != null) {
+                        request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, user);
+                        return true;
+                    }
                 }
             }
             //if no user info,check token
             JsonResult<FlyUserDto> userRes = getUserFromSsoApi(token);
             if (userRes != null) {
                 String userJsonString = JSONUtils.toJSONString(userRes.getData());
-                setCache(request,userJsonString);
+                setCache(userRes.getData().getId(), userJsonString);
+                CookieUtils.setCookie(response, Fly.WEB_COOKIE_USER_KEY, userRes.getData().getId() + "", Fly.WEB_TOKEN_EXPIRE);
                 request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, userRes.getData());
             }
+        } else {
+
         }
         return true;
     }
 
-    private void setCache(HttpServletRequest request,String userJsonString){
-        ops().set(cacheKey(request),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
+    private void setCache(Long userId,String userJsonString){
+        ops().set(cacheKey(userId),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
     }
 
     private JsonResult<FlyUserDto> getUserFromSsoApi(String token) {

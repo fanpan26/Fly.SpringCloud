@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sun.plugin2.os.windows.FLASHWINFO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,7 @@ public class AccountController {
     public String ssoLogout(HttpServletRequest request, HttpServletResponse response) {
         String token = CookieUtils.getCookie(request, Fly.WEB_COOKIE_KEY);
         CookieUtils.deleteCookie(request,response,Fly.WEB_COOKIE_KEY);
+        CookieUtils.deleteCookie(request,response, Fly.WEB_COOKIE_USER_KEY);
         return "redirect:" + ssoUrl + "/account/logout?token=" + token + "&from=fly-web";
     }
 }

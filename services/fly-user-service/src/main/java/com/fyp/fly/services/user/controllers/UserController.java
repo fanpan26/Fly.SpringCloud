@@ -24,6 +24,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public JsonResult getUserInfoById(@PathVariable Long id){
-       return userService.getUserBaseInfo(id);
+        return userService.getUserInfo(id);
     }
 }
