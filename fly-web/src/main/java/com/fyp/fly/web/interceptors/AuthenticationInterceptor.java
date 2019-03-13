@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     public AuthenticationInterceptor(){
-        System.out.println("AuthenticationInterceptor created");
+        
     }
     @Value("${sso.url}")
     private String ssoUrl;
@@ -68,11 +68,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             JsonResult<FlyUserDto> userRes = getUserFromSsoApi(token);
             if (userRes != null) {
                 String userJsonString = JSONUtils.toJSONString(userRes.getData());
-                ops().set(cacheKey(request),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
+                setCache(request,userJsonString);
                 request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, userRes.getData());
             }
         }
         return true;
+    }
+
+    private void setCache(HttpServletRequest request,String userJsonString){
+        ops().set(cacheKey(request),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
     }
 
     private JsonResult<FlyUserDto> getUserFromSsoApi(String token) {
