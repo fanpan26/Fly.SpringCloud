@@ -8,7 +8,8 @@ package com.fyp.fly.common.constants;
 public interface Fly {
     String SSO_COOKIE_KEY = "sso_auth";
     String WEB_COOKIE_KEY = "fly_auth";
-    String WEB_COOKIE_USER_KEY = "fly_user";
     String WEB_ATTRIBUTE_USER_KEY = "fly_current_user";
-    Integer WEB_COOKIE_USER_EXPIRE = 604800;
+
+    String WEB_CACHE_USER_KEY = "app:user:";
+    Integer WEB_CACHE_USER_EXPIRE = 600;
 }
