@@ -1,5 +1,6 @@
 package com.fyp.fly.services.user;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,15 +16,10 @@ import org.springframework.web.client.RestTemplate;
  * 文档参考：https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#netflix-eureka-client-starter
  */
 @SpringBootApplication
+@MapperScan("com.fyp.fly.services.user.repositories.mapper")
 public class UserServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class,args);
-    }
-
-    @Bean
-    @LoadBalanced
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
     }
 }
