@@ -74,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
     private UserFeignClient userClient;
 
     @Autowired
-    private AccountMapper accountRepository;
+    private AccountMapper accountMapper;
 
     @Autowired
     private PasswordHashing passwordHashing;
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
     }
     @Override
     public JsonResult login(String loginName, String loginPwd) {
-        Account account = accountRepository.loginByName(loginName);
+        Account account = accountMapper.loginByName(loginName);
         if(logger.isDebugEnabled()){
             logger.debug("login result:{}",account);
         }
@@ -92,6 +92,7 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
         String hashedPassword = passwordHashing.hash(loginName,loginPwd);
+        logger.info("生成的密码为："+ hashedPassword);
         if (account.getLoginPwd().equals(hashedPassword)) {
             setUserLoginStatus(account.getId(),true);
             return createTicketResult(account.getId());
