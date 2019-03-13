@@ -30,7 +30,6 @@ public class AccountController {
     @GetMapping("/logout")
     public String ssoLogout(HttpServletRequest request, HttpServletResponse response) {
         String token = CookieUtils.getCookie(request, Fly.WEB_COOKIE_KEY);
-        CookieUtils.deleteCookie(request,response,Fly.WEB_COOKIE_USER_KEY);
         CookieUtils.deleteCookie(request,response,Fly.WEB_COOKIE_KEY);
         return "redirect:" + ssoUrl + "/account/logout?token=" + token + "&from=fly-web";
     }
