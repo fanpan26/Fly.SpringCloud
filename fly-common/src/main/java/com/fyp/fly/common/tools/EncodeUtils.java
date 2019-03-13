@@ -10,6 +10,7 @@ import com.fyp.fly.common.result.token.JwtVerifyResult;
 import com.google.common.io.BaseEncoding;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 
@@ -25,6 +26,14 @@ public final class EncodeUtils {
     public static String encodeUrl(String url) {
         try {
             return URLEncoder.encode(url, CHAR_SET);
+        } catch (UnsupportedEncodingException ex) {
+            return url;
+        }
+    }
+
+    public static String decodeUrl(String url) {
+        try {
+            return URLDecoder.decode(url, CHAR_SET);
         } catch (UnsupportedEncodingException ex) {
             return url;
         }
