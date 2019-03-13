@@ -4,7 +4,6 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
-import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.web.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +15,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,7 +41,7 @@ public class IndexController {
             String token = verifyTicket(ticket);
             //假冒伪劣 ticket 不予理会
             if (token != null) {
-              CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token,Fly.WEB_COOKIE_USER_EXPIRE);
+              CookieUtils.setCookie(response, Fly.WEB_COOKIE_KEY, token,Fly.WEB_CACHE_USER_EXPIRE);
             }
             return "redirect:/";
         }
