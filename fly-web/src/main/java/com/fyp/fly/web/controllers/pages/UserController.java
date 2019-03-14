@@ -1,6 +1,5 @@
 package com.fyp.fly.web.controllers.pages;
 
-import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author fyp
