@@ -18,7 +18,7 @@
                                     <div class="layui-col-md3">
                                         <label class="layui-form-label">所在专栏</label>
                                         <div class="layui-input-block">
-                                            <select lay-verify="required" name="category" lay-filter="column">
+                                            <select lay-verify="required" name="category" lay-filter="column" th:value="${jie.category}">
                                                 <option></option>
                                                 <option value="0">提问</option>
                                                 <option value="99">分享</option>
@@ -32,21 +32,48 @@
                                     <div class="layui-col-md9">
                                         <label for="L_title" class="layui-form-label">标题</label>
                                         <div class="layui-input-block">
-                                            <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+                                            <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input" th:value="${jie.title}">
                                             <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row layui-col-space15 layui-form-item layui-hide" id="LAY_quiz">
+                                    <div class="layui-col-md3">
+                                        <label class="layui-form-label">所属产品</label>
+                                        <div class="layui-input-block">
+                                            <select name="project">
+                                                <option></option>
+                                                <option value="layui">layui</option>
+                                                <option value="独立版layer">独立版layer</option>
+                                                <option value="独立版layDate">独立版layDate</option>
+                                                <option value="LayIM">LayIM</option>
+                                                <option value="Fly社区模板">Fly社区模板</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        <label class="layui-form-label" for="L_version">版本号</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="L_version" value="" name="version" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md6">
+                                        <label class="layui-form-label" for="L_browser">浏览器</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="L_browser"  value="" name="browser" placeholder="浏览器名称及版本，如：IE 11" autocomplete="off" class="layui-input">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="layui-form-item layui-form-text">
                                     <div class="layui-input-block">
-                                        <textarea id="L_content" name="content" required lay-verify="required" placeholder="详细描述" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
+                                        <textarea id="L_content" name="content" required lay-verify="required" placeholder="详细描述" class="layui-textarea fly-editor" style="height: 260px;" th:text="${jie.content}"></textarea>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">悬赏飞吻</label>
                                         <div class="layui-input-inline" style="width: 190px;">
-                                            <select name="experience">
+                                            <select name="experience" th:value="${jie.experience}">
                                                 <option value="20">20</option>
                                                 <option value="30">30</option>
                                                 <option value="50">50</option>
@@ -76,10 +103,17 @@
             </div>
         </div>
     </div>
-    <script>
+</div>
+<div layout:fragment="body_script">
+    <script th:inline="javascript">
         function changeCode(o) {
             o.src='/validate/code?r='+Math.random();
         }
+        layui.use('layer',function () {
+            var layer = layui.layer;
+            var obj = [[${#httpServletRequest.getAttribute('jie')}]];
+            obj&&obj.alert?layer.msg(obj.errorMsg):'';
+        });
     </script>
 </div>
 </body>
