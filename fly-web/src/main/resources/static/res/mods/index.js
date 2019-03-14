@@ -276,7 +276,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       return content;
     }
     
-    //新消息通知
     ,newmsg: function(){
       var elemUser = $('.fly-nav-user');
       if(layui.cache.user.uid !== -1 && elemUser[0]){
@@ -612,8 +611,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     ,bgcolor: '#009688'
     ,click: function(type){
       if(type === 'bar1'){
-        layer.msg('打开 index.js，开启发表新帖的路径');
-        //location.href = 'jie/add.html';
+        location.href = '/jie/add';
       }
     }
   });
