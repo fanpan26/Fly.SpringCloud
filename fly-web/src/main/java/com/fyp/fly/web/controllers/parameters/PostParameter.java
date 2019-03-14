@@ -1,11 +1,28 @@
 package com.fyp.fly.web.controllers.parameters;
 
+import org.springframework.util.StringUtils;
+
 /**
  * @author fyp
  * @crate 2019/3/14 22:22
  * @project fly
  */
 public class PostParameter {
+
+    private static final PostParameter defaultParameter = new PostParameter();
+    public static PostParameter newParameter(){
+        return defaultParameter;
+    }
+
+    public boolean isAlert() {
+        return alert;
+    }
+
+    public void setAlert(boolean alert) {
+        this.alert = alert;
+    }
+
+    private boolean alert;
     private Long id;
     private int category;
     private String title;
@@ -63,5 +80,21 @@ public class PostParameter {
 
     private int experience;
 
+    private String errorMsg;
 
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
+    public String getErrorMsg() {
+        if (StringUtils.isEmpty(errorMsg)&&alert) {
+            if (StringUtils.isEmpty(title)) {
+                return "请填写标题";
+            }
+            if (StringUtils.isEmpty(content)) {
+                return "请填写内容";
+            }
+        }
+        return errorMsg;
+    }
 }
