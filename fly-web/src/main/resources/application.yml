@@ -19,6 +19,7 @@ gateway:
   url: http://localhost:9001
   services:
     user: fly-user-service
+    base: fly-base-service
 logging:
   level:
     spring:
