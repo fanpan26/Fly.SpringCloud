@@ -9,8 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 @MapperScan("com.fyp.fly.services.account.repositories.mapper")
-public class AccountApplication {
+public class AccountServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AccountApplication.class, args);
+        SpringApplication.run(AccountServiceApplication.class, args);
     }
 }
