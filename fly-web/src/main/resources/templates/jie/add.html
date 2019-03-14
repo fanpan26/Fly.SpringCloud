@@ -106,6 +106,7 @@
 </div>
 <div layout:fragment="body_script">
     <script th:inline="javascript">
+        layui.cache.page = 'jie';
         function changeCode(o) {
             o.src='/validate/code?r='+Math.random();
         }
