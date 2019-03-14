@@ -23,11 +23,13 @@
         <module>services/fly-comment-service</module>
         <module>services/fly-services-parent</module>
         <module>services/fly-services-discovery</module>
+        <module>services/fly-base-service</module>
         <module>fly-web</module>
         <module>fly-gateway</module>
         <module>fly-common</module>
         <module>fly-config</module>
         <module>fly-sso</module>
+
     </modules>
 
     <dependencyManagement>
@@ -70,6 +72,13 @@
                 <artifactId>java-jwt</artifactId>
                 <version>3.7.0</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>4.5.1</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-parent</artifactId>
