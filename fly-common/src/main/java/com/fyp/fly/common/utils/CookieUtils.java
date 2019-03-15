@@ -1,4 +1,4 @@
-package com.fyp.fly.common.tools;
+package com.fyp.fly.common.utils;
 
 
 import javax.servlet.http.Cookie;

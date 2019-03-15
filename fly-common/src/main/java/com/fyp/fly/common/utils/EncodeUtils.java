@@ -1,4 +1,4 @@
-package com.fyp.fly.common.tools;
+package com.fyp.fly.common.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
