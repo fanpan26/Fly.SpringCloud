@@ -35,3 +35,15 @@ CREATE TABLE `fly_user` (
   `create_at` bigint(20) NOT NULL COMMENT '注册时间\n',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户i基础信息表';
+
+CREATE TABLE `fly`.`fly_msg` (
+  `id` BIGINT NOT NULL,
+  `from_id` BIGINT NOT NULL COMMENT '消息来源 ID 0 系统  大于0 用户',
+  `to_id` BIGINT NOT NULL COMMENT '消息接收人',
+  `type` TINYINT NOT NULL COMMENT '消息类型 0 系统消息  1 回答消息 2 回复消息 3 关注消息(您关注的XXX评论了分享‘’xxxxx)',
+  `content_id` BIGINT NOT NULL COMMENT '内容ID',
+  `content` VARCHAR(200) NOT NULL,
+  `del` BIT NULL COMMENT '是否删除',
+  `create_at` BIGINT NULL,
+  PRIMARY KEY (`id`))
+COMMENT = '用户消息';
