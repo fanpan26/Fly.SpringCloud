@@ -1,7 +1,7 @@
 package com.fyp.fly.web.controllers.pages;
 
 import com.fyp.fly.common.constants.Fly;
-import com.fyp.fly.common.tools.CookieUtils;
+import com.fyp.fly.common.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,12 +1,10 @@
 package com.fyp.fly.services.user.services;
 
-import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
-import com.fyp.fly.common.tools.JSONUtils;
+import com.fyp.fly.common.utils.JSONUtils;
 import com.fyp.fly.services.user.cache.Cache;
 import com.fyp.fly.services.user.domain.FlyUser;
-import com.fyp.fly.services.user.domain.dto.FlyUserBaseInfoDto;
 import com.fyp.fly.services.user.domain.dto.FlyUserInfoDto;
 import com.fyp.fly.services.user.repositories.mapper.UserMapper;
 import org.apache.commons.lang.StringUtils;

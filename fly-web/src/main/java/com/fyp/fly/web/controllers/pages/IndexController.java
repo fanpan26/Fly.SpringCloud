@@ -4,7 +4,7 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
-import com.fyp.fly.common.tools.CookieUtils;
+import com.fyp.fly.common.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

@@ -3,7 +3,7 @@ package com.fyp.fly.services.account.services;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.token.JwtVerifyResult;
-import com.fyp.fly.common.tools.EncodeUtils;
+import com.fyp.fly.common.utils.EncodeUtils;
 import com.fyp.fly.services.account.client.UserFeignClient;
 import com.fyp.fly.services.account.domain.Account;
 import com.fyp.fly.services.account.domain.JwtResult;
@@ -20,7 +20,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 
-import javax.xml.transform.Result;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

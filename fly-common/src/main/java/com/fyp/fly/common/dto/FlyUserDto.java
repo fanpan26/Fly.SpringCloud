@@ -1,7 +1,7 @@
 package com.fyp.fly.common.dto;
 
 
-import com.fyp.fly.common.tools.DateUtils;
+import com.fyp.fly.common.utils.DateUtils;
 
 /**
  * @author fyp
