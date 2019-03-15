@@ -1,16 +1,10 @@
-package com.fyp.fly.sso.utils;
+package com.fyp.fly.common.tools;
 
-import com.fyp.fly.common.tools.EncodeUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * @author fyp
- * @crate 2019/3/11 22:40
- * @project fly
- */
 public final class CookieUtils {
 
     private static Cookie getCookieInternal(HttpServletRequest request, String name){

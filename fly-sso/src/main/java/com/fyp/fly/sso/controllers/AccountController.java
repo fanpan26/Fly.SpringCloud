@@ -4,10 +4,10 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
+import com.fyp.fly.common.tools.CookieUtils;
 import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.sso.api.client.AccountApiClient;
 import com.fyp.fly.sso.config.SsoConfig;
-import com.fyp.fly.sso.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

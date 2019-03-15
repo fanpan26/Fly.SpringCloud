@@ -3,7 +3,6 @@ package com.fyp.fly.web.controllers.biz;
 import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.tools.JSONUtils;
-import com.fyp.fly.web.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

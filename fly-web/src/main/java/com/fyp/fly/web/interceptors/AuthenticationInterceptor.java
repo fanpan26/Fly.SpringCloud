@@ -4,9 +4,9 @@ import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
+import com.fyp.fly.common.tools.CookieUtils;
 import com.fyp.fly.common.tools.EncodeUtils;
 import com.fyp.fly.common.tools.JSONUtils;
-import com.fyp.fly.web.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
