@@ -1,6 +1,5 @@
 package com.fyp.fly.sso.api.client;
 
-import com.alibaba.fastjson.JSON;
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
