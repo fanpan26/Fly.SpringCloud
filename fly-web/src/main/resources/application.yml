@@ -20,6 +20,7 @@ gateway:
   services:
     user: fly-user-service
     base: fly-base-service
+    article: fly-article-service
 logging:
   level:
     spring:
