@@ -1,9 +1,7 @@
 package com.fyp.fly.services.user.controllers;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.common.result.api.ResultUtils;
-import com.fyp.fly.services.user.services.UserService;
-import com.netflix.discovery.converters.Auto;
+import com.fyp.fly.services.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package com.fyp.fly.services.user.services;
+package com.fyp.fly.services.user.service;
 
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
@@ -6,7 +6,7 @@ import com.fyp.fly.common.utils.JSONUtils;
 import com.fyp.fly.services.user.cache.Cache;
 import com.fyp.fly.services.user.domain.FlyUser;
 import com.fyp.fly.services.user.domain.dto.FlyUserInfoDto;
-import com.fyp.fly.services.user.repositories.mapper.UserMapper;
+import com.fyp.fly.services.user.repository.mapper.UserMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

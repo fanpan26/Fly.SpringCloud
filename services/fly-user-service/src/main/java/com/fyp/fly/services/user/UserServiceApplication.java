@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  * 文档参考：https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#netflix-eureka-client-starter
  */
 @SpringBootApplication
-@MapperScan("com.fyp.fly.services.user.repositories.mapper")
+@MapperScan("com.fyp.fly.services.user.repository.mapper")
 public class UserServiceApplication {
 
     public static void main(String[] args) {

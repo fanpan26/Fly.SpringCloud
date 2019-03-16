@@ -1,4 +1,4 @@
-package com.fyp.fly.services.user.repositories.mapper;
+package com.fyp.fly.services.user.repository.mapper;
 
 import com.fyp.fly.services.user.domain.FlyUser;
 import org.apache.ibatis.annotations.Param;

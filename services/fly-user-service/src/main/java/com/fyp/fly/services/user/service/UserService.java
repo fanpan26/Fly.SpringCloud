@@ -1,7 +1,6 @@
-package com.fyp.fly.services.user.services;
+package com.fyp.fly.services.user.service;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.services.user.domain.dto.FlyUserBaseInfoDto;
 import com.fyp.fly.services.user.domain.dto.FlyUserInfoDto;
 
 /**
