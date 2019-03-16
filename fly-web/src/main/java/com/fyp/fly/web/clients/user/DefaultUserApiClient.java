@@ -17,21 +17,21 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class DefaultUserApiClient extends AbstractApiClient implements UserApiClient{
 
-    @Value("${gateway.url}")
-    private String gateWayUrl;
-
     @Value("${gateway.services.user}")
     private String serviceId;
 
     private String getUserUrl(Long userId){
-        return String.format("%s/%s/%s/%d",gateWayUrl,serviceId,"user",userId);
+        return buildApiUrl("user/"+userId);
     }
 
-    @Autowired
-    private RestTemplate restTemplate;
-
+    @Override
     public JsonResult<FlyUserDto> getUserById(Long userId) {
-        return getForObject(restTemplate,getUserUrl(userId), new ParameterizedTypeReference<JsonResult<FlyUserDto>>() {
+        return getForObject(getUserUrl(userId), new ParameterizedTypeReference<JsonResult<FlyUserDto>>() {
         });
+    }
+
+    @Override
+    protected String getServiceId() {
+        return serviceId;
     }
 }
