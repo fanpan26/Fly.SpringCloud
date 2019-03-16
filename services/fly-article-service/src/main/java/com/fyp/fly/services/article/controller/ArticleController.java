@@ -1,9 +1,10 @@
 package com.fyp.fly.services.article.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.fyp.fly.common.result.api.JsonResult;
+import com.fyp.fly.services.article.dto.ArticleEditDto;
+import com.fyp.fly.services.article.service.ArticleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author fyp
@@ -14,8 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/article")
 public class ArticleController {
 
-    @GetMapping("/{id}")
-    public String getArticleById(@PathVariable Long id){
-        return "this is from article "+ id;
+    @Autowired
+    private ArticleService articleService;
+
+    /**
+     * 添加一个帖子
+     * */
+    @PostMapping("/")
+    public JsonResult add(ArticleEditDto article) {
+        return articleService.add(article);
     }
 }
