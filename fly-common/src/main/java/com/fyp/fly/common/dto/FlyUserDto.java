@@ -142,10 +142,8 @@ public class FlyUserDto {
         this.createAt = createAt;
     }
 
-
-
     public String getCreateAtStr() {
-        return DateUtils.timeStamp2Date(createAt,"yyyy/MM/dd");
+        return DateUtils.timeStamp2Date(createAt);
     }
 
 
