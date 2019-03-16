@@ -1,4 +1,4 @@
-package com.fyp.fly.web.clients.user;
+package com.fyp.fly.web.client.user;
 
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;

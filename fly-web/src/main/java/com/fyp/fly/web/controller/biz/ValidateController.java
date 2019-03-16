@@ -1,6 +1,6 @@
 package com.fyp.fly.web.controller.biz;
 
-import com.fyp.fly.web.clients.base.BaseApiClient;
+import com.fyp.fly.web.client.base.BaseApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

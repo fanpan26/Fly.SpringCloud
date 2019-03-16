@@ -1,4 +1,4 @@
-package com.fyp.fly.web.clients.base;
+package com.fyp.fly.web.client.base;
 
 import com.fyp.fly.common.result.api.JsonResult;
 

@@ -2,8 +2,8 @@ package com.fyp.fly.web.controller.pages;
 
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
-import com.fyp.fly.web.clients.article.ArticleApiClient;
-import com.fyp.fly.web.clients.base.BaseApiClient;
+import com.fyp.fly.web.client.article.ArticleApiClient;
+import com.fyp.fly.web.client.base.BaseApiClient;
 import com.fyp.fly.web.controller.biz.BaseController;
 import com.fyp.fly.web.controller.parameter.PostParameter;
 import org.springframework.beans.factory.annotation.Autowired;

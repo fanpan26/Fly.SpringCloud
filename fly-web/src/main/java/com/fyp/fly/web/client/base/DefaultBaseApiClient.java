@@ -1,12 +1,10 @@
-package com.fyp.fly.web.clients.base;
+package com.fyp.fly.web.client.base;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.web.clients.AbstractApiClient;
+import com.fyp.fly.web.client.AbstractApiClient;
 import com.fyp.fly.web.config.FlyContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 

@@ -1,13 +1,11 @@
-package com.fyp.fly.web.clients.user;
+package com.fyp.fly.web.client.user;
 
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.web.clients.AbstractApiClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fyp.fly.web.client.AbstractApiClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author fyp

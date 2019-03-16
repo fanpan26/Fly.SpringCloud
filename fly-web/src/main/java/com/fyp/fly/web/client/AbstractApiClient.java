@@ -1,7 +1,6 @@
-package com.fyp.fly.web.clients;
+package com.fyp.fly.web.client;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.common.utils.ConvertUtils;
 import com.fyp.fly.web.config.FlyContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +10,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * @author fyp
