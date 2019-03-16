@@ -2,7 +2,7 @@ package com.fyp.fly.services.account.controllers;
 
 import com.fyp.fly.common.result.api.JsonResult;
 
-import com.fyp.fly.services.account.services.AccountService;
+import com.fyp.fly.services.account.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
