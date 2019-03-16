@@ -3,7 +3,7 @@ package com.fyp.fly.web.client.article;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.web.client.AbstractApiClient;
 import com.fyp.fly.web.config.FlyContext;
-import com.fyp.fly.web.controller.parameter.PostParameter;
+import com.fyp.fly.web.controller.form.ArticleForm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -32,7 +32,7 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
     }
 
     @Override
-    public JsonResult add(PostParameter parameter) {
+    public JsonResult add(ArticleForm parameter) {
        Long userId = FlyContext.getUserId();
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
         parameters.add("id", parameter.getId());

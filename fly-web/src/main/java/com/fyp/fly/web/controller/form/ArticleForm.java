@@ -1,4 +1,4 @@
-package com.fyp.fly.web.controller.parameter;
+package com.fyp.fly.web.controller.form;
 
 import org.springframework.util.StringUtils;
 
@@ -7,10 +7,10 @@ import org.springframework.util.StringUtils;
  * @crate 2019/3/14 22:22
  * @project fly
  */
-public class PostParameter {
+public class ArticleForm {
 
-    private static final PostParameter defaultParameter = new PostParameter();
-    public static PostParameter newParameter(){
+    private static final ArticleForm defaultParameter = new ArticleForm();
+    public static ArticleForm newParameter(){
         return defaultParameter;
     }
 

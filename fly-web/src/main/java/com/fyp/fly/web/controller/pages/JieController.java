@@ -5,7 +5,7 @@ import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.web.client.article.ArticleApiClient;
 import com.fyp.fly.web.client.base.BaseApiClient;
 import com.fyp.fly.web.controller.biz.BaseController;
-import com.fyp.fly.web.controller.parameter.PostParameter;
+import com.fyp.fly.web.controller.form.ArticleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +40,7 @@ public class JieController extends BaseController{
                 return "/jie/add";
             }
         }
-        request.setAttribute(POST_PAGE_ATTRIBUTE_KEY, PostParameter.newParameter());
+        request.setAttribute(POST_PAGE_ATTRIBUTE_KEY, ArticleForm.newParameter());
         return "/jie/add";
     }
 
@@ -70,7 +70,7 @@ public class JieController extends BaseController{
      * 发布一篇帖子
      * */
     @PostMapping("/post")
-    public String post(PostParameter parameter,
+    public String post(ArticleForm parameter,
                      RedirectAttributes redirect) throws IOException {
 
         String code = parameter.getVercode();
@@ -87,7 +87,7 @@ public class JieController extends BaseController{
         }
     }
 
-    private String postError(PostParameter parameter,String errorMessage,RedirectAttributes redirect) {
+    private String postError(ArticleForm parameter, String errorMessage, RedirectAttributes redirect) {
         parameter.setAlert(true);
         parameter.setErrorMsg(errorMessage);
         redirect.addFlashAttribute(POST_PAGE_ATTRIBUTE_KEY, parameter);

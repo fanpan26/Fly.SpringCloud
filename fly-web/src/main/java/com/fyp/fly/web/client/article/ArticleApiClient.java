@@ -1,7 +1,7 @@
 package com.fyp.fly.web.client.article;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.web.controller.parameter.PostParameter;
+import com.fyp.fly.web.controller.form.ArticleForm;
 
 /**
  * @author fyp
@@ -9,5 +9,5 @@ import com.fyp.fly.web.controller.parameter.PostParameter;
  * @project fly
  */
 public interface ArticleApiClient {
-    JsonResult add(PostParameter parameter);
+    JsonResult add(ArticleForm parameter);
 }

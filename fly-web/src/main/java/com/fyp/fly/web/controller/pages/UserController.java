@@ -3,7 +3,7 @@ package com.fyp.fly.web.controller.pages;
 import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
-import com.fyp.fly.web.clients.user.UserApiClient;
+import com.fyp.fly.web.client.user.UserApiClient;
 import com.fyp.fly.web.config.FlyContext;
 import com.fyp.fly.web.controller.biz.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
