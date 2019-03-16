@@ -2,6 +2,7 @@ package com.fyp.fly.web.clients.base;
 
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.web.clients.AbstractApiClient;
+import com.fyp.fly.web.config.FlyContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,23 +25,26 @@ public class DefaultBaseApiClient extends AbstractApiClient implements BaseApiCl
     private String serviceId;
 
     private String getCodeUrl(Long userId){
-        return String.format("%s/%s/%s/%d",gateWayUrl,serviceId,"validate/code",userId);
+        return buildApiUrl("validate/code/"+userId);
     }
 
-    private String getValidateCodeUrl(Long userId,String code){
-        return String.format("%s/%s/%s/%d?code=%s",gateWayUrl,serviceId,"validate/code",userId,code);
+    private String getValidateCodeUrl(Long userId,String code) {
+        return buildApiUrl("validate/code/" + userId + "?code=" + code);
     }
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Override
-    public InputStream getValidateCode(Long userId) {
-        return getForInputStream(restTemplate,getCodeUrl(userId));
+    public InputStream getValidateCode() {
+        return getForInputStream(getCodeUrl(FlyContext.getUserId()));
     }
 
     @Override
-    public JsonResult validateCode(Long userId, String code) {
-        return postForObject(restTemplate, getValidateCodeUrl(userId, code));
+    public JsonResult validateCode(String code) {
+        return postForObject(getValidateCodeUrl(FlyContext.getUserId(), code));
+    }
+
+    @Override
+    protected String getServiceId() {
+        return serviceId;
     }
 }
