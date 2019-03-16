@@ -10,6 +10,6 @@ import java.io.InputStream;
  * @project fly
  */
 public interface BaseApiClient {
-    InputStream getValidateCode(Long userId);
-    JsonResult validateCode(Long userId,String code);
+    InputStream getValidateCode();
+    JsonResult validateCode(String code);
 }
