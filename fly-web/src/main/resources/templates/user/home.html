@@ -22,7 +22,7 @@
         <p class="fly-home-info">
             <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">0 飞吻</span>
             <i class="iconfont icon-shijian"></i><span th:text="${headerUser.createAtStr}+' 加入'"> 加入</span>
-            <i class="iconfont icon-chengshi"></i><span th:text="${headerUser.address}"></span>
+            <i class="iconfont icon-chengshi"></i><span th:text="'来自 '+${headerUser.address}"></span>
         </p>
 
         <p th:text="'('+${headerUser.sign}+')'" class="fly-home-sign"></p>
