@@ -9,6 +9,9 @@ package com.fyp.fly.common.dto;
  */
 public class CountDto {
 
+    public CountDto(){
+
+    }
     public CountDto(int bizType,Long bizId,Integer bizCount) {
         this.bizType = bizType;
         this.bizId = bizId;
