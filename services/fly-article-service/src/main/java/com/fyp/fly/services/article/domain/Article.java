@@ -8,9 +8,6 @@ package com.fyp.fly.services.article.domain;
 public class Article{
     public Article() {
         this.createAt = System.currentTimeMillis();
-        this.del = false;
-        this.top = false;
-        this.special = false;
         this.updateAt = this.createAt;
     }
 
@@ -62,6 +59,14 @@ public class Article{
         this.top = top;
     }
 
+    public boolean getClosure(){
+        return closure;
+    }
+
+    public void setClosure(boolean closure){
+        this.closure = closure;
+    }
+
     public boolean getSpecial() {
         return special;
     }
@@ -94,6 +99,13 @@ public class Article{
         this.updateAt = updateAt;
     }
 
+    public int getExperience(){
+        return experience;
+    }
+    public void setExperience(int experience){
+        this.experience= experience;
+    }
+
     private  long  id;
 
     private  long  author;
@@ -108,7 +120,9 @@ public class Article{
 
     private  boolean  special;
 
-    private  boolean  del;
+    private boolean closure;
+    private boolean  del;
+    private int experience;
 
     private  long  createAt;
 
