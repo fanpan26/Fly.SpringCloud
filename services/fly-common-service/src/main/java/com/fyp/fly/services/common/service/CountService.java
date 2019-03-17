@@ -15,5 +15,5 @@ import java.util.List;
 public interface CountService {
     JsonResult add(int type, Long bizId);
 
-    JsonResult<List<CountDto>> getListByBizIds(int bizType, long... bizIds);
+    JsonResult<List<CountDto>> getListByBizIds(int bizType, List<Long> bizIds);
 }
