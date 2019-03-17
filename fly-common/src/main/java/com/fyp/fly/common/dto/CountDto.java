@@ -8,15 +8,22 @@ package com.fyp.fly.common.dto;
  * 通用计数类
  */
 public class CountDto {
-    private long bizId;
+
+    public CountDto(int bizType,Long bizId,Integer bizCount) {
+        this.bizType = bizType;
+        this.bizId = bizId;
+        this.bizCount = bizCount;
+    }
+
+    private Long bizId;
     private int bizType;
-    private int bizCount;
+    private Integer bizCount;
 
     public long getBizId() {
         return bizId;
     }
 
-    public void setBizId(long bizId) {
+    public void setBizId(Long bizId) {
         this.bizId = bizId;
     }
 
@@ -32,7 +39,7 @@ public class CountDto {
         return bizCount;
     }
 
-    public void setBizCount(int bizCount) {
+    public void setBizCount(Integer bizCount) {
         this.bizCount = bizCount;
     }
 
