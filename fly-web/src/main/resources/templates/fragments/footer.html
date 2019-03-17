@@ -26,7 +26,11 @@
             ,base: '/res/mods/'  //这里实际使用时，建议改成绝对路径
         }).extend({
             fly: 'index'
-        }).use('fly');
+        }).use('fly', function () {
+            if (window["init"]) {
+                window["init"](layui.fly);
+            }
+        });
     </script>
 </footer>
 </body>
