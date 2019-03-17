@@ -25,4 +25,9 @@ public class ArticleController {
     public JsonResult add(ArticleEditDto article) {
         return articleService.add(article);
     }
+
+    @GetMapping("/{id}")
+    public JsonResult findOneById(@PathVariable("id") Long id){
+        return articleService.findOneById(id);
+    }
 }
