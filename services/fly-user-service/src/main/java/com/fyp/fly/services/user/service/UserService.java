@@ -1,7 +1,7 @@
 package com.fyp.fly.services.user.service;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.services.user.domain.dto.FlyUserInfoDto;
+import com.fyp.fly.services.user.domain.User;
 
 /**
  * @author fyp
@@ -13,6 +13,6 @@ public interface UserService {
     /**
      * 获取用户信息
      * */
-    JsonResult<FlyUserInfoDto> getUserInfo(Long userId);
+    JsonResult<User> getUserInfo(Long userId);
 
 }
