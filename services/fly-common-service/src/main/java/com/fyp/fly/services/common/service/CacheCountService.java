@@ -1,12 +1,9 @@
 package com.fyp.fly.services.common.service;
 
 import com.fyp.fly.common.dto.CountDto;
+import com.fyp.fly.common.enums.CountBizType;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
-import com.fyp.fly.services.common.domain.Count;
-import com.fyp.fly.services.common.domain.CountBizType;
-import io.swagger.models.auth.In;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -95,6 +92,17 @@ public class CacheCountService implements CountService {
                     }
                 }
             }
+        }
+        return ResultUtils.success(resultList);
+    }
+
+    @Override
+    public JsonResult<List<CountDto>> getListByBizTypes(Long bizId, List<Integer> bizTypes) {
+        List<CountDto> resultList = new ArrayList<>(bizTypes.size());
+        for (Integer bizType : bizTypes) {
+            String key = getKeyByBizType(bizType, bizId);
+            String value = countOps().get(key, bizId.toString());
+            resultList.add(new CountDto(bizType, bizId, value == null ? 0 : Integer.valueOf(value)));
         }
         return ResultUtils.success(resultList);
     }
