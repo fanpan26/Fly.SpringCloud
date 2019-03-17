@@ -4,8 +4,7 @@ import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.JSONUtils;
 import com.fyp.fly.services.user.cache.Cache;
-import com.fyp.fly.services.user.domain.FlyUser;
-import com.fyp.fly.services.user.domain.dto.FlyUserInfoDto;
+import com.fyp.fly.services.user.domain.User;
 import com.fyp.fly.services.user.repository.mapper.UserMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +33,21 @@ public class DefaultUserService implements UserService {
     private UserMapper userMapper;
 
 
-    private FlyUser getUserFromCache(Long userId){
-        FlyUser user;
+    private User getUserFromCache(Long userId){
+        User user;
         String userJson = ops().get(Cache.CACHE_USER+userId);
         if (StringUtils.isEmpty(userJson)){
            user = userMapper.getUserById(userId);
            ops().set(Cache.CACHE_USER+userId,JSONUtils.toJSONString(user),Cache.CACHE_USER_EXPIRE, TimeUnit.SECONDS);
         }else{
-            user = JSONUtils.parseObject(userJson,FlyUser.class);
+            user = JSONUtils.parseObject(userJson,User.class);
         }
-
         return user;
     }
 
     @Override
-    public JsonResult<FlyUserInfoDto> getUserInfo(Long userId) {
-        FlyUser user = getUserFromCache(userId);
-        return ResultUtils.success(FlyUserInfoDto.createByUser(user));
+    public JsonResult getUserInfo(Long userId) {
+        User user = getUserFromCache(userId);
+        return ResultUtils.success(user);
     }
 }
