@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author fyp
@@ -27,6 +28,7 @@ import java.io.IOException;
 public class JieController extends BaseController{
 
     private static final String POST_PAGE_ATTRIBUTE_KEY = "jie";
+    private static final String ARTICLE_PAGE_ATTRIBUTE_KEY = "article";
     /**
      * 添加帖子
      */
@@ -47,9 +49,18 @@ public class JieController extends BaseController{
     /**
      * 帖子详情
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public String detail(@PathVariable("id") Long id) {
-        return "/jie/detail";
+        if (id == null) {
+            return "index";
+        }
+        JsonResult<Map<String, Object>> articleRes = articleApiClient.getArticleById(id);
+        if (ResultUtils.isSuccess(articleRes)) {
+            request.setAttribute(ARTICLE_PAGE_ATTRIBUTE_KEY, articleRes.getData());
+            return "/jie/detail";
+        } else {
+            return "404";
+        }
     }
 
     /**
@@ -70,7 +81,7 @@ public class JieController extends BaseController{
      * 发布一篇帖子
      * */
     @PostMapping("/post")
-    public String post(ArticleForm parameter,
+    public String addArticle(ArticleForm parameter,
                      RedirectAttributes redirect) throws IOException {
 
         String code = parameter.getVercode();
@@ -86,6 +97,7 @@ public class JieController extends BaseController{
             return postError(parameter, result.getMsg(), redirect);
         }
     }
+
 
     private String postError(ArticleForm parameter, String errorMessage, RedirectAttributes redirect) {
         parameter.setAlert(true);
