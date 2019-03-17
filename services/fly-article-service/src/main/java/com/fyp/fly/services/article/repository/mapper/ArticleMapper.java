@@ -11,8 +11,11 @@ import org.apache.ibatis.annotations.*;
 
 public interface ArticleMapper {
 
-    @Insert("INSERT INTO `fly`.`fly_article`\n" +
-            "(`id`,`author`,`title`,`category`,`content`,`top`,`special`,`del`,`create_at`,`update_at`)\n" +
-            "VALUES(#{id},#{author},#{title},#{category},#{content},#{top},#{special},#{del},#{createAt},#{updateAt});")
+    @Insert("INSERT INTO `fly_article`\n" +
+            "(`id`,`author`,`title`,`category`,`content`,`top`,`special`,`del`,`create_at`,`update_at`,`experience`)\n" +
+            "VALUES(#{id},#{author},#{title},#{category},#{content},#{top},#{special},#{del},#{createAt},#{updateAt},#{experience});")
     void add(Article article);
+
+    @Select("SELECT id,author,title,category,content,top,special,closure,experience,create_at from fly_article WHERE id=#{id}")
+    Article findById(@Param("id") Long id);
 }
