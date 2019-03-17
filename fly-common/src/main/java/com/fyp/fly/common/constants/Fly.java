@@ -14,4 +14,9 @@ public interface Fly {
     String WEB_CACHE_USER_KEY = "app:user:";
     Integer WEB_CACHE_USER_EXPIRE = 600;
     Integer WEB_TOKEN_EXPIRE = 604800;
+
+    interface Status {
+        int API_CODE_NOTFOUND = 1404;
+        int API_CODE_INNERERROR = 1500;
+    }
 }
