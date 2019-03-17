@@ -32,8 +32,16 @@ public class CountController {
     /**
      * 获取计数详情
      * */
-    @PostMapping("/{bizType}")
+    @PostMapping("/type/{bizType}")
     public JsonResult getCountsByBizIds(@PathVariable("bizType") int type,@RequestBody List<Long> bizIds) {
         return countService.getListByBizIds(type, bizIds);
+    }
+
+    /**
+     * 获取某个计数详情
+     * */
+    @PostMapping("/id/{bizId}")
+    public JsonResult getCountsByBizTypes(@PathVariable("bizId") Long bizId,@RequestBody List<Integer> bizTypes) {
+        return countService.getListByBizTypes(bizId, bizTypes);
     }
 }
