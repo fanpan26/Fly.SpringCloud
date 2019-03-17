@@ -5,9 +5,12 @@ import com.fyp.fly.web.client.AbstractApiClient;
 import com.fyp.fly.web.config.FlyContext;
 import com.fyp.fly.web.controller.form.ArticleForm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.Map;
 
 
 /**
@@ -27,13 +30,16 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
         return serviceId;
     }
 
-    private String getAddUrl(){
+    private String getAddUrl() {
         return buildApiUrl("article/");
+    }
+
+    private String getArticleUrl(Long articleId) {
+        return buildAggregationUrl("aggregation/article/" + articleId + "?userId=" + FlyContext.getUserId());
     }
 
     @Override
     public JsonResult add(ArticleForm parameter) {
-       Long userId = FlyContext.getUserId();
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
         parameters.add("id", parameter.getId());
         parameters.add("title", parameter.getTitle());
@@ -42,5 +48,12 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
         parameters.add("experience", parameter.getExperience());
 
         return postForObjectWithFormHeader(getAddUrl(), parameters);
+    }
+
+    @Override
+    public JsonResult<Map<String, Object>> getArticleById(Long articleId) {
+        String url = getArticleUrl(articleId);
+        return getForObject(url, new ParameterizedTypeReference<JsonResult<Map<String, Object>>>() {
+        });
     }
 }
