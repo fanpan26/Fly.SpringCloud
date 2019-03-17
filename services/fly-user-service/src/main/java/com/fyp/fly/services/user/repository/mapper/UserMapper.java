@@ -1,6 +1,6 @@
 package com.fyp.fly.services.user.repository.mapper;
 
-import com.fyp.fly.services.user.domain.FlyUser;
+import com.fyp.fly.services.user.domain.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -20,5 +20,5 @@ public interface UserMapper {
             @Result(property = "authStr",  column = "auth_str"),
             @Result(property = "createAt",column="create_at")
     })
-    FlyUser getUserById(@Param("id") Long id);
+    User getUserById(@Param("id") Long id);
 }
