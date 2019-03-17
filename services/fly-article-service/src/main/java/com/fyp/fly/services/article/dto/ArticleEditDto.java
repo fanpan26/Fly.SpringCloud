@@ -77,6 +77,7 @@ public class ArticleEditDto extends BaseDto{
         article.setTitle(title);
         article.setAuthor(userId);
         article.setCategory(category);
+        article.setExperience(experience);
         article.setContent(content);
         return article;
     }
