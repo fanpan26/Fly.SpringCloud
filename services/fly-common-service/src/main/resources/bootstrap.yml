@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: fly-common-service
+  cloud:
+    config:
+      discovery:
+        service-id: fly-config-server
+        enabled: true
+      label: master
+      profile: default
+      name: rabbitmq,mysql,redis
+      username: panzi
+      password: 123456
+      fail-fast: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8762/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
