@@ -42,6 +42,10 @@ public abstract class AbstractApiClient {
         return String.format("%s/%s/%s", gateWayUrl, getServiceId(),url);
     }
 
+    protected final String buildAggregationUrl(String url) {
+        return String.format("%s/%s", gateWayUrl,url);
+    }
+
     protected  <T> JsonResult<T> getForObject(String url,ParameterizedTypeReference<JsonResult<T>> parameterizedTypeReference){
         return restTemplate.exchange(url,
                 HttpMethod.GET,
