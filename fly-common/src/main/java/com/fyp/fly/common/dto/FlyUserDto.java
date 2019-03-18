@@ -143,7 +143,7 @@ public class FlyUserDto {
     }
 
     public String getCreateAtStr() {
-        return DateUtils.timeStamp2Date(createAt);
+        return DateUtils.millisecondsToDate(createAt);
     }
 
 
