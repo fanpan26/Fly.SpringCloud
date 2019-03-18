@@ -16,11 +16,19 @@ public final class JSONUtils {
         return JSON.toJSONString(object);
     }
 
+    public static byte[] toJSONBytes(Object object){
+        return JSON.toJSONBytes(object);
+    }
+
     /**
      * JSON 反序列化
      * */
     public static <T> T parseObject(String json,Class<T> clazz) {
         return JSON.parseObject(json, clazz);
+    }
+
+    public static <T> T parseObject(byte[] bytes,Class<T> clazz) {
+        return JSON.parseObject(bytes, clazz);
     }
 
 }

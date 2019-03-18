@@ -3,6 +3,7 @@ package com.fyp.fly.services.common.controller;
 import com.fyp.fly.common.dto.CountDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.services.common.service.CountService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class CountController {
 
     @Autowired
     private CountService countService;
+
 
     /**
      * 添加计数

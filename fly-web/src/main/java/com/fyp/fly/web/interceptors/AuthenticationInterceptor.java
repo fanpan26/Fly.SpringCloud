@@ -71,16 +71,18 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             //if no user info,check token
             JsonResult<FlyUserDto> userRes = getUserFromSsoApi(token);
             if (userRes != null) {
-                String userJsonString = JSONUtils.toJSONString(userRes.getData());
-                setCache(userRes.getData().getId(), userJsonString);
-                CookieUtils.setCookie(response, Fly.WEB_COOKIE_USER_KEY, userRes.getData().getId() + "", Fly.WEB_TOKEN_EXPIRE);
-                request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, userRes.getData());
+                if (ResultUtils.isSuccess(userRes)) {
+                    String userJsonString = JSONUtils.toJSONString(userRes.getData());
+                    setCache(userRes.getData().getId(), userJsonString);
+                    CookieUtils.setCookie(response, Fly.WEB_COOKIE_USER_KEY, userRes.getData().getId() + "", Fly.WEB_TOKEN_EXPIRE);
+                    request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, userRes.getData());
+                }
+                return true;
             }
-        }else{
-            if (!(request.getRequestURI().equals("/")||request.getRequestURI().startsWith("/account"))){
-                response.sendRedirect(ssoUrl+"?from=fly-web&url="+ EncodeUtils.encodeUrl(request.getRequestURI()));
-                return false;
-            }
+        }
+        if (!(request.getRequestURI().equals("/") || request.getRequestURI().startsWith("/account"))) {
+            response.sendRedirect(ssoUrl + "?from=fly-web&url=" + EncodeUtils.encodeUrl(request.getRequestURI()));
+            return false;
         }
         return true;
     }
@@ -93,11 +95,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         JsonResult<FlyUserDto> response = restTemplate.exchange(ssoUrl + "/user/info?token=" + token,
                 HttpMethod.GET, null, new ParameterizedTypeReference<JsonResult<FlyUserDto>>() {
                 }).getBody();
-        if (ResultUtils.isSuccess(response)) {
-            return response;
-        }
-        //TODO log the response error code and msg
-        return null;
+        return response;
     }
 
 }

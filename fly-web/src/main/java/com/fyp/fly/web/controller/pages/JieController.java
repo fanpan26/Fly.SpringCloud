@@ -56,6 +56,8 @@ public class JieController extends BaseController{
         }
         JsonResult<Map<String, Object>> articleRes = articleApiClient.getArticleById(id);
         if (ResultUtils.isSuccess(articleRes)) {
+            //add browse count
+            articleApiClient.browse(id);
             request.setAttribute(ARTICLE_PAGE_ATTRIBUTE_KEY, articleRes.getData());
             return "/jie/detail";
         } else {

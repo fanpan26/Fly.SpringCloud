@@ -12,4 +12,6 @@ public interface ArticleService {
     JsonResult add(ArticleEditDto article);
 
     JsonResult findOneById(Long id);
+
+    JsonResult browse(Long id);
 }

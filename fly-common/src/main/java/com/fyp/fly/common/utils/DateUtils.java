@@ -13,10 +13,14 @@ import java.util.Map;
  * @project fly
  */
 public class DateUtils {
-    public static String timeStamp2Date(long seconds) {
-        if (seconds <= 0) {
+    public static String secondsToDate(long seconds) {
+        return millisecondsToDate(seconds * 1000);
+    }
+
+    public static String millisecondsToDate(long milliseconds) {
+        if (milliseconds <= 0) {
             return "";
         }
-        return DateUtil.formatDate(DateUtil.date(seconds * 1000));
+        return DateUtil.formatDate(DateUtil.date(milliseconds));
     }
 }

@@ -1,0 +1,38 @@
+package com.fyp.fly.services.common.consumer;
+
+import com.fyp.fly.common.event.CountEvent;
+import com.fyp.fly.common.utils.EncodeUtils;
+import com.fyp.fly.common.utils.JSONUtils;
+import com.fyp.fly.services.common.domain.Count;
+import com.fyp.fly.services.common.service.CountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class RabbitMessageListener implements MessageListener {
+
+    @Autowired
+    private CountService countService;
+
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMessageListener.class);
+
+    @Override
+    public void onMessage(Message message) {
+        try {
+            CountEvent event = JSONUtils.parseObject(message.getBody(), CountEvent.class);
+            countService.add(event.getBizType(), event.getBizId());
+        }catch (Exception e){
+
+        }
+    }
+
+    @Override
+    public void containerAckMode(AcknowledgeMode mode) {
+
+    }
+}

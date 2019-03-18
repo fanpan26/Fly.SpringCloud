@@ -1,5 +1,7 @@
 package com.fyp.fly.gateway.client.domain;
 
+import com.fyp.fly.common.utils.DateUtils;
+
 /**
  * @author fyp
  * @crate 2019/3/17 21:23
@@ -37,6 +39,10 @@ public class Article{
 
     public int getCategory() {
         return category;
+    }
+
+    public String getCategoryStr(){
+       return ArticleCategory.nameOfCategory(category);
     }
 
     public void setCategory(int category) {
@@ -89,6 +95,10 @@ public class Article{
 
     public void setCreateAt(long createAt) {
         this.createAt = createAt;
+    }
+
+    public String getCreateAtStr(){
+        return DateUtils.millisecondsToDate(createAt);
     }
 
     public long getUpdateAt() {

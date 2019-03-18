@@ -14,4 +14,6 @@ public interface ArticleApiClient {
     JsonResult add(ArticleForm parameter);
 
     JsonResult<Map<String,Object>> getArticleById(Long articleId);
+
+    JsonResult browse(Long id);
 }

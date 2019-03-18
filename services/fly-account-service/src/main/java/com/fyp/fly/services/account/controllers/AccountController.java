@@ -66,9 +66,4 @@ public class AccountController {
         return accountService.getUser(token);
     }
 
-    @GetMapping("/testZuul")
-    public  String getZuulConfig(){
-        return "zuul test";
-    }
-
 }
