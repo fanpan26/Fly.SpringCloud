@@ -46,4 +46,12 @@ public class ArticleController {
     public JsonResult browse(@PathVariable("id") Long id) {
        return articleService.browse(id);
     }
+
+    /**
+     * 帖子删除
+     * */
+    @PostMapping("/remove/{id}")
+    public JsonResult remove(@PathVariable("id") Long id) {
+        return articleService.delete(id);
+    }
 }

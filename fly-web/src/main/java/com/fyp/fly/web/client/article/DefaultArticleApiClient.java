@@ -36,6 +36,9 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
     private String getBrowseUrl(Long articleId) {
         return buildApiUrl("article/browse/"+articleId);
     }
+    private String getRemoveUrl(Long articleId) {
+        return buildApiUrl("article/remove/"+articleId);
+    }
 
     private String getArticleUrl(Long articleId) {
         return buildAggregationUrl("aggregation/article/" + articleId + "?userId=" + FlyContext.getUserId());
@@ -63,6 +66,12 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
     @Override
     public JsonResult browse(Long id) {
         String url = getBrowseUrl(id);
+        return postForObject(url);
+    }
+
+    @Override
+    public JsonResult remove(Long id) {
+        String url = getRemoveUrl(id);
         return postForObject(url);
     }
 }

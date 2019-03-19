@@ -74,13 +74,14 @@ layui.define('fly', function(exports){
   gather.jieAdmin = {
     //删求解
     del: function(div){
-      layer.confirm('确认删除该求解么？', function(index){
+      layer.confirm('确认删除吗？', function(index){
         layer.close(index);
-        fly.json('/api/jie-delete/', {
-          id: div.data('id')
+        var id = $('#hidden_article_id').val()||0;
+        fly.json('/article/remove/'+id, {
         }, function(res){
-          if(res.status === 0){
-            location.href = '/jie/';
+          alert(res.code);
+          if(res.code == 0){
+            location.href = '/';
           } else {
             layer.msg(res.msg);
           }

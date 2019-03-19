@@ -14,4 +14,6 @@ public interface ArticleService {
     JsonResult findOneById(Long id);
 
     JsonResult browse(Long id);
+
+    JsonResult delete(Long id);
 }

@@ -16,6 +16,9 @@ public interface ArticleMapper {
             "VALUES(#{id},#{author},#{title},#{category},#{content},#{top},#{special},#{del},#{createAt},#{updateAt},#{experience});")
     void add(Article article);
 
-    @Select("SELECT id,author,title,category,content,top,special,closure,experience,create_at from fly_article WHERE id=#{id}")
+    @Select("SELECT id,author,title,category,content,top,special,closure,experience,create_at from fly_article WHERE id=#{id} and del=0")
     Article findById(@Param("id") Long id);
+
+   @Update("update fly_article set del=1 where id=#{id}")
+    void delete(@Param("id") Long id);
 }

@@ -63,4 +63,13 @@ public class ArticleServiceImpl implements ArticleService{
         rabbitTemplate.convertAndSend(FlyEvent.SERVICE_COMMON_EXCHANGE, FlyEvent.SERVICE_ARTICLE_COUNT_EVENT, JSONUtils.toJSONString(event));
         return ResultUtils.success();
     }
+
+    @Override
+    public JsonResult delete(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("id");
+        }
+        articleMapper.delete(id);
+        return ResultUtils.success();
+    }
 }

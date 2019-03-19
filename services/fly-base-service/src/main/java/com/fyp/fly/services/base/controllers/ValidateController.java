@@ -26,7 +26,7 @@ public class ValidateController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    private static final String CACHE_KEY_VALIDATE_CODE = "services:base:code:";
+    private static final String CACHE_KEY_VALIDATE_CODE = "service:base:code:";
 
     private void setCache(String code,Long userId) {
         redisTemplate.opsForValue().set(CACHE_KEY_VALIDATE_CODE + userId, code);

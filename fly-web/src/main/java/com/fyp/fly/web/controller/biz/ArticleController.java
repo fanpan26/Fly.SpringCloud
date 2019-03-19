@@ -19,4 +19,9 @@ public class ArticleController {
     public JsonResult browse(@PathVariable("id") Long id) {
         return articleApiClient.browse(id);
     }
+
+    @PostMapping("/remove/{id}")
+    public JsonResult remove(@PathVariable("id") Long id) {
+        return articleApiClient.remove(id);
+    }
 }

@@ -16,4 +16,6 @@ public interface ArticleApiClient {
     JsonResult<Map<String,Object>> getArticleById(Long articleId);
 
     JsonResult browse(Long id);
+
+    JsonResult remove(Long id);
 }

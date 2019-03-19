@@ -19,7 +19,7 @@
                         <span class="layui-badge layui-bg-red" th:if="${article.article.special}">精帖</span>
 
                         <div class="fly-admin-box">
-                            <input type="hidden" th:value="${article.article.id}"/>
+                            <input type="hidden" id="hidden_article_id" th:value="${article.article.id}"/>
                             <span class="layui-btn layui-btn-xs jie-admin" type="del" th:if="${article.isAuthor}">删除</span>
 
                             <!--<span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>-->
