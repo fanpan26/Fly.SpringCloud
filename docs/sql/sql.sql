@@ -47,3 +47,25 @@ CREATE TABLE `fly`.`fly_msg` (
   `create_at` BIGINT NULL,
   PRIMARY KEY (`id`))
 COMMENT = '用户消息';
+
+CREATE TABLE `fly`.`fly_comment` (
+  `id` BIGINT NOT NULL DEFAULT 0,
+  `uid` BIGINT NOT NULL COMMENT '评论人',
+  `art_id` BIGINT NOT NULL COMMENT '帖子ID',
+  `content` VARCHAR(4000) NOT NULL COMMENT '评论内容',
+  `create_at` BIGINT NOT NULL COMMENT '发表时间',
+  `adopt` BIT NOT NULL DEFAULT 0 COMMENT '是否被采纳 1 采纳 0 无',
+  `reply_id` BIGINT NULL,
+  PRIMARY KEY (`id`))
+COMMENT = '帖子评论';
+
+CREATE TABLE `fly_count` (
+  `id` bigint(20) NOT NULL,
+  `biz_id` bigint(20) DEFAULT NULL COMMENT '业务ID ，例如帖子 ，用户 等',
+  `biz_type` tinyint(4) NOT NULL COMMENT '业务类型  1 帖子  2 评论',
+  `biz_count` int(11) DEFAULT NULL COMMENT '业务数据统计条数',
+  `create_at` bigint(20) DEFAULT NULL COMMENT '创建时间',
+  `udpate_at` bigint(20) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计数';
+

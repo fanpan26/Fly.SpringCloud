@@ -159,8 +159,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
                 ,url: '/api/upload/'
                 ,size: 200
                 ,done: function(res){
-                  if(res.status == 0){
-                    image.val(res.url);
+                  if(res.code == 0){
+                    image.val(res.data.url);
                   } else {
                     layer.msg(res.msg, {icon: 5});
                   }
