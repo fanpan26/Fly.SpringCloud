@@ -16,7 +16,7 @@ public class CommentController {
 
     @PostMapping("/")
     public JsonResult add(CommentDto comment) {
-        return commentService.add(comment);
+        return commentService.addCache(comment);
     }
 
     @PostMapping("/remove/{id}")

@@ -33,6 +33,7 @@
                                 <cit th:text="${article.commentCount}" id="jiedaCount">0</cit></a><i class="iconfont" title="人气"></i><cit th:text="${article.browseCount}">0</cit></span>
                     </div>
                     <div class="detail-about">
+                        <input type="hidden" id="hidden_author_id" th:value="${article.author.id}"/>
                         <a class="fly-avatar" href="../user/home.html">
                             <img th:src="${article.author.avatar}" th:alt="${article.author.name}">
                         </a>

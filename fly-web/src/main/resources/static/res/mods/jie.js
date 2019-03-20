@@ -54,7 +54,9 @@ layui.define('fly', function(exports){
             <i class="layui-badge fly-badge-vip">{{d.user.vip}}</i>\
            {{# }}}\
         </a>\
+         {{# if(d.author){ }}\
         <span>(楼主)</span>\
+          {{# }}}\
         </div>\
         <div class="detail-hits">\
           <span>刚刚</span>\
@@ -75,6 +77,7 @@ layui.define('fly', function(exports){
         </div>\
     </li>'
     data.id=res.data;
+    data.author=layui.cache.user.uid==$('#hidden_author_id').val();
     data.content = fly.content(data.content);
     laytpl(tpl).render($.extend(data, {
       user: layui.cache.user
@@ -176,6 +179,7 @@ layui.define('fly', function(exports){
       var aite = '@'+ li.find('.fly-detail-user cite').text().replace(/\s/g, '');
       dom.content.focus()
       if(val.indexOf(aite) !== -1) return;
+      $('#hidden_article_reply_id').val(li.data('id'));
       dom.content.val(aite +' ' + val);
     }
     ,accept: function(li){ //采纳

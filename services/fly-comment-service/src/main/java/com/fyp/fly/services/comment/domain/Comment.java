@@ -2,7 +2,9 @@ package com.fyp.fly.services.comment.domain;
 
 import com.fyp.fly.common.utils.IdUtils;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable{
 
     public Comment(Long artId,String content,Long userId,Long replyId) {
         createAt = System.currentTimeMillis();
@@ -16,7 +18,7 @@ public class Comment {
 
     private long id;
     private long uid;
-    private long artId;
+    private transient long artId;
     private String content;
     private long createAt;
     private boolean adopt;

@@ -7,15 +7,25 @@ import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.JSONUtils;
 import com.fyp.fly.services.comment.domain.Comment;
+import com.fyp.fly.services.comment.domain.CommentCache;
 import com.fyp.fly.services.comment.domain.CommentDto;
 import com.fyp.fly.services.comment.repository.mapper.CommentMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DefaultCommentService implements CommentService {
+
+    @Autowired
+    private ListOperations<String, Object> listOps;
+
 
     @Autowired
     private CommentMapper commentMapper;
@@ -36,6 +46,14 @@ public class DefaultCommentService implements CommentService {
         } else {
             return ResultUtils.failed(comment.getErrMsg());
         }
+    }
+
+    @Override
+    public JsonResult addCache(CommentDto comment) {
+        Comment commentModel = comment.transfer();
+        listOps.leftPush("service:comment:l_" + comment.getArtId(), commentModel);
+        //List<Object> list = listOps.range("service:comment:l_" + comment.getArtId(),1,20);
+        return ResultUtils.success();
     }
 
     @Override
