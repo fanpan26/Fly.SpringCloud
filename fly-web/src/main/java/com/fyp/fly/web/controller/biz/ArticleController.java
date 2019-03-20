@@ -36,4 +36,14 @@ public class ArticleController {
     public JsonResult removeReply(@PathVariable("id") Long id) {
         return commentApiClient.remove(id);
     }
+
+    @GetMapping("/reply/content/{id}")
+    public JsonResult getReplyContent(@PathVariable("id") Long id) {
+        return commentApiClient.getContent(id);
+    }
+
+    @PostMapping("/reply/content/{id}")
+    public JsonResult updateReplyContent(@PathVariable("id") Long id,String content) {
+        return commentApiClient.updateContent(id, content);
+    }
 }

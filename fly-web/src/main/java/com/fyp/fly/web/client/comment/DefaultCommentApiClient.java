@@ -4,6 +4,7 @@ import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.web.client.AbstractApiClient;
 import com.fyp.fly.web.controller.form.CommentDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +26,9 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
     private String getDeleteUrl(Long id) {
         return buildApiUrl("comment/remove/"+id);
     }
+    private String getContentUrl(Long id) {
+        return buildApiUrl("comment/content/"+id);
+    }
 
     @Override
     public JsonResult add(CommentDto comment) {
@@ -41,5 +45,19 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
     public JsonResult remove(Long id) {
        String url = getDeleteUrl(id);
        return postForObject(url);
+    }
+
+    @Override
+    public JsonResult getContent(Long id) {
+        String url = getContentUrl(id);
+        return getForObject(url, new ParameterizedTypeReference<JsonResult<String>>() {
+        });
+    }
+
+    @Override
+    public JsonResult updateContent(Long id,String content) {
+        MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
+        parameters.add("content", content);
+        return postForObjectWithFormHeader(getContentUrl(id), parameters);
     }
 }

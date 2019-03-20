@@ -1,9 +1,7 @@
 package com.fyp.fly.services.comment.repository.mapper;
 
 import com.fyp.fly.services.comment.domain.Comment;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 public interface CommentMapper {
 
@@ -13,4 +11,10 @@ public interface CommentMapper {
 
     @Delete("DELETE FROM `fly_comment` WHERE id=#{id}")
     void delete(@Param("id") Long id);
+
+    @Select("SELECT content FROM `fly_comment` where Id=#{id}")
+    String getContentById(@Param("id") Long id);
+
+    @Update("UPDATE `fly_comment` SET content=#{content} WHERE `id`=#{id} and `uid`=#{uid}")
+    void updateContent(Long id,Long uid,String content);
 }

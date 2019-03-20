@@ -6,4 +6,6 @@ import com.fyp.fly.services.comment.domain.CommentDto;
 public interface CommentService {
     JsonResult add(CommentDto comment);
     JsonResult delete(Long id);
+    JsonResult getContent(Long id);
+    JsonResult updateContent(Long id,Long uid,String content);
 }

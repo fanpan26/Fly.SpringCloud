@@ -6,4 +6,6 @@ import com.fyp.fly.web.controller.form.CommentDto;
 public interface CommentApiClient {
     JsonResult add(CommentDto comment);
     JsonResult remove(Long id);
+    JsonResult getContent(Long id);
+    JsonResult updateContent(Long id, String content);
 }

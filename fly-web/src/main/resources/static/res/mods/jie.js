@@ -196,14 +196,10 @@ layui.define('fly', function(exports){
       });
     }
     ,edit: function(li){ //编辑
-      console.log(li);
-      fly.json('/jie/getDa/', {
-        id: li.data('id')
-      }, function(res){
-        var data = res.rows;
+      fly.json('/article/reply/content/'+li.data('id'), {}, function(res){
         layer.prompt({
           formType: 2
-          ,value: data.content
+          ,value: res.data
           ,maxlength: 100000
           ,title: '编辑回帖'
           ,area: ['728px', '300px']
@@ -213,15 +209,13 @@ layui.define('fly', function(exports){
             });
           }
         }, function(value, index){
-          fly.json('/jie/updateDa/', {
-            id: li.data('id')
-            ,content: value
+          fly.json('/article/reply/content/'+li.data('id'),{content: value
           }, function(res){
             layer.close(index);
             li.find('.detail-body').html(fly.content(value));
           });
         });
-      });
+      },{type:'GET'});
     }
     ,del: function(li){ //删除
       layer.confirm('确认删除该回答么？', function(index){
