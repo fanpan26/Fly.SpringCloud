@@ -9,8 +9,13 @@ public abstract class BaseDto {
 
     protected String errMsg;
     public final boolean isValid() {
-        checkArguments();
+        errMsg = checkArguments();
         return errMsg == null || errMsg.length() == 0;
     }
+
+    public final String getErrMsg(){
+        return errMsg;
+    }
+
     public abstract String checkArguments();
 }
