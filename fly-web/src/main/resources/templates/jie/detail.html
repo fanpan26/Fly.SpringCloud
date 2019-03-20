@@ -30,7 +30,7 @@
                         </div>
                         <span class="fly-list-nums" id="span_nums">
                             <a href="#comment"><i class="iconfont" title="回答"></i>
-                                <cit th:text="${article.commentCount}">0</cit></a><i class="iconfont" title="人气"></i><cit th:text="${article.browseCount}">0</cit></span>
+                                <cit th:text="${article.commentCount}" id="jiedaCount">0</cit></a><i class="iconfont" title="人气"></i><cit th:text="${article.browseCount}">0</cit></span>
                     </div>
                     <div class="detail-about">
                         <a class="fly-avatar" href="../user/home.html">
@@ -141,11 +141,11 @@
                         </li>
 
                         <!-- 无数据时 -->
-                        <!-- <li class="fly-none">消灭零回复</li> -->
+                         <li class="fly-none">还没有人回答，快来消灭零回复</li>
                     </ul>
 
                     <div class="layui-form layui-form-pane">
-                        <form action="/jie/reply/" method="post">
+                        <form action="/article/reply/" method="post">
                             <div class="layui-form-item layui-form-text">
                                 <a name="comment"></a>
                                 <div class="layui-input-block">
@@ -153,7 +153,8 @@
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <input type="hidden" name="jid" value="123">
+                                <input type="hidden" name="artId" th:value="${article.article.id}"/>
+                                <input type="hidden" name="replyId" id="hidden_article_reply_id" value="0"/>
                                 <button class="layui-btn" lay-filter="*" lay-submit>提交回复</button>
                             </div>
                         </form>

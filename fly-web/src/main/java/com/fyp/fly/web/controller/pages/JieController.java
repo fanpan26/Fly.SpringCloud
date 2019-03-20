@@ -5,7 +5,7 @@ import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.web.client.article.ArticleApiClient;
 import com.fyp.fly.web.client.base.BaseApiClient;
 import com.fyp.fly.web.controller.biz.BaseController;
-import com.fyp.fly.web.controller.form.ArticleForm;
+import com.fyp.fly.web.controller.form.ArticleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +42,7 @@ public class JieController extends BaseController{
                 return "/jie/add";
             }
         }
-        request.setAttribute(POST_PAGE_ATTRIBUTE_KEY, ArticleForm.newParameter());
+        request.setAttribute(POST_PAGE_ATTRIBUTE_KEY, ArticleDto.newParameter());
         return "/jie/add";
     }
 
@@ -83,8 +83,8 @@ public class JieController extends BaseController{
      * 发布一篇帖子
      * */
     @PostMapping("/post")
-    public String addArticle(ArticleForm parameter,
-                     RedirectAttributes redirect) throws IOException {
+    public String addArticle(ArticleDto parameter,
+                             RedirectAttributes redirect){
 
         String code = parameter.getVercode();
         JsonResult res = baseApiClient.validateCode(code);
@@ -101,7 +101,7 @@ public class JieController extends BaseController{
     }
 
 
-    private String postError(ArticleForm parameter, String errorMessage, RedirectAttributes redirect) {
+    private String postError(ArticleDto parameter, String errorMessage, RedirectAttributes redirect) {
         parameter.setAlert(true);
         parameter.setErrorMsg(errorMessage);
         redirect.addFlashAttribute(POST_PAGE_ATTRIBUTE_KEY, parameter);

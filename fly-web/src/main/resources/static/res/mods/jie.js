@@ -38,14 +38,14 @@ layui.define('fly', function(exports){
   });
 
   //提交回答
-  fly.form['/article/reply/'] = function(data, required){
-    var tpl = '<li>\
+  fly.form['/article/reply/'] = function(data, required,res){
+    var tpl = '<li data-id="{{d.id}}">\
       <div class="detail-about detail-about-reply">\
-        <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
-          <img src="{{= d.user.avatar}}" alt="{{= d.user.username}}">\
+        <a class="fly-avatar" href="/u/{{ d.user.uid }}" target="_blank">\
+          <img src="{{d.user.avatar}}" alt="{{d.user.username}}">\
         </a>\
         <div class="fly-detail-user">\
-          <a href="/u/{{ layui.cache.user.uid }}" target="_blank" class="fly-link">\
+          <a href="/u/{{ d.user.uid }}" target="_blank" class="fly-link">\
             <cite>{{d.user.username}}</cite>\
             {{# if(d.user.auth){ }}\
             <i class="iconfont icon-renzheng" title="认证信息：{{d.user.auth}}"></i>\
@@ -74,6 +74,7 @@ layui.define('fly', function(exports){
         </div>\
         </div>\
     </li>'
+    data.id=res.data;
     data.content = fly.content(data.content);
     laytpl(tpl).render($.extend(data, {
       user: layui.cache.user
@@ -225,10 +226,8 @@ layui.define('fly', function(exports){
     ,del: function(li){ //删除
       layer.confirm('确认删除该回答么？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-delete/', {
-          id: li.data('id')
-        }, function(res){
-          if(res.status === 0){
+        fly.json('/article/reply/remove/'+li.data('id'), { }, function(res){
+          if(res.code === 0){
             var count = dom.jiedaCount.text()|0;
             dom.jiedaCount.html(--count);
             li.remove();

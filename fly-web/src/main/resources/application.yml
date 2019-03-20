@@ -21,6 +21,7 @@ gateway:
     user: fly-user-service
     base: fly-base-service
     article: fly-article-service
+    comment: fly-comment-service
 logging:
   level:
     spring:

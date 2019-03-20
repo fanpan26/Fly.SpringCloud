@@ -7,10 +7,10 @@ import org.springframework.util.StringUtils;
  * @crate 2019/3/14 22:22
  * @project fly
  */
-public class ArticleForm {
+public class ArticleDto {
 
-    private static final ArticleForm defaultParameter = new ArticleForm();
-    public static ArticleForm newParameter(){
+    private static final ArticleDto defaultParameter = new ArticleDto();
+    public static ArticleDto newParameter(){
         return defaultParameter;
     }
 

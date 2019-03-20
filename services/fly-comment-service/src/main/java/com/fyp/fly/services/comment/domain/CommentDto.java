@@ -7,6 +7,16 @@ public class CommentDto extends BaseDto {
     private Long artId;
     private Long userId;
 
+    public Long getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Long replyId) {
+        this.replyId = replyId;
+    }
+
+    private Long replyId;
+
     public Long getArtId() {
         return artId;
     }
@@ -48,6 +58,6 @@ public class CommentDto extends BaseDto {
     }
 
     public Comment transfer(){
-        return new Comment(artId,content,userId);
+        return new Comment(artId,content,userId,replyId);
     }
 }

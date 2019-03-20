@@ -12,7 +12,7 @@
     </div>
 
     <script src="/res/layui/layui.js"></script>
-    <script>
+    <script th:inline="javascript">
         layui.cache.page = '';
         layui.cache.user = {
             username: '游客'
@@ -21,6 +21,19 @@
             ,experience: 83
             ,sex: '男'
         };
+        var user = [[${#httpServletRequest.getAttribute('headerUser')}]];
+        if(user){
+            layui.cache.user = {
+                username: user.name
+                ,uid: user.id
+                ,avatar: user.avatar
+                ,experience: 0
+                ,sex: user.sex==1?'男':'女'
+                ,vip:user.vipString
+                ,auth:user.authStr
+            };
+        }
+        console.log(layui.cache.user);
         layui.config({
             version: "3.0.0"
             ,base: '/res/mods/'  //这里实际使用时，建议改成绝对路径
