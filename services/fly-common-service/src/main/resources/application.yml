@@ -21,4 +21,4 @@ spring:
 # 计数服务每个hash存储的条数
 count:
   bucket:
-    size: 100000
+    size: 10000000
