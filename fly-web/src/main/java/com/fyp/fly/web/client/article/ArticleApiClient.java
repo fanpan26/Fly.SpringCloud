@@ -1,7 +1,7 @@
 package com.fyp.fly.web.client.article;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.web.controller.form.ArticleForm;
+import com.fyp.fly.web.controller.form.ArticleDto;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * @project fly
  */
 public interface ArticleApiClient {
-    JsonResult add(ArticleForm parameter);
+    JsonResult add(ArticleDto parameter);
 
     JsonResult<Map<String,Object>> getArticleById(Long articleId);
 
