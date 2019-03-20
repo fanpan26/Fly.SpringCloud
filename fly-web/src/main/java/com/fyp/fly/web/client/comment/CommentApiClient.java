@@ -1,0 +1,9 @@
+package com.fyp.fly.web.client.comment;
+
+import com.fyp.fly.common.result.api.JsonResult;
+import com.fyp.fly.web.controller.form.CommentDto;
+
+public interface CommentApiClient {
+    JsonResult add(CommentDto comment);
+    JsonResult remove(Long id);
+}
