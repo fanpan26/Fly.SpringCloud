@@ -1,13 +1,10 @@
 package com.fyp.fly.services.common.controller;
 
-import com.fyp.fly.common.dto.CountDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.services.common.service.CountService;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +25,7 @@ public class CountController {
      * */
     @PostMapping("/{bizType}/{bizId}")
     public JsonResult getCountByBizId(@PathVariable("bizType") int type,@PathVariable("bizId") Long bizId) {
-        return countService.add(type, bizId);
+        return countService.increment(type, bizId);
     }
 
     /**

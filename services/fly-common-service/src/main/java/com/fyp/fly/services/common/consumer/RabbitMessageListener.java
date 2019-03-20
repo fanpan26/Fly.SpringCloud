@@ -1,9 +1,7 @@
 package com.fyp.fly.services.common.consumer;
 
 import com.fyp.fly.common.event.CountEvent;
-import com.fyp.fly.common.utils.EncodeUtils;
 import com.fyp.fly.common.utils.JSONUtils;
-import com.fyp.fly.services.common.domain.Count;
 import com.fyp.fly.services.common.service.CountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +23,13 @@ public class RabbitMessageListener implements MessageListener {
     public void onMessage(Message message) {
         try {
             CountEvent event = JSONUtils.parseObject(message.getBody(), CountEvent.class);
-            countService.add(event.getBizType(), event.getBizId());
-        }catch (Exception e){
-
+            if (event.isIncrement()) {
+                countService.increment(event.getBizType(), event.getBizId());
+            } else {
+                countService.decrement(event.getBizType(), event.getBizId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

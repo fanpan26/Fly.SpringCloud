@@ -17,6 +17,6 @@ public class CountServiceTests extends CommonServiceApplicationTests {
 
     @Test
     public void addCountTest(){
-        countService.add(1,100001L);
+        countService.increment(1,100001L);
     }
 }

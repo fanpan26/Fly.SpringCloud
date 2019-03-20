@@ -11,7 +11,9 @@ import java.util.List;
  * @project fly
  */
 public interface CountService {
-    JsonResult add(int type, Long bizId);
+    JsonResult increment(int type, Long bizId);
+
+    JsonResult decrement(int type, Long bizId);
 
     JsonResult<List<CountDto>> getListByBizIds(int bizType, List<Long> bizIds);
 

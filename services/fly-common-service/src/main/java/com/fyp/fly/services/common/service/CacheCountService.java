@@ -51,11 +51,20 @@ public class CacheCountService implements CountService {
      * 添加一条计数
      */
     @Override
-    public JsonResult add(int type, Long bizId) {
+    public JsonResult increment(int type, Long bizId) {
+        return changeCount(type,bizId,1L);
+    }
+
+    @Override
+    public JsonResult decrement(int type, Long bizId) {
+       return changeCount(type,bizId,-1L);
+    }
+
+    private JsonResult changeCount(int type, Long bizId,Long count) {
         String key = getKeyByBizType(type, bizId);
         //如果redis缓存丢失，会有数据不准的问题，不处理，交给计划去做，检查
-        Long count = countOps().increment(key, bizId.toString(), 1);
-        return ResultUtils.success(count);
+        Long res = countOps().increment(key, bizId.toString(), count);
+        return ResultUtils.success(res);
     }
 
 

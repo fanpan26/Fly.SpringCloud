@@ -15,6 +15,9 @@ public interface CommentMapper {
     @Select("SELECT content FROM `fly_comment` where Id=#{id}")
     String getContentById(@Param("id") Long id);
 
+    @Select("SELECT art_id FROM `fly_comment` where Id=#{id}")
+    Long getArtIdById(@Param("id") Long id);
+
     @Update("UPDATE `fly_comment` SET content=#{content} WHERE `id`=#{id} and `uid`=#{uid}")
     void updateContent(Long id,Long uid,String content);
 }
