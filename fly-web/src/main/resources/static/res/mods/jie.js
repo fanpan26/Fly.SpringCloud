@@ -38,7 +38,7 @@ layui.define('fly', function(exports){
   });
 
   //提交回答
-  fly.form['/jie/reply/'] = function(data, required){
+  fly.form['/article/reply/'] = function(data, required){
     var tpl = '<li>\
       <div class="detail-about detail-about-reply">\
         <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
@@ -47,7 +47,14 @@ layui.define('fly', function(exports){
         <div class="fly-detail-user">\
           <a href="/u/{{ layui.cache.user.uid }}" target="_blank" class="fly-link">\
             <cite>{{d.user.username}}</cite>\
-          </a>\
+            {{# if(d.user.auth){ }}\
+            <i class="iconfont icon-renzheng" title="认证信息：{{d.user.auth}}"></i>\
+            {{# }}}\
+           {{# if(d.user.vip){ }}\
+            <i class="layui-badge fly-badge-vip">{{d.user.vip}}</i>\
+           {{# }}}\
+        </a>\
+        <span>(楼主)</span>\
         </div>\
         <div class="detail-hits">\
           <span>刚刚</span>\
@@ -56,6 +63,16 @@ layui.define('fly', function(exports){
       <div class="detail-body jieda-body photos">\
         {{ d.content}}\
       </div>\
+      <div class="jieda-reply">\
+        <span class="jieda-zan" type="zan">\
+        <i class="iconfont icon-zan"></i>\
+        <em>0</em>\
+        </span>\
+    <div class="jieda-admin">\
+        <span type="edit">编辑</span>\
+        <span type="del">删除</span>\
+        </div>\
+        </div>\
     </li>'
     data.content = fly.content(data.content);
     laytpl(tpl).render($.extend(data, {
@@ -66,7 +83,7 @@ layui.define('fly', function(exports){
       dom.jieda.append(html);
       
       var count = dom.jiedaCount.text()|0;
-      dom.jiedaCount.html(++count);
+      dom.jiedaCount.text(++count);
     });
   };
 
@@ -178,6 +195,7 @@ layui.define('fly', function(exports){
       });
     }
     ,edit: function(li){ //编辑
+      console.log(li);
       fly.json('/jie/getDa/', {
         id: li.data('id')
       }, function(res){
@@ -226,7 +244,8 @@ layui.define('fly', function(exports){
     }
   };
 
-  $('.jieda-reply span').on('click', function(){
+  $(document).on('click','.jieda-reply span',function () {
+    console.log('what the fuck')
     var othis = $(this), type = othis.attr('type');
     gather.jiedaActive[type].call(this, othis.parents('li'));
   });
