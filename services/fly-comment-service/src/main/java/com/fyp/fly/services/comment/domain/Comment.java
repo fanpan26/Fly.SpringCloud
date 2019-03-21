@@ -1,11 +1,13 @@
 package com.fyp.fly.services.comment.domain;
 
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.utils.IdUtils;
 
 import java.io.Serializable;
 
 public class Comment implements Serializable{
 
+    public Comment(){}
     public Comment(Long artId,String content,Long userId,Long replyId) {
         createAt = System.currentTimeMillis();
         id = IdUtils.next(userId);
@@ -80,4 +82,34 @@ public class Comment implements Serializable{
     }
 
     private long replyId;
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+    }
+
+    private UserModel user;
+
+    public boolean isAuthor() {
+        return author;
+    }
+
+    public void setAuthor(boolean author) {
+        this.author = author;
+    }
+
+    public boolean isEditor() {
+        return editor;
+    }
+
+    public void setEditor(boolean editor) {
+        this.editor = editor;
+    }
+
+    private boolean author;
+    private boolean editor;
+
 }
