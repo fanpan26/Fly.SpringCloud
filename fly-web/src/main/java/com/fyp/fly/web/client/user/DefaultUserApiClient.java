@@ -1,6 +1,6 @@
 package com.fyp.fly.web.client.user;
 
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.web.client.AbstractApiClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +23,8 @@ public class DefaultUserApiClient extends AbstractApiClient implements UserApiCl
     }
 
     @Override
-    public JsonResult<FlyUserDto> getUserById(Long userId) {
-        return getForObject(getUserUrl(userId), new ParameterizedTypeReference<JsonResult<FlyUserDto>>() {
+    public JsonResult<UserModel> getUserById(Long userId) {
+        return getForObject(getUserUrl(userId), new ParameterizedTypeReference<JsonResult<UserModel>>() {
         });
     }
 
