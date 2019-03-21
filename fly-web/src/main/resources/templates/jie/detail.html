@@ -59,90 +59,6 @@
                     </fieldset>
 
                     <ul class="jieda" id="jieda">
-                        <li data-id="111" class="jieda-daan">
-                            <a name="item-1111111111"></a>
-                            <div class="detail-about detail-about-reply">
-                                <a class="fly-avatar" href="">
-                                    <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" ">
-                                </a>
-                                <div class="fly-detail-user">
-                                    <a href="" class="fly-link">
-                                        <cite>贤心</cite>
-                                        <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-                                        <i class="layui-badge fly-badge-vip">VIP3</i>
-                                    </a>
-
-                                    <span>(楼主)</span>
-                                    <!--
-                                    <span style="color:#5FB878">(管理员)</span>
-                                    <span style="color:#FF9E3F">（社区之光）</span>
-                                    <span style="color:#999">（该号已被封）</span>
-                                    -->
-                                </div>
-
-                                <div class="detail-hits">
-                                    <span>2017-11-30</span>
-                                </div>
-
-                                <i class="iconfont icon-caina" title="最佳答案"></i>
-                            </div>
-                            <div class="detail-body jieda-body photos">
-                                <p>香菇那个蓝瘦，这是一条被采纳的回帖</p>
-                            </div>
-                            <div class="jieda-reply">
-              <span class="jieda-zan zanok" type="zan">
-                <i class="iconfont icon-zan"></i>
-                <em>66</em>
-              </span>
-                                <span type="reply">
-                <i class="iconfont icon-svgmoban53"></i>
-                回复
-              </span>
-                                <div class="jieda-admin">
-                                    <span type="edit">编辑</span>
-                                    <span type="del">删除</span>
-                                    <!-- <span class="jieda-accept" type="accept">采纳</span> -->
-                                </div>
-                            </div>
-                        </li>
-
-                        <li data-id="111">
-                            <a name="item-1111111111"></a>
-                            <div class="detail-about detail-about-reply">
-                                <a class="fly-avatar" href="">
-                                    <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" ">
-                                </a>
-                                <div class="fly-detail-user">
-                                    <a href="" class="fly-link">
-                                        <cite>贤心</cite>
-                                    </a>
-                                </div>
-                                <div class="detail-hits">
-                                    <span>2017-11-30</span>
-                                </div>
-                            </div>
-                            <div class="detail-body jieda-body photos">
-                                放心肯定都会弄得，你说是不是呀//@<a href="javascript:;" class="fly-aite">岁月小偷</a> 扩展个table行右键菜单啊。<img alt="[嘻嘻]" title="[嘻嘻]" src="//img.t.sinajs.cn/t4/appstyle/expression/ext/normal/0b/tootha_thumb.gif">
-                            </div>
-                            <div class="jieda-reply">
-              <span class="jieda-zan" type="zan">
-                <i class="iconfont icon-zan"></i>
-                <em>0</em>
-              </span>
-                                <span type="reply">
-                <i class="iconfont icon-svgmoban53"></i>
-                回复
-              </span>
-                                <div class="jieda-admin">
-                                    <span type="edit">编辑</span>
-                                    <span type="del">删除</span>
-                                    <span class="jieda-accept" type="accept">采纳</span>
-                                </div>
-                            </div>
-                        </li>
-
-                        <!-- 无数据时 -->
-                         <li class="fly-none">还没有人回答，快来消灭零回复</li>
                     </ul>
 
                     <div class="layui-form layui-form-pane">
@@ -233,16 +149,24 @@
 <div layout:fragment="body_script">
     <script th:inline="javascript">
         layui.cache.page = 'jie';
-
+        var article = [[${#httpServletRequest.getAttribute('article')}]];
         function init(fly) {
             var interval = setInterval(function () {
                 if (fly.faces) {
                     clearInterval(interval);
-                    var article = [[${#httpServletRequest.getAttribute('article')}]];
                     var e = document.getElementById('div_article_content');
                     e.innerHTML = fly.content(article.article.content);
+                    fly.json('/jie/comment/'+article.article.id+'/'+article.author.id+'/1', {}, function (html) {
+                        var e = document.getElementById('jieda');
+                        e.innerHTML = html;
+                        var bodys =document.getElementsByClassName('jieda-body');
+                        for (var i=0;i<bodys.length;i++){
+                            bodys[i].innerHTML = fly.content(bodys[i].innerText);
+                        }
+                    }, {type: 'GET', dataType: 'html'});
                 }
-            }, 100);
+            }, 10);
+
         }
     </script>
 </div>

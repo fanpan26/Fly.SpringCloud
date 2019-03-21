@@ -21,7 +21,7 @@ public class CommentController {
     @ApiOperation(value = "添加评论")
     @PostMapping("/")
     public JsonResult add(CommentDto comment) {
-        return commentService.addCache(comment);
+        return commentService.add(comment);
     }
 
     @ApiOperation(value = "删除评论")

@@ -23,4 +23,23 @@ public class DateUtils {
         }
         return DateUtil.formatDate(DateUtil.date(milliseconds));
     }
+
+    public static String offset(long milliseconds) {
+        long now = System.currentTimeMillis();
+        long offset = (now - milliseconds) / 1000;
+        if (offset < 60) {
+            return "刚刚";
+        }
+        if (offset < 3600) {
+            return offset / 60 + "分钟前";
+        }
+        if (offset < 3600 * 24) {
+            return offset / 3600 + "小时前";
+        }
+        if (offset < 3600 * 48) {
+            return offset / 3600 + "小时前";
+        }
+        return millisecondsToDate(milliseconds);
+
+    }
 }

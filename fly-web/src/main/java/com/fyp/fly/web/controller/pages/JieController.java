@@ -4,6 +4,7 @@ import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.web.client.article.ArticleApiClient;
 import com.fyp.fly.web.client.base.BaseApiClient;
+import com.fyp.fly.web.client.comment.CommentApiClient;
 import com.fyp.fly.web.controller.biz.BaseController;
 import com.fyp.fly.web.controller.form.ArticleDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("/jie")
 public class JieController extends BaseController{
+
+    @Autowired
+    private CommentApiClient commentApiClient;
+
 
     private static final String POST_PAGE_ATTRIBUTE_KEY = "jie";
     private static final String ARTICLE_PAGE_ATTRIBUTE_KEY = "article";
@@ -73,6 +78,12 @@ public class JieController extends BaseController{
         return "/jie/index";
     }
 
+    @GetMapping("/comment/{artId}/{authorId}/{pageIndex}")
+    public String comment(@PathVariable("artId")Long artId,@PathVariable("authorId")Long authorId,@PathVariable("pageIndex") Integer pageIndex) {
+        JsonResult<Object> commentList = commentApiClient.getList(artId, authorId, pageIndex, 20);
+        request.setAttribute("commentList", commentList.getData());
+        return "/jie/comment";
+    }
 
     @Autowired
     private BaseApiClient baseApiClient;

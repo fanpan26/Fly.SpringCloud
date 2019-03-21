@@ -1,0 +1,25 @@
+<li th:each="comment:${commentList}" th:attr="data-id=${comment.id}" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="detail-about detail-about-reply">
+        <a class="fly-avatar" th:href="'/u/'+${comment.user.id}" target="_blank"> <img th:src="${comment.user.avatar}" th:alt="${comment.user.name}" /> </a>
+        <div class="fly-detail-user">
+            <a href="/u/1" target="_blank" class="fly-link"> <cite th:text="${comment.user.name}"></cite> <i th:if="${comment.user.auth==true}" class="iconfont icon-renzheng" th:title="'认证信息：'+${comment.user.authStr}"></i>
+                <i th:if="${comment.user.vip>0}" class="layui-badge fly-badge-vip" th:text="${comment.user.vipString}"></i> </a>
+            <span th:if="${comment.author}">(楼主)</span>
+        </div>
+        <div class="detail-hits">
+            <span th:text="${comment.createAtStr}">刚刚</span>
+        </div>
+    </div>
+    <div th:text="${comment.content}" class="detail-body jieda-body photos">
+    </div>
+    <div class="jieda-reply">
+        <span class="jieda-zan" type="zan"> <i class="iconfont icon-zan"></i> <em>0</em> </span>
+        <span type="reply" th:if="${comment.editor==false}"><i class="iconfont icon-svgmoban53"></i>回复</span>
+        <div class="jieda-admin">
+            <span th:if="${comment.editor}" type="edit">编辑</span>
+            <span th:if="${comment.author}" class="jieda-accept" type="accept">采纳</span>
+            <!--<span type="del">删除</span>-->
+        </div>
+    </div>
+</li>
+<li class="fly-none" th:if="${#lists.isEmpty(commentList)}"  xmlns:th="http://www.w3.org/1999/xhtml">还没有人回答，快来消灭零回复</li>

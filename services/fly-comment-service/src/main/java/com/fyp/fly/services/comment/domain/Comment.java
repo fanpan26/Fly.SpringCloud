@@ -1,6 +1,8 @@
 package com.fyp.fly.services.comment.domain;
 
+import cn.hutool.core.date.DateUtil;
 import com.fyp.fly.common.dto.UserModel;
+import com.fyp.fly.common.utils.DateUtils;
 import com.fyp.fly.common.utils.IdUtils;
 
 import java.io.Serializable;
@@ -59,6 +61,10 @@ public class Comment implements Serializable{
 
     public long getCreateAt() {
         return createAt;
+    }
+
+    public String getCreateAtStr(){
+        return DateUtils.offset(createAt);
     }
 
     public void setCreateAt(long createAt) {

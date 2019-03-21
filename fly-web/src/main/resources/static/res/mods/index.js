@@ -69,7 +69,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         data: data,
         url: url,
         success: function(res){
-          if(res.code === 0) {
+          if(res.code === 0||options.dataType=='html') {
             success && success(res);
           } else {
             layer.msg(res.msg || res.code, {shift: 6});
@@ -516,7 +516,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
 
   //新消息通知
-  fly.newmsg();
+  //fly.newmsg();
 
   //发送激活邮件
   fly.activate = function(email){

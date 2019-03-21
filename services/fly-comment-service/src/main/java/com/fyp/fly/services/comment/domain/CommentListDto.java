@@ -60,7 +60,7 @@ public class CommentListDto {
         if (pageSize==null||pageSize<=0||pageSize>100) {
             pageSize = 20;
         }
-        return (pageIndex-1)*pageSize +1;
+        return (pageIndex-1)*pageSize;
     }
 
     public Integer getEnd(){

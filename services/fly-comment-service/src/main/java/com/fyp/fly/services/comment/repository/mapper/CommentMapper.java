@@ -19,5 +19,5 @@ public interface CommentMapper {
     Long getArtIdById(@Param("id") Long id);
 
     @Update("UPDATE `fly_comment` SET content=#{content} WHERE `id`=#{id} and `uid`=#{uid}")
-    void updateContent(Long id,Long uid,String content);
+    void updateContent(@Param("id") Long id,@Param("uid") Long uid,@Param("content") String content);
 }

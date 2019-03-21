@@ -52,19 +52,12 @@ public class DefaultCommentService implements CommentService {
         if (comment.isValid()) {
             Comment commentModel = comment.transfer();
             commentMapper.add(commentModel);
-            sendCommentCountChangedEvent(comment.getArtId(),true);
+            listOps.rightPush(CACHE_COMMENT_LIST + comment.getArtId(), commentModel);
+            sendCommentCountChangedEvent(comment.getArtId(), true);
             return ResultUtils.success(commentModel.getId());
         } else {
             return ResultUtils.failed(comment.getErrMsg());
         }
-    }
-
-    @Override
-    public JsonResult addCache(CommentDto comment) {
-        Comment commentModel = comment.transfer();
-        listOps.leftPush(CACHE_COMMENT_LIST + comment.getArtId(), commentModel);
-        //List<Object> list = listOps.range("service:comment:l_" + comment.getArtId(),1,20);
-        return ResultUtils.success();
     }
 
     @Override
@@ -103,6 +96,9 @@ public class DefaultCommentService implements CommentService {
     public JsonResult getList(CommentListDto listParam) {
         List<Object> commentList = listOps.range(CACHE_COMMENT_LIST + listParam.getArtId(), listParam.getStart(), listParam.getEnd());
 
+        if (commentList.isEmpty()){
+            return ResultUtils.success(new ArrayList<Comment>(0));
+        }
         List<Comment> comments = commentList.stream().map(c -> JSONUtils.parseObject(c.toString(), Comment.class)).collect(Collectors.toList());
         List<Long> userIds = comments.stream().map(x -> x.getUid()).distinct().collect(Collectors.toList());
         //根据用户ID获取用户集合
