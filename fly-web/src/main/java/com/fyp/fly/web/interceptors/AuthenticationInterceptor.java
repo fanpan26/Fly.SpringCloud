@@ -1,7 +1,7 @@
 package com.fyp.fly.web.interceptors;
 
 import com.fyp.fly.common.constants.Fly;
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.CookieUtils;
@@ -61,7 +61,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if (uid != null) {
                 String userJson = ops().get(cacheKey(Long.valueOf(uid)));
                 if (!StringUtils.isEmpty(userJson)) {
-                    FlyUserDto user = JSONUtils.parseObject(userJson, FlyUserDto.class);
+                    UserModel user = JSONUtils.parseObject(userJson, UserModel.class);
                     if (user != null) {
                         request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, user);
                         return true;
@@ -69,7 +69,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 }
             }
             //if no user info,check token
-            JsonResult<FlyUserDto> userRes = getUserFromSsoApi(token);
+            JsonResult<UserModel> userRes = getUserFromSsoApi(token);
             if (userRes != null) {
                 if (ResultUtils.isSuccess(userRes)) {
                     String userJsonString = JSONUtils.toJSONString(userRes.getData());
@@ -91,9 +91,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         ops().set(cacheKey(userId),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
     }
 
-    private JsonResult<FlyUserDto> getUserFromSsoApi(String token) {
-        JsonResult<FlyUserDto> response = restTemplate.exchange(ssoUrl + "/user/info?token=" + token,
-                HttpMethod.GET, null, new ParameterizedTypeReference<JsonResult<FlyUserDto>>() {
+    private JsonResult<UserModel> getUserFromSsoApi(String token) {
+        JsonResult<UserModel> response = restTemplate.exchange(ssoUrl + "/user/info?token=" + token,
+                HttpMethod.GET, null, new ParameterizedTypeReference<JsonResult<UserModel>>() {
                 }).getBody();
         return response;
     }
