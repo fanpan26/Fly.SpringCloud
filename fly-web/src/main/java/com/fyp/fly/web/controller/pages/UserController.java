@@ -1,6 +1,6 @@
 package com.fyp.fly.web.controller.pages;
 
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.web.client.user.UserApiClient;
@@ -26,7 +26,7 @@ public class UserController extends BaseController{
 
     @GetMapping("/home")
     public String home() throws Exception {
-        JsonResult<FlyUserDto> userRes = userApiClient.getUserById(FlyContext.getUserId());
+        JsonResult<UserModel> userRes = userApiClient.getUserById(FlyContext.getUserId());
         if (ResultUtils.isSuccess(userRes)) {
             request.setAttribute("homeUser",userRes.getData());
         }
