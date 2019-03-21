@@ -1,7 +1,7 @@
 package com.fyp.fly.web.config;
 
 import com.fyp.fly.common.constants.Fly;
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.utils.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,22 +30,22 @@ public class FlyContext {
        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
    }
 
-    public static FlyUserDto getUser() {
-        FlyUserDto userFromAttribute = (FlyUserDto) getCurrentRequest().getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
+    public static UserModel getUser() {
+        UserModel userFromAttribute = (UserModel) getCurrentRequest().getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
         if (userFromAttribute == null) {
             return null;
         } else {
             final String key = Fly.WEB_CACHE_USER_KEY + userFromAttribute.getId();
             String userJSON = redisTemplate.opsForValue().get(key);
             if (userJSON != null) {
-                return JSONUtils.parseObject(userJSON, FlyUserDto.class);
+                return JSONUtils.parseObject(userJSON, UserModel.class);
             }
         }
-        return new FlyUserDto();
+        return new UserModel();
     }
 
     public static Long getUserId() {
-        FlyUserDto userFromAttribute = (FlyUserDto) getCurrentRequest().getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
+        UserModel userFromAttribute = (UserModel) getCurrentRequest().getAttribute(Fly.WEB_ATTRIBUTE_USER_KEY);
         if (userFromAttribute == null) {
             return 0L;
         }
