@@ -1,6 +1,6 @@
 package com.fyp.fly.sso.api.client;
 
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.SsoTicketApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +83,8 @@ public final class AccountApiClient {
         });
     }
 
-    public JsonResult<FlyUserDto> getUser(String token) {
-        return getForObject(getApiUrl(API_USER) + "?token=" + token, new ParameterizedTypeReference<JsonResult<FlyUserDto>>() {
+    public JsonResult<UserModel> getUser(String token) {
+        return getForObject(getApiUrl(API_USER) + "?token=" + token, new ParameterizedTypeReference<JsonResult<UserModel>>() {
         });
     }
 
