@@ -1,18 +1,18 @@
 package com.fyp.fly.services.user.service;
 
+import com.alibaba.fastjson.JSON;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.JSONUtils;
-import com.fyp.fly.services.user.cache.Cache;
 import com.fyp.fly.services.user.domain.User;
 import com.fyp.fly.services.user.repository.mapper.UserMapper;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author fyp
@@ -22,25 +22,22 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DefaultUserService implements UserService {
 
-    @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private static final String USER_CACHE_KEY = "service:user:";
 
-    private ValueOperations<String, String> ops() {
-        return redisTemplate.opsForValue();
-    }
+    @Autowired
+    private HashOperations<String, String, Object> hashOps;
 
     @Autowired
     private UserMapper userMapper;
 
-
     private User getUserFromCache(Long userId){
         User user;
-        String userJson = ops().get(Cache.CACHE_USER+userId);
-        if (StringUtils.isEmpty(userJson)){
+        Object userObject = hashOps.get(USER_CACHE_KEY,userId.toString());
+        if (userObject == null){
            user = userMapper.getUserById(userId);
-           ops().set(Cache.CACHE_USER+userId,JSONUtils.toJSONString(user),Cache.CACHE_USER_EXPIRE, TimeUnit.SECONDS);
-        }else{
-            user = JSONUtils.parseObject(userJson,User.class);
+           hashOps.put(USER_CACHE_KEY,userId.toString(), JSONUtils.toJSONString(user));
+        }else {
+            user = JSONUtils.parseObject((String)userObject,User.class);
         }
         return user;
     }
@@ -49,5 +46,17 @@ public class DefaultUserService implements UserService {
     public JsonResult getUserInfo(Long userId) {
         User user = getUserFromCache(userId);
         return ResultUtils.success(user);
+    }
+
+    @Override
+    public JsonResult getUserList(List<String> userIds) {
+        List<Object> users = hashOps.multiGet(USER_CACHE_KEY, userIds);
+        List<User> usersList = new ArrayList<>(users.size());
+        for (Object user : users){
+            if (user != null){
+                usersList.add(JSONUtils.parseObject(user.toString(),User.class));
+            }
+        }
+        return ResultUtils.success(usersList);
     }
 }
