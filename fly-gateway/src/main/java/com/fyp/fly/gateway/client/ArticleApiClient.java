@@ -1,6 +1,5 @@
 package com.fyp.fly.gateway.client;
 
-import com.fyp.fly.common.dto.FlyUserDto;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.gateway.client.domain.Article;
 import org.springframework.cloud.openfeign.FeignClient;
