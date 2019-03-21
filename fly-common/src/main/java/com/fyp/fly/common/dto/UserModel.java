@@ -8,7 +8,7 @@ import com.fyp.fly.common.utils.DateUtils;
  * @crate 2019/3/10 23:36
  * @project fly
  */
-public class FlyUserDto {
+public class UserModel {
 
     public String getVipString() {
         return "VIP" + getVip();
