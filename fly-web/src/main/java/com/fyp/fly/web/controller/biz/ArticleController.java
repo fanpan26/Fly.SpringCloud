@@ -46,4 +46,9 @@ public class ArticleController {
     public JsonResult updateReplyContent(@PathVariable("id") Long id,String content) {
         return commentApiClient.updateContent(id, content);
     }
+
+    @GetMapping("/reply/list/{id}/{pageIndex}")
+    public JsonResult updateReplyContent(@PathVariable("id") Long id,@PathVariable("pageIndex") Integer pageIndex) {
+        return commentApiClient.getList(id, 1L, pageIndex, 20);
+    }
 }
