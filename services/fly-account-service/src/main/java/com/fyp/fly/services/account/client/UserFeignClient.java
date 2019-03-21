@@ -1,6 +1,6 @@
 package com.fyp.fly.services.account.client;
 
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.result.api.JsonResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,5 +18,5 @@ public interface UserFeignClient {
      * 获取用户信息
      * */
     @RequestMapping(value = "/user/{id}",method = RequestMethod.GET)
-    JsonResult<FlyUserDto> getUserById(@PathVariable("id") Long id);
+    JsonResult<UserModel> getUserById(@PathVariable("id") Long id);
 }
