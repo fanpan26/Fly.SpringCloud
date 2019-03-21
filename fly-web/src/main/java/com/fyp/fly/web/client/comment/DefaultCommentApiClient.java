@@ -2,6 +2,7 @@ package com.fyp.fly.web.client.comment;
 
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.web.client.AbstractApiClient;
+import com.fyp.fly.web.config.FlyContext;
 import com.fyp.fly.web.controller.form.CommentDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,6 +24,10 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
     private String getAddUrl() {
         return buildApiUrl("comment/");
     }
+    private String getListUrl(Long artId,Long authorId,Integer pageIndex,Integer pageSize){
+        return buildApiUrl(String.format("comment/list?artId=%d&authorId=%d&userId=%d&pageIndex=%d&pageSize=%d",artId,authorId, FlyContext.getUserId(),pageIndex,pageSize));
+    }
+
     private String getDeleteUrl(Long id) {
         return buildApiUrl("comment/remove/"+id);
     }
@@ -59,5 +64,12 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
         parameters.add("content", content);
         return postForObjectWithFormHeader(getContentUrl(id), parameters);
+    }
+
+    @Override
+    public JsonResult getList(Long artId, Long authorId, Integer pageIndex, Integer pageSize) {
+        String url = getListUrl(artId, authorId, pageIndex, pageSize);
+        return getForObject(url, new ParameterizedTypeReference<JsonResult<Object>>() {
+        });
     }
 }
