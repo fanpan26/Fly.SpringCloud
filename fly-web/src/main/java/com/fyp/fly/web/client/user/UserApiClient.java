@@ -1,6 +1,6 @@
 package com.fyp.fly.web.client.user;
 
-import com.fyp.fly.common.dto.FlyUserDto;
+import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.result.api.JsonResult;
 
 /**
@@ -9,5 +9,5 @@ import com.fyp.fly.common.result.api.JsonResult;
  * @project fly
  */
 public interface UserApiClient {
-    JsonResult<FlyUserDto> getUserById(Long userId);
+    JsonResult<UserModel> getUserById(Long userId);
 }
