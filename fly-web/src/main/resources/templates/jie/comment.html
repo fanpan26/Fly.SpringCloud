@@ -16,8 +16,8 @@
         <span class="jieda-zan" type="zan"> <i class="iconfont icon-zan"></i> <em>0</em> </span>
         <span type="reply" th:if="${comment.editor==false}"><i class="iconfont icon-svgmoban53"></i>回复</span>
         <div class="jieda-admin">
-            <span th:if="${comment.editor}" type="edit">编辑</span>
-            <span th:if="${comment.author}" class="jieda-accept" type="accept">采纳</span>
+            <!--<span th:if="${comment.editor}" type="edit">编辑</span>-->
+            <span th:if="${comment.author&&!comment.editor}" class="jieda-accept" type="accept">采纳</span>
             <!--<span type="del">删除</span>-->
         </div>
     </div>
