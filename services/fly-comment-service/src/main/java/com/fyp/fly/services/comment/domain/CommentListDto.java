@@ -50,6 +50,10 @@ public class CommentListDto {
         this.pageSize = pageSize;
     }
 
+    public  boolean isMine() {
+        return authorId.equals(userId);
+    }
+
     private Integer pageIndex;
     private Integer pageSize;
 

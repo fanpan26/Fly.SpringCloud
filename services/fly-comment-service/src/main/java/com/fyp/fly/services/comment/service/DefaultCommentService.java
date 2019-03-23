@@ -103,6 +103,7 @@ public class DefaultCommentService implements CommentService {
         List<Long> userIds = comments.stream().map(x -> x.getUid()).distinct().collect(Collectors.toList());
         //根据用户ID获取用户集合
         JsonResult<List<UserModel>> userList = userFeignClient.getList(userIds);
+        boolean isMine = listParam.isMine();
         if (ResultUtils.isSuccess(userList)) {
             comments.stream().forEach(c ->{
                 c.setUser(userList.getData().stream().filter(x -> c.getUid() == x.getId()).findFirst().get());
@@ -110,6 +111,7 @@ public class DefaultCommentService implements CommentService {
                 c.setAuthor(Objects.equals(c.getUid(),listParam.getAuthorId()));
                 // if user is comment editor
                 c.setEditor(Objects.equals(c.getUid(),listParam.getUserId()));
+                c.setMine(isMine);
             });
         }
         return ResultUtils.success(comments);

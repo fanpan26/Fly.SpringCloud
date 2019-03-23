@@ -115,6 +115,16 @@ public class Comment implements Serializable{
         this.editor = editor;
     }
 
+
+    public boolean isMine() {
+        return mine;
+    }
+
+    public void setMine(boolean mine) {
+        this.mine = mine;
+    }
+
+    private boolean mine;
     private boolean author;
     private boolean editor;
 
