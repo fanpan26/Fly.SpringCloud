@@ -47,4 +47,10 @@ public class CommentController {
     public JsonResult getList(CommentListDto listParam) {
         return commentService.getList(listParam);
     }
+
+    @ApiOperation(value = "采纳答案")
+    @PostMapping("/adopt/{id}")
+    public JsonResult adopt(@PathVariable("id") Long id,Long artId) {
+        return commentService.adopt(id,artId);
+    }
 }

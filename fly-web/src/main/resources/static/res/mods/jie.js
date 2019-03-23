@@ -70,12 +70,14 @@ layui.define('fly', function(exports){
         <i class="iconfont icon-zan"></i>\
         <em>0</em>\
         </span>\
-    <div class="jieda-admin">\
-        <span type="edit">编辑</span>\
-        <span type="del">删除</span>\
-        </div>\
         </div>\
     </li>'
+      /**
+       * // <div class="jieda-admin">
+       //     <span type="edit">编辑</span>
+       //     <span type="del">删除</span>
+       //     </div>
+       * */
     data.id=res.data;
     data.author=layui.cache.user.uid==$('#hidden_author_id').val();
     data.content = fly.content(data.content);
@@ -187,10 +189,8 @@ layui.define('fly', function(exports){
       var othis = $(this);
       layer.confirm('是否采纳该回答为最佳答案？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-accept/', {
-          id: li.data('id')
-        }, function(res){
-          if(res.status === 0){
+        fly.json('/article/reply/adopt/'+li.data('id'), {artId:$('#hidden_article_id').val()}, function(res){
+          if(res.code === 0){
             $('.jieda-accept').remove();
             li.addClass('jieda-daan');
             li.find('.detail-about').append('<i class="iconfont icon-caina" title="最佳答案"></i>');
@@ -243,7 +243,6 @@ layui.define('fly', function(exports){
   };
 
   $(document).on('click','.jieda-reply span',function () {
-    console.log('what the fuck')
     var othis = $(this), type = othis.attr('type');
     gather.jiedaActive[type].call(this, othis.parents('li'));
   });

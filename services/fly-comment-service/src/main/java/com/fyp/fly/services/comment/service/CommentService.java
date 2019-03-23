@@ -10,4 +10,5 @@ public interface CommentService {
     JsonResult getContent(Long id);
     JsonResult updateContent(Long id,Long uid,String content);
     JsonResult getList(CommentListDto listParam);
+    JsonResult adopt(Long id,Long artId);
 }

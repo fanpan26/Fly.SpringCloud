@@ -20,4 +20,7 @@ public interface CommentMapper {
 
     @Update("UPDATE `fly_comment` SET content=#{content} WHERE `id`=#{id} and `uid`=#{uid}")
     void updateContent(@Param("id") Long id,@Param("uid") Long uid,@Param("content") String content);
+
+    @Update("UPDATE `fly_comment` SET adopt=1 where Id=#{id}")
+    void adopt(@Param("id") Long id);
 }

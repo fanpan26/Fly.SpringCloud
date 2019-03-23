@@ -31,6 +31,11 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
     private String getDeleteUrl(Long id) {
         return buildApiUrl("comment/remove/"+id);
     }
+
+    private String getAdoptUrl(Long id,Long artId) {
+        return buildApiUrl("comment/adopt/"+id+"?artId="+artId);
+    }
+
     private String getContentUrl(Long id) {
         return buildApiUrl("comment/content/"+id);
     }
@@ -64,6 +69,12 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
         parameters.add("content", content);
         return postForObjectWithFormHeader(getContentUrl(id), parameters);
+    }
+
+    @Override
+    public JsonResult adopt(Long id, Long artId) {
+        String url = getAdoptUrl(id, artId);
+        return postForObject(url);
     }
 
     @Override

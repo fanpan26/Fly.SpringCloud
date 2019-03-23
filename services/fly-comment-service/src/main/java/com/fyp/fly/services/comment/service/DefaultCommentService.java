@@ -30,9 +30,13 @@ import java.util.stream.Collectors;
 public class DefaultCommentService implements CommentService {
 
     private static final String CACHE_COMMENT_LIST = "service:comment:l_";
+    private static final String CACHE_COMMENT_ARTICLE_ADOPT = "service:comment:adopt";
 
     @Autowired
     private ListOperations<String, Object> listOps;
+
+    @Autowired
+    private HashOperations<String,String,Object> hashOps;
 
 
     @Autowired
@@ -46,9 +50,6 @@ public class DefaultCommentService implements CommentService {
 
     @Override
     public JsonResult add(CommentDto comment) {
-        if (comment == null) {
-            throw new NullPointerException("comment");
-        }
         if (comment.isValid()) {
             Comment commentModel = comment.transfer();
             commentMapper.add(commentModel);
@@ -62,9 +63,6 @@ public class DefaultCommentService implements CommentService {
 
     @Override
     public JsonResult delete(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("id");
-        }
         Long artId = commentMapper.getArtIdById(id);
         if (artId == null){
             return ResultUtils.failed("帖子不存在");
@@ -76,18 +74,12 @@ public class DefaultCommentService implements CommentService {
 
     @Override
     public JsonResult getContent(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("id");
-        }
         String content = commentMapper.getContentById(id);
         return ResultUtils.stringResult(content);
     }
 
     @Override
     public JsonResult updateContent(Long id, Long uid, String content) {
-        if (id == null || uid == null || StringUtils.isEmpty(content)){
-            throw new IllegalArgumentException("id/uid/content");
-        }
         commentMapper.updateContent(id,uid,content);
         return ResultUtils.success();
     }
@@ -96,25 +88,45 @@ public class DefaultCommentService implements CommentService {
     public JsonResult getList(CommentListDto listParam) {
         List<Object> commentList = listOps.range(CACHE_COMMENT_LIST + listParam.getArtId(), listParam.getStart(), listParam.getEnd());
 
-        if (commentList.isEmpty()){
+        if (commentList.isEmpty()) {
             return ResultUtils.success(new ArrayList<Comment>(0));
         }
         List<Comment> comments = commentList.stream().map(c -> JSONUtils.parseObject(c.toString(), Comment.class)).collect(Collectors.toList());
         List<Long> userIds = comments.stream().map(x -> x.getUid()).distinct().collect(Collectors.toList());
         //根据用户ID获取用户集合
         JsonResult<List<UserModel>> userList = userFeignClient.getList(userIds);
+        Long adoptId = getAdoptIdByArtId(listParam.getArtId());
         boolean isMine = listParam.isMine();
         if (ResultUtils.isSuccess(userList)) {
-            comments.stream().forEach(c ->{
+            comments.stream().forEach(c -> {
                 c.setUser(userList.getData().stream().filter(x -> c.getUid() == x.getId()).findFirst().get());
                 // if user is article author
-                c.setAuthor(Objects.equals(c.getUid(),listParam.getAuthorId()));
+                c.setAuthor(Objects.equals(c.getUid(), listParam.getAuthorId()));
                 // if user is comment editor
-                c.setEditor(Objects.equals(c.getUid(),listParam.getUserId()));
+                c.setEditor(Objects.equals(c.getUid(), listParam.getUserId()));
                 c.setMine(isMine);
+                c.setAdopt(adoptId > 0 ? Objects.equals(c.getId(), adoptId) : false);
             });
         }
         return ResultUtils.success(comments);
+    }
+
+    @Override
+    public JsonResult adopt(Long id,Long artId) {
+        String artIdStr = artId.toString();
+        Long adoptId = getAdoptIdByArtId(artId);
+
+        if (adoptId != 0) {
+            if (Objects.equals(id, adoptId)) {
+                return ResultUtils.success(id);
+            } else {
+                return ResultUtils.failed("已经有其他答案被采纳");
+            }
+        }
+        commentMapper.adopt(id);
+        //add cache <hashKey>  artId, <hashValue> adopt commentId
+        hashOps.put(CACHE_COMMENT_ARTICLE_ADOPT, artIdStr, id.toString());
+        return ResultUtils.success(id);
     }
 
     private void sendCommentCountChangedEvent(Long id,boolean increment) {
@@ -125,5 +137,13 @@ public class DefaultCommentService implements CommentService {
         event.setIncrement(increment);
 
         rabbitTemplate.convertAndSend(FlyEvent.SERVICE_COMMON_EXCHANGE, FlyEvent.SERVICE_ARTICLE_COUNT_EVENT, JSONUtils.toJSONString(event));
+    }
+
+    private Long getAdoptIdByArtId(Long artId){
+        Object  adoptId = hashOps.get(CACHE_COMMENT_ARTICLE_ADOPT,artId.toString());
+        if (adoptId == null){
+            return 0L;
+        }
+        return Long.valueOf(adoptId.toString());
     }
 }

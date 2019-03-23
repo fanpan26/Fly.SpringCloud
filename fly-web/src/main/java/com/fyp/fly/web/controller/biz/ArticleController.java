@@ -47,6 +47,11 @@ public class ArticleController {
         return commentApiClient.updateContent(id, content);
     }
 
+    @PostMapping("/reply/adopt/{id}")
+    public JsonResult adoptReply(@PathVariable("id") Long id,Long artId) {
+        return commentApiClient.adopt(id, artId);
+    }
+
     @GetMapping("/reply/list/{id}/{pageIndex}")
     public JsonResult updateReplyContent(@PathVariable("id") Long id,@PathVariable("pageIndex") Integer pageIndex) {
         return commentApiClient.getList(id, 1L, pageIndex, 20);

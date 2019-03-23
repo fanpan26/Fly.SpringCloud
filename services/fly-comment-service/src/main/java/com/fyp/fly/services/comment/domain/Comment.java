@@ -1,6 +1,5 @@
 package com.fyp.fly.services.comment.domain;
 
-import cn.hutool.core.date.DateUtil;
 import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.utils.DateUtils;
 import com.fyp.fly.common.utils.IdUtils;
@@ -12,7 +11,7 @@ public class Comment implements Serializable{
     public Comment(){}
     public Comment(Long artId,String content,Long userId,Long replyId) {
         createAt = System.currentTimeMillis();
-        id = IdUtils.next(userId);
+        id = IdUtils.nextId(1,userId);
         this.artId = artId;
         this.content = content;
         this.uid = userId;

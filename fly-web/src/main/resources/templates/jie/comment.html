@@ -9,6 +9,7 @@
         <div class="detail-hits">
             <span th:text="${comment.createAtStr}">刚刚</span>
         </div>
+        <i th:if="${comment.adopt}" class="iconfont icon-caina" title="最佳答案"></i>
     </div>
     <div th:text="${comment.content}" class="detail-body jieda-body photos">
     </div>
@@ -17,7 +18,7 @@
         <span type="reply" th:if="${comment.editor==false}"><i class="iconfont icon-svgmoban53"></i>回复</span>
         <div class="jieda-admin">
             <!--<span th:if="${comment.editor}" type="edit">编辑</span>-->
-            <span th:if="${comment.mine==true} and ${comment.editor==false}" class="jieda-accept" type="accept">采纳</span>
+            <span th:if="${comment.mine==true} and ${comment.editor==false} and ${comment.adopt==false}" class="jieda-accept" type="accept">采纳</span>
             <!--<span type="del">删除</span>-->
         </div>
     </div>
