@@ -123,6 +123,15 @@ public class Comment implements Serializable{
         this.mine = mine;
     }
 
+    public boolean isArtAdopted() {
+        return artAdopted;
+    }
+
+    public void setArtAdopted(boolean artAdopted) {
+        this.artAdopted = artAdopted;
+    }
+
+    private boolean artAdopted;
     private boolean mine;
     private boolean author;
     private boolean editor;

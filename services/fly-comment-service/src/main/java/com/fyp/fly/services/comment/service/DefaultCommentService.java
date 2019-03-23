@@ -105,6 +105,7 @@ public class DefaultCommentService implements CommentService {
                 // if user is comment editor
                 c.setEditor(Objects.equals(c.getUid(), listParam.getUserId()));
                 c.setMine(isMine);
+                c.setArtAdopted(adoptId > 0);
                 c.setAdopt(adoptId > 0 ? Objects.equals(c.getId(), adoptId) : false);
             });
         }
