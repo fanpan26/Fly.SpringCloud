@@ -3,6 +3,7 @@ package com.fyp.fly.services.article;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author fyp
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @project fly
  */
 @SpringBootApplication
+@EnableFeignClients
 @MapperScan("com.fyp.fly.services.article.repository.mapper")
 public class ArticleServiceApplication {
     public static void main(String[] args) {
