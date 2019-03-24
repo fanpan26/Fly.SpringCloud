@@ -16,4 +16,9 @@ public interface ArticleService {
     JsonResult browse(Long id);
 
     JsonResult delete(Long id);
+
+    /**
+     * 获取TOP 10 热议的文章列表
+     * */
+    JsonResult getTop10CommentList();
 }
