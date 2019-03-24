@@ -1,6 +1,6 @@
 package com.fyp.fly.gateway.service;
 
-import com.fyp.fly.common.dto.CountDto;
+import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.enums.CountBizType;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
@@ -56,19 +56,19 @@ public class ArticleAggregationService {
                user = userRes.getData();
            }
 
-           JsonResult<List<CountDto>> countRes = commonApiClient.getCountsByBizTypes(articleId,ARTICLE_COUNT_BIZ_TYPE);
+           JsonResult<List<CountVo>> countRes = commonApiClient.getCountsByBizTypes(articleId,ARTICLE_COUNT_BIZ_TYPE);
 
            Map<String,Object> resultMap = Maps.newHashMapWithExpectedSize(4);
            resultMap.put("author",user);
            resultMap.put("article",article);
            resultMap.put("isAuthor",isAuthor);
-           List<CountDto> countDtos;
+           List<CountVo> countVos;
            if(ResultUtils.isSuccess(countRes)){
-               countDtos =countRes.getData();
+               countVos =countRes.getData();
            }else {
-               countDtos = getDefaultArticleCount(articleId);
+               countVos = getDefaultArticleCount(articleId);
            }
-           for (CountDto count : countDtos){
+           for (CountVo count : countVos){
                if (count.getBizType() == CountBizType.ARTICLE_BROWSER.getCode()){
                    resultMap.put("browseCount",count.getBizCount());
                }
@@ -81,10 +81,10 @@ public class ArticleAggregationService {
        return articleRes;
    }
 
-   private List<CountDto> getDefaultArticleCount(Long bizId){
-       List<CountDto> result = new ArrayList<>(2);
-       result.add(new CountDto(CountBizType.ARTICLE_BROWSER.getCode(),bizId,0));
-       result.add(new CountDto(CountBizType.ARTICLE_COMMENT.getCode(),bizId,0));
+   private List<CountVo> getDefaultArticleCount(Long bizId){
+       List<CountVo> result = new ArrayList<>(2);
+       result.add(new CountVo(CountBizType.ARTICLE_BROWSER.getCode(),bizId,0));
+       result.add(new CountVo(CountBizType.ARTICLE_COMMENT.getCode(),bizId,0));
        return result;
    }
 }
