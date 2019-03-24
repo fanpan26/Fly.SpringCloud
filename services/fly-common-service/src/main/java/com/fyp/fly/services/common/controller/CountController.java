@@ -43,4 +43,12 @@ public class CountController {
     public JsonResult getCountsByBizTypes(@PathVariable("bizId") Long bizId,@RequestBody List<Integer> bizTypes) {
         return countService.getListByBizTypes(bizId, bizTypes);
     }
+
+    /**
+     * 获取TOP N
+     * */
+    @GetMapping("/top/{bizType}")
+    public JsonResult getCountsByBizTypes(@PathVariable("bizType") Integer bizType,Integer start,Integer end) {
+        return countService.getSortedListByBizType(bizType, start, end);
+    }
 }
