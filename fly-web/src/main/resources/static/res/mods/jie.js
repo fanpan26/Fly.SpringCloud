@@ -6,12 +6,13 @@
  
 layui.define('fly', function(exports){
 
-  var $ = layui.jquery;
-  var layer = layui.layer;
-  var util = layui.util;
-  var laytpl = layui.laytpl;
-  var form = layui.form;
-  var fly = layui.fly;
+  var $ = layui.jquery
+      ,layer = layui.layer
+      ,util = layui.util
+      ,laytpl = layui.laytpl
+      ,laypage=layui.laypage
+      ,form = layui.form
+      ,fly = layui.fly;
   
   var gather = {}, dom = {
     jieda: $('#jieda')
@@ -146,6 +147,44 @@ layui.define('fly', function(exports){
     gather.jieAdmin[type] && gather.jieAdmin[type].call(this, othis.parent());
   });
 
+    var getCommentUrl=function (page) {
+        var id = $('#hidden_article_id').val(), aid = $('#hidden_author_id').val();
+        return '/jie/comment/' + id + '/' + aid + '/' + page
+    },loadComments=function (page) {
+        fly.json(getCommentUrl(page), {}, function (html) {
+            var e = document.getElementById('jieda');
+            e.innerHTML = html;
+            var bodys =document.getElementsByClassName('jieda-body');
+            for (var i=0;i<bodys.length;i++){
+                bodys[i].innerHTML = fly.content(bodys[i].innerText);
+            }
+            layui.laypage.render({
+                elem: 'comment_page'
+                ,count: parseInt($('#jiedaCount').text())
+                ,limit:20
+                ,curr:page
+                ,jump: function(obj,first) {
+                  console.log(obj);
+                  console.log(first);
+                    if (!first) {
+                        var curr = obj.curr;
+                        loadComments(curr);
+                    }
+                }
+            });
+        }, {type: 'GET', dataType: 'html'});
+    }
+    var renderComments = function () {
+        var interval = setInterval(function () {
+            if (fly.faces) {
+                clearInterval(interval);
+                var e = document.getElementById('div_article_content');
+                e.innerHTML = fly.content(e.innerText);
+                e.removeAttribute('style');
+               loadComments(1);
+            }
+        }, 1);
+    }
   //异步渲染
   var asyncRender = function(){
     var div = $('.fly-admin-box'), jieAdmin = $('#LAY_jieAdmin');
@@ -158,8 +197,8 @@ layui.define('fly', function(exports){
       //   jieAdmin.append('<span class="layui-btn layui-btn-xs jie-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
       // });
     }
+      renderComments();
   }();
-
   //解答操作
   gather.jiedaActive = {
     zan: function(li){ //赞

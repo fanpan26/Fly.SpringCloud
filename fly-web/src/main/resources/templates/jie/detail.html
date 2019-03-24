@@ -20,6 +20,7 @@
 
                         <div class="fly-admin-box">
                             <input type="hidden" id="hidden_article_id" th:value="${article.article.id}"/>
+                            <input type="hidden" id="hidden_author_id" th:value="${article.author.id}"/>
                             <span class="layui-btn layui-btn-xs jie-admin" type="del" th:if="${article.isAuthor}">删除</span>
 
                             <!--<span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>-->
@@ -33,7 +34,6 @@
                                 <cit th:text="${article.commentCount}" id="jiedaCount">0</cit></a><i class="iconfont" title="人气"></i><cit th:text="${article.browseCount}">0</cit></span>
                     </div>
                     <div class="detail-about">
-                        <input type="hidden" id="hidden_author_id" th:value="${article.author.id}"/>
                         <a class="fly-avatar" href="../user/home.html">
                             <img th:src="${article.author.avatar}" th:alt="${article.author.name}">
                         </a>
@@ -50,7 +50,7 @@
                             <span class="layui-btn layui-btn-xs jie-admin" type="edit" th:if="${article.isAuthor}"><a href="add.html">编辑此贴</a></span>
                         </div>
                     </div>
-                    <div class="detail-body photos" id="div_article_content"></div>
+                    <div style="display: none;" class="detail-body photos" id="div_article_content" th:text="${article.article.content}"></div>
                 </div>
 
                 <div class="fly-panel detail-box" id="flyReply">
@@ -60,7 +60,7 @@
 
                     <ul class="jieda" id="jieda">
                     </ul>
-
+                    <div id="comment_page"></div>
                     <div class="layui-form layui-form-pane">
                         <form action="/article/reply/" method="post">
                             <div class="layui-form-item layui-form-text">
@@ -149,25 +149,6 @@
 <div layout:fragment="body_script">
     <script th:inline="javascript">
         layui.cache.page = 'jie';
-        var article = [[${#httpServletRequest.getAttribute('article')}]];
-        function init(fly) {
-            var interval = setInterval(function () {
-                if (fly.faces) {
-                    clearInterval(interval);
-                    var e = document.getElementById('div_article_content');
-                    e.innerHTML = fly.content(article.article.content);
-                    fly.json('/jie/comment/'+article.article.id+'/'+article.author.id+'/1', {}, function (html) {
-                        var e = document.getElementById('jieda');
-                        e.innerHTML = html;
-                        var bodys =document.getElementsByClassName('jieda-body');
-                        for (var i=0;i<bodys.length;i++){
-                            bodys[i].innerHTML = fly.content(bodys[i].innerText);
-                        }
-                    }, {type: 'GET', dataType: 'html'});
-                }
-            }, 10);
-
-        }
     </script>
 </div>
 </body>
