@@ -7,12 +7,12 @@ package com.fyp.fly.common.dto;
  *
  * 通用计数类
  */
-public class CountDto {
+public class CountVo {
 
-    public CountDto(){
+    public CountVo(){
 
     }
-    public CountDto(int bizType,Long bizId,Integer bizCount) {
+    public CountVo(int bizType, Long bizId, Integer bizCount) {
         this.bizType = bizType;
         this.bizId = bizId;
         this.bizCount = bizCount;
