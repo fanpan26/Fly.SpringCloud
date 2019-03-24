@@ -124,7 +124,7 @@ public class Comment implements Serializable{
     }
 
     public boolean isArtAdopted() {
-        return artAdopted;
+        return mine && !editor && !artAdopted;
     }
 
     public void setArtAdopted(boolean artAdopted) {
