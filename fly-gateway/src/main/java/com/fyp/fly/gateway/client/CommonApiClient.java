@@ -1,6 +1,6 @@
 package com.fyp.fly.gateway.client;
 
-import com.fyp.fly.common.dto.CountDto;
+import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.result.api.JsonResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,5 +21,5 @@ public interface CommonApiClient {
      * 根据业务ID获取与该业务ID相关的统计数据
      * */
     @PostMapping("/count/id/{bizId}")
-    JsonResult<List<CountDto>> getCountsByBizTypes(@PathVariable("bizId") Long bizId, @RequestBody List<Integer> bizTypes);
+    JsonResult<List<CountVo>> getCountsByBizTypes(@PathVariable("bizId") Long bizId, @RequestBody List<Integer> bizTypes);
 }
