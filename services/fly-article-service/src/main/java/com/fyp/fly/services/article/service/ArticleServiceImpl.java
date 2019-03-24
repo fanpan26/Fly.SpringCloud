@@ -1,12 +1,14 @@
 package com.fyp.fly.services.article.service;
 
 import com.fyp.fly.common.constants.Fly;
+import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.enums.CountBizType;
 import com.fyp.fly.common.event.CountEvent;
 import com.fyp.fly.common.event.FlyEvent;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.JSONUtils;
+import com.fyp.fly.services.article.client.CountFeignClient;
 import com.fyp.fly.services.article.domain.Article;
 import com.fyp.fly.services.article.dto.ArticleEditDto;
 import com.fyp.fly.services.article.repository.mapper.ArticleMapper;
@@ -15,6 +17,8 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author fyp
@@ -26,6 +30,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private CountFeignClient countFeignClient;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -71,5 +78,17 @@ public class ArticleServiceImpl implements ArticleService{
         }
         articleMapper.delete(id);
         return ResultUtils.success();
+    }
+
+    @Override
+    public JsonResult getTop10CommentList() {
+
+        JsonResult<List<CountVo>> countRes = countFeignClient.getTopNCountsByBizType(CountBizType.ARTICLE_COMMENT.getCode(), 0, 10);
+        if (ResultUtils.isSuccess(countRes)){
+            List<CountVo> counts = countRes.getData();
+            //组装文章标题数据
+
+        }
+        return null;
     }
 }
