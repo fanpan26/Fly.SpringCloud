@@ -1,5 +1,6 @@
 package com.fyp.fly.services.article.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.enums.CountBizType;
@@ -16,12 +17,11 @@ import com.fyp.fly.services.article.repository.mapper.ArticleMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +45,10 @@ public class ArticleServiceImpl implements ArticleService{
     private HashOperations<String,String,String> hashOps;
 
     @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
+
+
+    @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Override
@@ -55,7 +59,9 @@ public class ArticleServiceImpl implements ArticleService{
         if (article.isValid()) {
             Article art = article.transfer();
             articleMapper.add(art);
+            //add cache
             hashOps.put(getCacheArticleListKey(), String.valueOf(art.getId()), JSONUtils.toJSONString(art));
+            redisTemplate.expire(getCacheArticleListKey(), 7, TimeUnit.DAYS);
             return ResultUtils.success();
         } else {
             return ResultUtils.failed(article.checkArguments());
@@ -127,7 +133,8 @@ public class ArticleServiceImpl implements ArticleService{
         return ResultUtils.success(resultList);
     }
 
+    //本周热议，所以，缓存key以每周区分，
     private String getCacheArticleListKey() {
-        return CACHE_ARTICLE_LIST_PREFIX + 0;
+        return CACHE_ARTICLE_LIST_PREFIX + DateUtil.weekOfYear(new Date());
     }
 }
