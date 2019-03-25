@@ -21,4 +21,9 @@ public interface ArticleService {
      * 获取TOP 10 热议的文章列表
      * */
     JsonResult getTopNCommentList(int top);
+
+    /**
+     * 获取用户最近发布列表
+     * */
+    JsonResult getRecentPublishedByUserId(Long userId);
 }

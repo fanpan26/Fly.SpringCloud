@@ -200,7 +200,6 @@ layui.define('fly', function(exports){
       // });
     }
     renderComments();
-    renderHots();
   }();
   //解答操作
   gather.jiedaActive = {

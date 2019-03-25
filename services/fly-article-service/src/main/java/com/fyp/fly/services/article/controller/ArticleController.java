@@ -55,4 +55,9 @@ public class ArticleController {
     public JsonResult getTopN(@PathVariable("top") Integer top) {
         return articleService.getTopNCommentList(top);
     }
+
+    @GetMapping("/recent/{userId}")
+    public JsonResult getRecentPublishedByUserId(@PathVariable("userId") Long userId) {
+        return articleService.getRecentPublishedByUserId(userId);
+    }
 }

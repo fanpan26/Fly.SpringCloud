@@ -47,6 +47,9 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
     private String getTopNCommentUrl(Integer top) {
         return buildApiUrl("/article/top/"+top);
     }
+    private String getRecentPublishedUrl() {
+        return buildApiUrl("/article/recent/" + FlyContext.getUserId());
+    }
 
     @Override
     public JsonResult add(ArticleDto parameter) {
@@ -85,4 +88,12 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
         return getForObject(url, new ParameterizedTypeReference<JsonResult<Object>>() {
         });
     }
+
+    @Override
+    public JsonResult getRecentPublishedByUserId() {
+        String url = getRecentPublishedUrl();
+        return getForObject(url, new ParameterizedTypeReference<JsonResult<Object>>() {
+        });
+    }
+
 }

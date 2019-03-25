@@ -20,4 +20,6 @@ public interface ArticleApiClient {
     JsonResult remove(Long id);
 
     JsonResult getTopNCommentList(Integer top);
+
+    JsonResult getRecentPublishedByUserId();
 }

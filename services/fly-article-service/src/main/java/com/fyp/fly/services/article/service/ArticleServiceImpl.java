@@ -1,6 +1,7 @@
 package com.fyp.fly.services.article.service;
 
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSON;
 import com.fyp.fly.common.constants.Fly;
 import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.enums.CountBizType;
@@ -13,13 +14,16 @@ import com.fyp.fly.services.article.client.CountFeignClient;
 import com.fyp.fly.services.article.domain.Article;
 import com.fyp.fly.services.article.domain.dto.ArticleEditDto;
 import com.fyp.fly.services.article.domain.vo.ArticleTopVo;
+import com.fyp.fly.services.article.domain.vo.ArticleUserRecentPublishVo;
 import com.fyp.fly.services.article.repository.mapper.ArticleMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -33,6 +37,7 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements ArticleService{
 
     private static final String CACHE_ARTICLE_LIST_PREFIX = "service:article:list_";
+    private static final String CACHE_ARTICLE_USER_LIST_PREFIX="service:article:user_recent_";
 
 
     @Autowired
@@ -43,6 +48,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Autowired
     private HashOperations<String,String,String> hashOps;
+
+    @Autowired
+    private ValueOperations<String, String> valueOps;
 
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
@@ -131,6 +139,46 @@ public class ArticleServiceImpl implements ArticleService{
             }
         }
         return ResultUtils.success(resultList);
+    }
+
+    /**
+     * 获取用户最近发布列表
+     *
+     * @param userId
+     */
+    @Override
+    public JsonResult getRecentPublishedByUserId(Long userId) {
+
+        String result = valueOps.get(CACHE_ARTICLE_USER_LIST_PREFIX + userId);
+        if (result != null) {
+            return ResultUtils.success(JSONUtils.parseArray(result, ArticleUserRecentPublishVo.class));
+        }
+
+        List<ArticleUserRecentPublishVo> publishVos = new ArrayList<>(10);
+        List<Article> articles = articleMapper.getListByUserId(userId);
+        if (articles.size() > 0) {
+            List<Long> bizIds = articles.stream().map(x -> x.getId()).collect(Collectors.toList());
+            List<CountVo> browses = countFeignClient.getCountsByBizIds(CountBizType.ARTICLE_BROWSER.getCode(), bizIds).getData();
+            List<CountVo> comments = countFeignClient.getCountsByBizIds(CountBizType.ARTICLE_COMMENT.getCode(), bizIds).getData();
+
+            publishVos = articles.stream().map(x -> {
+                Optional<CountVo> currentBrowseVo = browses.stream().filter(b -> Objects.equals(b.getBizId(), x.getId())).findFirst();
+                Optional<CountVo> currentCommentVo = comments.stream().filter(b -> Objects.equals(b.getBizId(), x.getId())).findFirst();
+                int browseCount = currentBrowseVo.isPresent() ? currentBrowseVo.get().getBizCount() : 0;
+                int commentCount = currentCommentVo.isPresent() ? currentCommentVo.get().getBizCount() : 0;
+                ArticleUserRecentPublishVo vo =
+                        new ArticleUserRecentPublishVo(x.getId(),
+                                x.getSpecial(),
+                                x.getTop(),
+                                x.getTitle(),
+                                x.getCreateAt(),
+                                browseCount,
+                                commentCount);
+                return vo;
+            }).collect(Collectors.toList());
+        }
+        valueOps.set(CACHE_ARTICLE_USER_LIST_PREFIX + userId, JSONUtils.toJSONString(publishVos),30,TimeUnit.MINUTES);
+        return ResultUtils.success(publishVos);
     }
 
     //本周热议，所以，缓存key以每周区分，
