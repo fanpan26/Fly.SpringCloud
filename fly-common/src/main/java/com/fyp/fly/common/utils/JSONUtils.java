@@ -2,6 +2,8 @@ package com.fyp.fly.common.utils;
 
 import com.alibaba.fastjson.JSON;
 
+import java.util.List;
+
 /**
  * @author fyp
  * @crate 2019/3/10 22:58
@@ -31,4 +33,7 @@ public final class JSONUtils {
         return JSON.parseObject(bytes, clazz);
     }
 
+    public static <T> List<T> parseArray(String json, Class<T> clazz) {
+        return JSON.parseArray(json, clazz);
+    }
 }
