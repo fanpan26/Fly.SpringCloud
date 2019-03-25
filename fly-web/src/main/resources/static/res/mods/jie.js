@@ -103,7 +103,6 @@ layui.define('fly', function(exports){
         var id = $('#hidden_article_id').val()||0;
         fly.json('/article/remove/'+id, {
         }, function(res){
-          alert(res.code);
           if(res.code == 0){
             location.href = '/';
           } else {
