@@ -18,4 +18,6 @@ public interface ArticleApiClient {
     JsonResult browse(Long id);
 
     JsonResult remove(Long id);
+
+    JsonResult getTopNCommentList(Integer top);
 }
