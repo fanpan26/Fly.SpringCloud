@@ -41,7 +41,7 @@
                     <ul class="jie-row">
                         <li th:each="article:${recentPublishedList}" >
                             <span class="fly-jing" th:if="${article.special}">精</span>
-                            <a href="" class="jie-title" th:text="${article.title}"> </a>
+                            <a th:href="'/jie/'+${article.id}" href="#" class="jie-title" th:text="${article.title}"> </a>
                             <i th:text="${article.createAt}">刚刚</i>
                             <em class="layui-hide-xs" th:text="${article.browseCount}+'阅/'+${article.commentCount}+'答'">0阅/0答</em>
                         </li>

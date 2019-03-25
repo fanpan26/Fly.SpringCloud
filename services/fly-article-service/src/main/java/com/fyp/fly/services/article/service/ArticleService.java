@@ -15,7 +15,7 @@ public interface ArticleService {
 
     JsonResult browse(Long id);
 
-    JsonResult delete(Long id);
+    JsonResult delete(Long id,Long userId);
 
     /**
      * 获取TOP 10 热议的文章列表

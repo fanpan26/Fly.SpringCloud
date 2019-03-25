@@ -37,7 +37,7 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
         return buildApiUrl("article/browse/"+articleId);
     }
     private String getRemoveUrl(Long articleId) {
-        return buildApiUrl("article/remove/"+articleId);
+        return buildApiUrl("article/remove/"+articleId+"?userId="+FlyContext.getUserId());
     }
 
     private String getArticleUrl(Long articleId) {

@@ -68,8 +68,10 @@ public class ArticleServiceImpl implements ArticleService{
             Article art = article.transfer();
             articleMapper.add(art);
             //add cache
-            hashOps.put(getCacheArticleListKey(), String.valueOf(art.getId()), JSONUtils.toJSONString(art));
+            addListCache(art);
             redisTemplate.expire(getCacheArticleListKey(), 7, TimeUnit.DAYS);
+            //remove recently published cache
+            removeRecentPublishedCache(article.getUserId());
             return ResultUtils.success();
         } else {
             return ResultUtils.failed(article.checkArguments());
@@ -98,12 +100,13 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public JsonResult delete(Long id) {
+    public JsonResult delete(Long id,Long userId) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("id");
         }
         articleMapper.delete(id);
         hashOps.delete(getCacheArticleListKey(), id.toString());
+        removeRecentPublishedCache(userId);
         return ResultUtils.success();
     }
 
@@ -184,5 +187,14 @@ public class ArticleServiceImpl implements ArticleService{
     //本周热议，所以，缓存key以每周区分，
     private String getCacheArticleListKey() {
         return CACHE_ARTICLE_LIST_PREFIX + DateUtil.weekOfYear(new Date());
+    }
+
+    private void removeRecentPublishedCache(Long userId){
+        redisTemplate.delete(CACHE_ARTICLE_USER_LIST_PREFIX + userId);
+    }
+
+    private void addListCache(Article article){
+        hashOps.put(getCacheArticleListKey(), String.valueOf(article.getId()), JSONUtils.toJSONString(article));
+        redisTemplate.expire(getCacheArticleListKey(), 7, TimeUnit.DAYS);
     }
 }

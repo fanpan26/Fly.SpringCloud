@@ -47,8 +47,8 @@ public class ArticleController {
      * 帖子删除
      * */
     @PostMapping("/remove/{id}")
-    public JsonResult remove(@PathVariable("id") Long id) {
-        return articleService.delete(id);
+    public JsonResult remove(@PathVariable("id") Long id,Long userId) {
+        return articleService.delete(id,userId);
     }
 
     @GetMapping("/top/{top}")
