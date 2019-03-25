@@ -158,32 +158,43 @@ layui.define('fly', function(exports){
             for (var i=0;i<bodys.length;i++){
                 bodys[i].innerHTML = fly.content(bodys[i].innerText);
             }
-            layui.laypage.render({
+         var c = parseInt($('#jiedaCount').text());
+            if(c>20) {
+              layui.laypage.render({
                 elem: 'comment_page'
-                ,count: parseInt($('#jiedaCount').text())
-                ,limit:20
-                ,curr:page
-                ,jump: function(obj,first) {
-                  console.log(obj);
-                  console.log(first);
-                    if (!first) {
-                        var curr = obj.curr;
-                        loadComments(curr);
-                    }
+                , count: parseInt($('#jiedaCount').text())
+                , limit: 20
+                , curr: page
+                , jump: function (obj, first) {
+                  if (!first) {
+                    var curr = obj.curr;
+                    loadComments(curr);
+                  }
                 }
-            });
+              });
+            }
         }, {type: 'GET', dataType: 'html'});
     }
     var renderComments = function () {
+      var e = document.getElementById('div_article_content');
+      if (e) {
         var interval = setInterval(function () {
-            if (fly.faces) {
-                clearInterval(interval);
-                var e = document.getElementById('div_article_content');
-                e.innerHTML = fly.content(e.innerText);
-                e.removeAttribute('style');
-               loadComments(1);
-            }
+          if (fly.faces) {
+            clearInterval(interval);
+            e.innerHTML = fly.content(e.innerText);
+            e.removeAttribute('style');
+            loadComments(1);
+          }
         }, 1);
+      }
+    }
+    var renderHots = function () {
+      var e = $('.fly-list-one');
+      if (e&&e.length) {
+        fly.json('/jie/hot', {}, function (res) {
+          e.append(res);
+        }, {type: 'GET', dataType: 'html'});
+      }
     }
   //异步渲染
   var asyncRender = function(){
@@ -197,7 +208,8 @@ layui.define('fly', function(exports){
       //   jieAdmin.append('<span class="layui-btn layui-btn-xs jie-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
       // });
     }
-      renderComments();
+    renderComments();
+    renderHots();
   }();
   //解答操作
   gather.jiedaActive = {

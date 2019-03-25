@@ -1,7 +1,7 @@
 package com.fyp.fly.services.article.service;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.services.article.dto.ArticleEditDto;
+import com.fyp.fly.services.article.domain.dto.ArticleEditDto;
 
 /**
  * @author fyp
@@ -20,5 +20,5 @@ public interface ArticleService {
     /**
      * 获取TOP 10 热议的文章列表
      * */
-    JsonResult getTop10CommentList();
+    JsonResult getTopNCommentList(int top);
 }

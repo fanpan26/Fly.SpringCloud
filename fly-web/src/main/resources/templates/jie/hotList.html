@@ -1,0 +1,5 @@
+<dd  th:each="article:${hotList}" xmlns:th="http://www.w3.org/1999/xhtml">
+    <a th:href="'/jie/'+ ${article.id}" href="#" th:text="${article.title}"></a>
+    <span><i class="iconfont icon-pinglun1"></i><t th:text="' ' + ${article.count}">0</t></span>
+</dd>
+<div class="fly-none" th:if="${#lists.isEmpty(hotList)}"  xmlns:th="http://www.w3.org/1999/xhtml">没有相关数据</div>

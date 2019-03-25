@@ -10,15 +10,19 @@ import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.JSONUtils;
 import com.fyp.fly.services.article.client.CountFeignClient;
 import com.fyp.fly.services.article.domain.Article;
-import com.fyp.fly.services.article.dto.ArticleEditDto;
+import com.fyp.fly.services.article.domain.dto.ArticleEditDto;
+import com.fyp.fly.services.article.domain.vo.ArticleTopVo;
 import com.fyp.fly.services.article.repository.mapper.ArticleMapper;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author fyp
@@ -28,6 +32,9 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService{
 
+    private static final String CACHE_ARTICLE_LIST_PREFIX = "service:article:list_";
+
+
     @Autowired
     private ArticleMapper articleMapper;
 
@@ -35,17 +42,22 @@ public class ArticleServiceImpl implements ArticleService{
     private CountFeignClient countFeignClient;
 
     @Autowired
+    private HashOperations<String,String,String> hashOps;
+
+    @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Override
     public JsonResult add(ArticleEditDto article) {
-        if (article == null){
+        if (article == null) {
             throw new NullPointerException("article");
         }
-        if (article.isValid()){
-            articleMapper.add(article.transfer());
+        if (article.isValid()) {
+            Article art = article.transfer();
+            articleMapper.add(art);
+            hashOps.put(getCacheArticleListKey(), String.valueOf(art.getId()), JSONUtils.toJSONString(art));
             return ResultUtils.success();
-        }else{
+        } else {
             return ResultUtils.failed(article.checkArguments());
         }
     }
@@ -81,14 +93,40 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public JsonResult getTop10CommentList() {
+    public JsonResult getTopNCommentList(int top) {
 
-        JsonResult<List<CountVo>> countRes = countFeignClient.getTopNCountsByBizType(CountBizType.ARTICLE_COMMENT.getCode(), 0, 10);
-        if (ResultUtils.isSuccess(countRes)){
+        List<ArticleTopVo> resultList = new ArrayList<>();
+        JsonResult<List<CountVo>> countRes = countFeignClient.getTopNCountsByBizType(CountBizType.ARTICLE_COMMENT.getCode(), 0, top);
+        if (ResultUtils.isSuccess(countRes)) {
             List<CountVo> counts = countRes.getData();
             //组装文章标题数据
+            List<String> ids = counts.stream().map(x -> String.valueOf(x.getBizId())).collect(Collectors.toList());
+            List<String> articleJsons = hashOps.multiGet(getCacheArticleListKey(), ids);
+            if (articleJsons != null && articleJsons.size() > 0) {
+                List<Article> articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
 
+                for (CountVo count : counts) {
+                    ArticleTopVo articleTopVo = new ArticleTopVo();
+                    articleTopVo.setId(count.getBizId());
+                    Optional<Article> article = articles.stream().filter(a -> {
+                        if (a == null) {
+                            return false;
+                        }
+                        return Objects.equals(a.getId(), count.getBizId());
+                    }).findFirst();
+                    if (article.isPresent()) {
+                        articleTopVo.setTitle(article.get().getTitle());
+                        articleTopVo.setCount(count.getBizCount());
+                        resultList.add(articleTopVo);
+                    }
+
+                }
+            }
         }
-        return null;
+        return ResultUtils.success(resultList);
+    }
+
+    private String getCacheArticleListKey() {
+        return CACHE_ARTICLE_LIST_PREFIX + 0;
     }
 }

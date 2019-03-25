@@ -1,4 +1,4 @@
-package com.fyp.fly.services.article.dto;
+package com.fyp.fly.services.article.domain.dto;
 
 
 import com.fyp.fly.common.dto.BaseDto;

@@ -85,6 +85,13 @@ public class JieController extends BaseController{
         return "/jie/comment";
     }
 
+    @GetMapping("/hot")
+    public String hotList() {
+        JsonResult<Object> hotList = articleApiClient.getTopNCommentList(10);
+        request.setAttribute("hotList", hotList.getData());
+        return "/jie/hotList";
+    }
+
     @Autowired
     private BaseApiClient baseApiClient;
 

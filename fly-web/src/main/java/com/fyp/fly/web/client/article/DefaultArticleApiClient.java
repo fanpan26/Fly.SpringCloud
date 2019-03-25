@@ -44,6 +44,10 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
         return buildAggregationUrl("aggregation/article/" + articleId + "?userId=" + FlyContext.getUserId());
     }
 
+    private String getTopNCommentUrl(Integer top) {
+        return buildApiUrl("/article/top/"+top);
+    }
+
     @Override
     public JsonResult add(ArticleDto parameter) {
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
@@ -73,5 +77,12 @@ public class DefaultArticleApiClient extends AbstractApiClient implements Articl
     public JsonResult remove(Long id) {
         String url = getRemoveUrl(id);
         return postForObject(url);
+    }
+
+    @Override
+    public JsonResult getTopNCommentList(Integer top) {
+        String url = getTopNCommentUrl(top);
+        return getForObject(url, new ParameterizedTypeReference<JsonResult<Object>>() {
+        });
     }
 }

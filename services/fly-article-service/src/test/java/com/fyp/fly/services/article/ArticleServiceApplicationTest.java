@@ -2,7 +2,7 @@ package com.fyp.fly.services.article;
 
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.services.article.dto.ArticleEditDto;
+import com.fyp.fly.services.article.domain.dto.ArticleEditDto;
 import com.fyp.fly.services.article.service.ArticleService;
 import org.junit.After;
 import org.junit.Assert;

@@ -1,11 +1,7 @@
 package com.fyp.fly.services.article.controller;
 
-import com.fyp.fly.common.enums.CountBizType;
-import com.fyp.fly.common.event.CountEvent;
-import com.fyp.fly.common.event.FlyEvent;
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.common.result.api.ResultUtils;
-import com.fyp.fly.services.article.dto.ArticleEditDto;
+import com.fyp.fly.services.article.domain.dto.ArticleEditDto;
 import com.fyp.fly.services.article.service.ArticleService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +49,10 @@ public class ArticleController {
     @PostMapping("/remove/{id}")
     public JsonResult remove(@PathVariable("id") Long id) {
         return articleService.delete(id);
+    }
+
+    @GetMapping("/top/{top}")
+    public JsonResult getTopN(@PathVariable("top") Integer top) {
+        return articleService.getTopNCommentList(top);
     }
 }

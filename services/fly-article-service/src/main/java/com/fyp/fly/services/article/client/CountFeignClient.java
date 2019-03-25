@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface CountFeignClient {
      * 获取TOP N 的数据统计
      * */
     @RequestMapping(value = "/count/top/{bizType}",method = RequestMethod.GET)
-    JsonResult<List<CountVo>> getTopNCountsByBizType(@PathVariable("bizType") Integer bizType, Integer start, Integer end);
+    JsonResult<List<CountVo>> getTopNCountsByBizType(@PathVariable("bizType") Integer bizType, @RequestParam("start") Integer start,@RequestParam("end") Integer end);
 }
