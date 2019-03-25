@@ -330,7 +330,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util','laypage'],
   ,elemSigninHelp = $('#LAY_signinHelp')
   ,elemSigninTop = $('#LAY_signinTop')
   ,elemSigninMain = $('.fly-signin-main')
-  ,elemSigninDays = $('.fly-signin-days');
+  ,elemSigninDays = $('.fly-signin-days')
+      ,elemHot=$('.fly-list-one');
   
   if(elemSigninMain[0]){
     /*
@@ -340,6 +341,14 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util','laypage'],
       signRender(res.data);
     });
     */
+  }
+  if (elemHot[0]){
+      var e = $('.fly-list-one');
+      if (e&&e.length) {
+        fly.json('/jie/hot', {}, function (res) {
+          e.append(res);
+        }, {type: 'GET', dataType: 'html'});
+      }
   }
   $('body').on('click', '#LAY_signin', function(){
     var othis = $(this);
