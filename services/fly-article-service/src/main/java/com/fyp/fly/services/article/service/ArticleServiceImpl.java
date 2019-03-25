@@ -89,6 +89,7 @@ public class ArticleServiceImpl implements ArticleService{
             throw new IllegalArgumentException("id");
         }
         articleMapper.delete(id);
+        hashOps.delete(getCacheArticleListKey(), id.toString());
         return ResultUtils.success();
     }
 
