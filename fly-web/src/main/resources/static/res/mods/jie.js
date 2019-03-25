@@ -187,14 +187,6 @@ layui.define('fly', function(exports){
         }, 1);
       }
     }
-    var renderHots = function () {
-      var e = $('.fly-list-one');
-      if (e&&e.length) {
-        fly.json('/jie/hot', {}, function (res) {
-          e.append(res);
-        }, {type: 'GET', dataType: 'html'});
-      }
-    }
   //异步渲染
   var asyncRender = function(){
     var div = $('.fly-admin-box'), jieAdmin = $('#LAY_jieAdmin');
