@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
  * @project fly
  */
 @Service
-public class ArticleServiceImpl implements ArticleService{
+public class ArticleServiceImpl implements ArticleService {
 
     private static final String CACHE_ARTICLE_LIST_PREFIX = "service:article:list_";
-    private static final String CACHE_ARTICLE_USER_LIST_PREFIX="service:article:user_recent_";
+    private static final String CACHE_ARTICLE_USER_LIST_PREFIX = "service:article:user_recent_";
 
 
     @Autowired
@@ -47,13 +47,13 @@ public class ArticleServiceImpl implements ArticleService{
     private CountFeignClient countFeignClient;
 
     @Autowired
-    private HashOperations<String,String,String> hashOps;
+    private HashOperations<String, String, String> hashOps;
 
     @Autowired
     private ValueOperations<String, String> valueOps;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     @Autowired
@@ -84,8 +84,8 @@ public class ArticleServiceImpl implements ArticleService{
             throw new IllegalArgumentException("id");
         }
         Article article = articleMapper.findById(id);
-        if (article == null || article.getDel()){
-            return ResultUtils.failed(Fly.Status.API_CODE_NOTFOUND,"帖子不存在");
+        if (article == null || article.getDel()) {
+            return ResultUtils.failed(Fly.Status.API_CODE_NOTFOUND, "帖子不存在");
         }
         return ResultUtils.success(article);
     }
@@ -100,7 +100,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public JsonResult delete(Long id,Long userId) {
+    public JsonResult delete(Long id, Long userId) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("id");
         }
@@ -180,21 +180,20 @@ public class ArticleServiceImpl implements ArticleService{
                 return vo;
             }).collect(Collectors.toList());
         }
-        valueOps.set(CACHE_ARTICLE_USER_LIST_PREFIX + userId, JSONUtils.toJSONString(publishVos),30,TimeUnit.MINUTES);
+        valueOps.set(CACHE_ARTICLE_USER_LIST_PREFIX + userId, JSONUtils.toJSONString(publishVos), 30, TimeUnit.MINUTES);
         return ResultUtils.success(publishVos);
     }
 
     //本周热议，所以，缓存key以每周区分，
     private String getCacheArticleListKey() {
-        return CACHE_ARTICLE_LIST_PREFIX + DateUtil.weekOfYear(new Date());
+        return CACHE_ARTICLE_LIST_PREFIX;
     }
 
-    private void removeRecentPublishedCache(Long userId){
+    private void removeRecentPublishedCache(Long userId) {
         redisTemplate.delete(CACHE_ARTICLE_USER_LIST_PREFIX + userId);
     }
 
-    private void addListCache(Article article){
+    private void addListCache(Article article) {
         hashOps.put(getCacheArticleListKey(), String.valueOf(article.getId()), JSONUtils.toJSONString(article));
-        redisTemplate.expire(getCacheArticleListKey(), 7, TimeUnit.DAYS);
     }
 }

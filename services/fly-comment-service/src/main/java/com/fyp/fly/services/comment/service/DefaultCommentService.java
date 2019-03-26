@@ -54,7 +54,8 @@ public class DefaultCommentService implements CommentService {
             Comment commentModel = comment.transfer();
             commentMapper.add(commentModel);
             listOps.rightPush(CACHE_COMMENT_LIST + comment.getArtId(), commentModel);
-            sendCommentCountChangedEvent(comment.getArtId(), true);
+            sendCommentCountChangedEvent(comment.getArtId(), true,CountBizType.ARTICLE_COMMENT);
+            sendCommentCountChangedEvent(comment.getUserId(), true,CountBizType.USER_COMMENT);
             return ResultUtils.success(commentModel.getId());
         } else {
             return ResultUtils.failed(comment.getErrMsg());
@@ -62,16 +63,16 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Override
-    public JsonResult delete(Long id) {
+    public JsonResult delete(Long id,Long userId) {
         Long artId = commentMapper.getArtIdById(id);
-        if (artId == null){
+        if (artId == null) {
             return ResultUtils.failed("帖子不存在");
         }
         commentMapper.delete(id);
-        sendCommentCountChangedEvent(artId,false);
+        sendCommentCountChangedEvent(artId, false, CountBizType.ARTICLE_COMMENT);
+        sendCommentCountChangedEvent(userId, false, CountBizType.USER_COMMENT);
         return ResultUtils.success();
     }
-
     @Override
     public JsonResult getContent(Long id) {
         String content = commentMapper.getContentById(id);
@@ -130,15 +131,16 @@ public class DefaultCommentService implements CommentService {
         return ResultUtils.success(id);
     }
 
-    private void sendCommentCountChangedEvent(Long id,boolean increment) {
+    private void sendCommentCountChangedEvent(Long id,boolean increment,CountBizType bizType) {
 
         CountEvent event = new CountEvent();
         event.setBizId(id);
-        event.setBizType(CountBizType.ARTICLE_COMMENT.getCode());
+        event.setBizType(bizType.getCode());
         event.setIncrement(increment);
 
-        rabbitTemplate.convertAndSend(FlyEvent.SERVICE_COMMON_EXCHANGE, FlyEvent.SERVICE_ARTICLE_COUNT_EVENT, JSONUtils.toJSONString(event));
+        rabbitTemplate.convertAndSend(FlyEvent.SERVICE_COMMON_EXCHANGE, FlyEvent.SERVICE_ARTICLE_COMMENT_COUNT_EVENT, JSONUtils.toJSONString(event));
     }
+
 
     private Long getAdoptIdByArtId(Long artId){
         Object  adoptId = hashOps.get(CACHE_COMMENT_ARTICLE_ADOPT,artId.toString());

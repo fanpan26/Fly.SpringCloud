@@ -72,9 +72,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             JsonResult<UserModel> userRes = getUserFromSsoApi(token);
             if (userRes != null) {
                 if (ResultUtils.isSuccess(userRes)) {
-                    String userJsonString = JSONUtils.toJSONString(userRes.getData());
-                    setCache(userRes.getData().getId(), userJsonString);
-                    CookieUtils.setCookie(response, Fly.WEB_COOKIE_USER_KEY, userRes.getData().getId() + "", Fly.WEB_TOKEN_EXPIRE);
+                    setCache(userRes.getData());
+                    setCookie(response,userRes.getData());
                     request.setAttribute(Fly.WEB_ATTRIBUTE_USER_KEY, userRes.getData());
                 }
                 return true;
@@ -87,8 +86,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    private void setCache(Long userId,String userJsonString){
-        ops().set(cacheKey(userId),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
+    private void setCache(UserModel user){
+        String userJsonString = JSONUtils.toJSONString(user);
+        ops().set(cacheKey(user.getId()),userJsonString,Fly.WEB_CACHE_USER_EXPIRE, TimeUnit.SECONDS);
+    }
+
+    private void setCookie(HttpServletResponse response,UserModel user){
+        CookieUtils.setCookie(response, Fly.WEB_COOKIE_USER_KEY, user.getId() + "", Fly.WEB_TOKEN_EXPIRE);
     }
 
     private JsonResult<UserModel> getUserFromSsoApi(String token) {

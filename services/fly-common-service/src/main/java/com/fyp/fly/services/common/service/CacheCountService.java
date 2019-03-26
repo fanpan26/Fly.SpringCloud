@@ -1,5 +1,6 @@
 package com.fyp.fly.services.common.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.enums.CountBizType;
 import com.fyp.fly.common.result.api.JsonResult;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -54,7 +56,12 @@ public class CacheCountService implements CountService {
 
     private String getSortedCountKeyByBizType(int type) {
         String key = CountBizType.valueOf(type).getKey();
-        return String.format("%s%s_%d", CACHE_COUNT_SORTED_KEY_PREFIX, key, 0);
+        return String.format("%s%s_%d_%d", CACHE_COUNT_SORTED_KEY_PREFIX, key, 0+DateUtil.weekOfYear(new Date()));
+    }
+
+    private String getWeekSortedCountKeyByBizType(int type) {
+        String key = CountBizType.valueOf(type).getKey();
+        return String.format("%s%s_%d_%d", CACHE_COUNT_SORTED_KEY_PREFIX, key, 0,DateUtil.weekOfYear(new Date()));
     }
 
     /**
@@ -84,6 +91,8 @@ public class CacheCountService implements CountService {
     private void addSortedRecords(int type, Long bizId, Long count) {
         String key = getSortedCountKeyByBizType(type);
         zsetOps.add(key, bizId, count);
+        int dayOfWeek = DateUtil.dayOfWeek(new Date());
+        redisTemplate.expire(key, 7 - dayOfWeek, TimeUnit.DAYS);
     }
 
 

@@ -26,8 +26,8 @@ public class CommentController {
 
     @ApiOperation(value = "删除评论")
     @PostMapping("/remove/{id}")
-    public JsonResult remove(@PathVariable("id") Long id) {
-        return commentService.delete(id);
+    public JsonResult remove(@PathVariable("id") Long id,Long userId) {
+        return commentService.delete(id,userId);
     }
 
     @ApiOperation(value = "获取评论内容")
