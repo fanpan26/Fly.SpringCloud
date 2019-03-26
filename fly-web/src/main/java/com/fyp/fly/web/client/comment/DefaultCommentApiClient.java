@@ -29,7 +29,7 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
     }
 
     private String getDeleteUrl(Long id) {
-        return buildApiUrl("comment/remove/"+id);
+        return buildApiUrl("comment/remove/"+id+"?userId="+FlyContext.getUserId());
     }
 
     private String getAdoptUrl(Long id,Long artId) {
