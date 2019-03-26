@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.swing.text.html.Option;
 import java.util.*;
@@ -69,7 +70,6 @@ public class ArticleServiceImpl implements ArticleService {
             articleMapper.add(art);
             //add cache
             addListCache(art);
-            redisTemplate.expire(getCacheArticleListKey(), 7, TimeUnit.DAYS);
             //remove recently published cache
             removeRecentPublishedCache(article.getUserId());
             return ResultUtils.success();
@@ -110,6 +110,7 @@ public class ArticleServiceImpl implements ArticleService {
         return ResultUtils.success();
     }
 
+    private static final Object articleListLock = new Object();
     @Override
     public JsonResult getTopNCommentList(int top) {
 
@@ -120,12 +121,8 @@ public class ArticleServiceImpl implements ArticleService {
             //组装文章标题数据
             List<String> ids = counts.stream().map(x -> String.valueOf(x.getBizId())).collect(Collectors.toList());
             List<String> articleJsons = hashOps.multiGet(getCacheArticleListKey(), ids);
-            List<Article> articles;
-            if (articleJsons != null && articleJsons.size() > 0) {
-                articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
-            } else {
-               throw new IllegalStateException("no articles in cache");
-            }
+
+            List<Article> articles = getArticleList(articleJsons,ids);
             if (articles.size() > 0) {
                 for (CountVo count : counts) {
                     ArticleTopVo articleTopVo = new ArticleTopVo();
@@ -148,6 +145,27 @@ public class ArticleServiceImpl implements ArticleService {
         return ResultUtils.success(resultList);
     }
 
+    private List<Article> getArticleList(List<String> articleJsons,List<String> ids) {
+        List<Article> articles;
+        boolean isNotEmptyList = articleJsons.stream().anyMatch(x-> !StringUtils.isEmpty(x));
+        if (isNotEmptyList) {
+            articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
+        } else {
+            synchronized (articleListLock) {
+                articleJsons = hashOps.multiGet(getCacheArticleListKey(), ids);
+                isNotEmptyList = articleJsons.stream().anyMatch(x-> !StringUtils.isEmpty(x));
+                if (!isNotEmptyList) {
+                    articles = articleMapper.getListByCreateAt();
+                    if (articles.size() > 0) {
+                        addListCaches(articles);
+                    }
+                } else {
+                    articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
+                }
+            }
+        }
+        return articles;
+    }
     /**
      * 获取用户最近发布列表
      *
@@ -199,5 +217,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     private void addListCache(Article article) {
         hashOps.put(getCacheArticleListKey(), String.valueOf(article.getId()), JSONUtils.toJSONString(article));
+    }
+
+    private void addListCaches(List<Article> articles) {
+
+        Map<String,String> cacheData = new HashMap<>(articles.size());
+        for (Article article:articles){
+            cacheData.put(String.valueOf(article.getId()),JSONUtils.toJSONString(article));
+        }
+        hashOps.putAll(getCacheArticleListKey(),cacheData);
     }
 }

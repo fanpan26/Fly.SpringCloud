@@ -30,6 +30,9 @@ public interface ArticleMapper {
     })
     List<Article> getListByUserId(@Param("userId") Long userId);
 
+    @Select("SELECT id,title,top,special FROM fly.fly_article order by create_at desc limit 100")
+    List<Article> getListByCreateAt();
+
 
 
    @Update("update fly_article set del=1 where id=#{id}")
