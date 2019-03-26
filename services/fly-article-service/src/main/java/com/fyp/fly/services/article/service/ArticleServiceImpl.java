@@ -120,9 +120,15 @@ public class ArticleServiceImpl implements ArticleService {
             //组装文章标题数据
             List<String> ids = counts.stream().map(x -> String.valueOf(x.getBizId())).collect(Collectors.toList());
             List<String> articleJsons = hashOps.multiGet(getCacheArticleListKey(), ids);
+            List<Article> articles;
             if (articleJsons != null && articleJsons.size() > 0) {
-                List<Article> articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
-
+                articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
+            } else {
+                //TODO  init articles cache
+                articles = new ArrayList<>();
+                //hashOps.putAll();
+            }
+            if (articles.size() > 0) {
                 for (CountVo count : counts) {
                     ArticleTopVo articleTopVo = new ArticleTopVo();
                     articleTopVo.setId(count.getBizId());
@@ -137,10 +143,10 @@ public class ArticleServiceImpl implements ArticleService {
                         articleTopVo.setCount(count.getBizCount());
                         resultList.add(articleTopVo);
                     }
-
                 }
             }
         }
+
         return ResultUtils.success(resultList);
     }
 

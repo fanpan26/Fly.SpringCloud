@@ -56,13 +56,9 @@ public class CacheCountService implements CountService {
 
     private String getSortedCountKeyByBizType(int type) {
         String key = CountBizType.valueOf(type).getKey();
-        return String.format("%s%s_%d_%d", CACHE_COUNT_SORTED_KEY_PREFIX, key, 0+DateUtil.weekOfYear(new Date()));
-    }
-
-    private String getWeekSortedCountKeyByBizType(int type) {
-        String key = CountBizType.valueOf(type).getKey();
         return String.format("%s%s_%d_%d", CACHE_COUNT_SORTED_KEY_PREFIX, key, 0,DateUtil.weekOfYear(new Date()));
     }
+
 
     /**
      * 添加一条计数

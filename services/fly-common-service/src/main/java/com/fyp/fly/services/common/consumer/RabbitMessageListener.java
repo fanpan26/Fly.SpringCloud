@@ -23,7 +23,7 @@ public class RabbitMessageListener implements MessageListener {
     public void onMessage(Message message) {
         try {
             CountEvent event = JSONUtils.parseObject(message.getBody(), CountEvent.class);
-            System.out.println(message.getBody());
+            System.out.println(JSONUtils.toJSONString(event));
             if (event.isIncrement()) {
                 countService.increment(event.getBizType(), event.getBizId());
             } else {
