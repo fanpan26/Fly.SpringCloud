@@ -472,14 +472,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util','laypage'],
   ,elemReply = $('#LAY_replyRank');
 
   if(elemReply[0]){
-    /*
-    fly.json('/top/reply/', {
-      limit: 20
-    }, function(res){
-      var html = laytpl(tplReply).render(res);
-      elemReply.find('dl').html(html);
-    });
-    */
+    fly.json('/rank', {}, function(html){
+      elemReply.append(html);
+    },{type:'GET',dataType:'html'});
   };
 
   //相册
