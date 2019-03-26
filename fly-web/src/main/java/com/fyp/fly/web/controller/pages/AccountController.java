@@ -24,7 +24,12 @@ public class AccountController {
 
     @GetMapping("/login")
     public String ssoLogin() {
-        return "redirect:" + ssoUrl + "?from=fly-web";
+        return "redirect:" + ssoUrl + "?action=login&from=fly-web";
+    }
+
+    @GetMapping("/reg")
+    public String ssoReg() {
+        return "redirect:" + ssoUrl + "?action=reg&from=fly-web";
     }
 
     @GetMapping("/logout")
