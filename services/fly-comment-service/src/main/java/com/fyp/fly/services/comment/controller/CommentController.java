@@ -1,8 +1,8 @@
 package com.fyp.fly.services.comment.controller;
 
 import com.fyp.fly.common.result.api.JsonResult;
-import com.fyp.fly.services.comment.domain.CommentDto;
-import com.fyp.fly.services.comment.domain.CommentListDto;
+import com.fyp.fly.services.comment.domain.dto.CommentDto;
+import com.fyp.fly.services.comment.domain.dto.CommentListDto;
 import com.fyp.fly.services.comment.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,5 +52,11 @@ public class CommentController {
     @PostMapping("/adopt/{id}")
     public JsonResult adopt(@PathVariable("id") Long id,Long artId) {
         return commentService.adopt(id,artId);
+    }
+
+    @ApiOperation(value = "获取评论前N名的用户列表")
+    @GetMapping("/rank")
+    public JsonResult getTopNUserList() {
+        return commentService.getTopNCommentUserList();
     }
 }
