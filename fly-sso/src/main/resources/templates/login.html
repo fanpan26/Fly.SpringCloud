@@ -8,7 +8,7 @@
             <div class="layui-tab layui-tab-brief" lay-filter="user">
                 <ul class="layui-tab-title">
                     <li class="layui-this">登入</li>
-                    <li><a href="reg.html">注册</a></li>
+                    <li><a href="/account/reg">注册</a></li>
                 </ul>
                 <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;" th:attr="action=@{/account/login}" th:method="POST">
                     <div class="layui-tab-item layui-show">
@@ -53,8 +53,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 <div layout:fragment="body_script">
     <script th:inline="javascript">
