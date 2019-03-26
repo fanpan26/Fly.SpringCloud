@@ -28,6 +28,10 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
         return buildApiUrl(String.format("comment/list?artId=%d&authorId=%d&userId=%d&pageIndex=%d&pageSize=%d",artId,authorId, FlyContext.getUserId(),pageIndex,pageSize));
     }
 
+    private String getUserRankUrl(){
+        return buildApiUrl("comment/rank");
+    }
+
     private String getDeleteUrl(Long id) {
         return buildApiUrl("comment/remove/"+id+"?userId="+FlyContext.getUserId());
     }
@@ -80,6 +84,13 @@ public class DefaultCommentApiClient extends AbstractApiClient implements Commen
     @Override
     public JsonResult getList(Long artId, Long authorId, Integer pageIndex, Integer pageSize) {
         String url = getListUrl(artId, authorId, pageIndex, pageSize);
+        return getForObject(url, new ParameterizedTypeReference<JsonResult<Object>>() {
+        });
+    }
+
+    @Override
+    public JsonResult getUserRank() {
+        String url = getUserRankUrl();
         return getForObject(url, new ParameterizedTypeReference<JsonResult<Object>>() {
         });
     }
