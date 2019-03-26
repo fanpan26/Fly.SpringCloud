@@ -18,6 +18,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 /**
  * @author fyp
@@ -42,11 +43,20 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = getAuthenticationToken(request);
         String from = request.getParameter("from");
+        String action =request.getParameter("action");
         String url = request.getParameter("url");
 
         String fromUrl = SsoConfig.getUrl(from);
         if (StringUtils.isEmpty(token)) {
-            response.sendRedirect("/account/login?redirect_url=" + EncodeUtils.encodeUrl(StringUtils.isEmpty(url)? fromUrl:(fromUrl+"?redirect="+url)));
+            if (action == null){
+                action = "login";
+            }else {
+                action = action.toLowerCase();
+                if (!Objects.equals(action, "login") && !Objects.equals(action, "reg")) {
+                    action = "login";
+                }
+            }
+            response.sendRedirect("/account/"+action+"?redirect_url=" + EncodeUtils.encodeUrl(StringUtils.isEmpty(url)? fromUrl:(fromUrl+"?redirect="+url)));
         } else {
             JsonResult<SsoTicketApiResult> ssoTicket = accountApiClient.getTicketByToken(token);
             if (ResultUtils.isSuccess(ssoTicket)) {
