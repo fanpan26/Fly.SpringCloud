@@ -8,4 +8,6 @@ public class FlyEvent {
      * 帖子数变化TOPIC
      * */
     public static final String SERVICE_ARTICLE_COUNT_EVENT = "fly.topic.count.article";
+    public static final String SERVICE_ARTICLE_COMMENT_COUNT_EVENT = "fly.topic.count.comment-article";
+    public static final String SERVICE_USER_COMMENT_COUNT_EVENT = "fly.topic.count.comment-user";
 }
