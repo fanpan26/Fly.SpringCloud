@@ -124,9 +124,7 @@ public class ArticleServiceImpl implements ArticleService {
             if (articleJsons != null && articleJsons.size() > 0) {
                 articles = articleJsons.stream().map(x -> JSONUtils.parseObject(x, Article.class)).collect(Collectors.toList());
             } else {
-                //TODO  init articles cache
-                articles = new ArrayList<>();
-                //hashOps.putAll();
+               throw new IllegalStateException("no articles in cache");
             }
             if (articles.size() > 0) {
                 for (CountVo count : counts) {
