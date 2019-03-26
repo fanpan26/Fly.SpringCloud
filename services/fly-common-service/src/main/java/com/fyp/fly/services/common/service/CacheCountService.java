@@ -153,8 +153,8 @@ public class CacheCountService implements CountService {
         Set<ZSetOperations.TypedTuple<Object>> values = zsetOps.reverseRangeWithScores(key, start, end);
 
         List<CountVo> results = values.stream().map(v ->
-                new CountVo(CountBizType.ARTICLE_COMMENT.getCode()
-                        , (Long) v.getValue()
+                new CountVo(bizType
+                        , Long.valueOf(v.getValue().toString())
                         , v.getScore().intValue()))
                 .collect(Collectors.toList());
 
