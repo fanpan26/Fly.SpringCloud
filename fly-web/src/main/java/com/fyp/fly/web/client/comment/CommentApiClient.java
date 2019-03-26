@@ -10,4 +10,5 @@ public interface CommentApiClient {
     JsonResult updateContent(Long id, String content);
     JsonResult adopt(Long id, Long artId);
     JsonResult getList(Long artId,Long authorId,Integer pageIndex,Integer pageSize);
+    JsonResult getUserRank();
 }
