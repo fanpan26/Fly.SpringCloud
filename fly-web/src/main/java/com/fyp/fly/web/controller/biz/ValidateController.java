@@ -23,7 +23,7 @@ public class ValidateController extends BaseController {
     private BaseApiClient baseApiClient;
 
     @GetMapping("/code")
-    public void test(HttpServletResponse response) throws IOException {
+    public void getValidateCode(HttpServletResponse response) throws IOException {
         InputStream in = null;
         OutputStream out = null;
         try {
