@@ -1,5 +1,6 @@
 package com.fyp.fly.services.comment.service;
 
+import com.fyp.fly.common.dto.CountVo;
 import com.fyp.fly.common.dto.UserModel;
 import com.fyp.fly.common.enums.CountBizType;
 import com.fyp.fly.common.event.CountEvent;
@@ -7,23 +8,23 @@ import com.fyp.fly.common.event.FlyEvent;
 import com.fyp.fly.common.result.api.JsonResult;
 import com.fyp.fly.common.result.api.ResultUtils;
 import com.fyp.fly.common.utils.JSONUtils;
+import com.fyp.fly.services.comment.client.CountFeignClient;
 import com.fyp.fly.services.comment.client.UserFeignClient;
 import com.fyp.fly.services.comment.domain.Comment;
-import com.fyp.fly.services.comment.domain.CommentCache;
-import com.fyp.fly.services.comment.domain.CommentDto;
-import com.fyp.fly.services.comment.domain.CommentListDto;
+import com.fyp.fly.services.comment.domain.dto.CommentDto;
+import com.fyp.fly.services.comment.domain.dto.CommentListDto;
+import com.fyp.fly.services.comment.domain.vo.UserTopCommentVo;
 import com.fyp.fly.services.comment.repository.mapper.CommentMapper;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +48,9 @@ public class DefaultCommentService implements CommentService {
 
     @Autowired
     private UserFeignClient userFeignClient;
+
+    @Autowired
+    private CountFeignClient countFeignClient;
 
     @Override
     public JsonResult add(CommentDto comment) {
@@ -129,6 +133,34 @@ public class DefaultCommentService implements CommentService {
         //add cache <hashKey>  artId, <hashValue> adopt commentId
         hashOps.put(CACHE_COMMENT_ARTICLE_ADOPT, artIdStr, id.toString());
         return ResultUtils.success(id);
+    }
+
+    @Override
+    public JsonResult getTopNCommentUserList() {
+        List<UserTopCommentVo> resultList = new ArrayList<>();
+
+        JsonResult<List<CountVo>> countRes = countFeignClient.getTopNCountsByBizType(CountBizType.USER_COMMENT.getCode(), 0, 12);
+        if (ResultUtils.isSuccess(countRes)) {
+            List<CountVo> counts = countRes.getData();
+            List<Long> userIds = counts.stream().map(x -> x.getBizId()).collect(Collectors.toList());
+            JsonResult<List<UserModel>> userRes = userFeignClient.getList(userIds);
+
+            if (ResultUtils.isSuccess(userRes)) {
+                List<UserModel> users = userRes.getData();
+                counts.stream().forEach(x -> {
+                    Optional<UserModel> currentUser = users.stream().filter(u -> Objects.equals(u.getId(), x.getBizId())).findFirst();
+                    if (currentUser.isPresent()) {
+                        UserTopCommentVo vo = new UserTopCommentVo();
+                        vo.setCount(x.getBizCount());
+                        vo.setId(x.getBizId());
+                        vo.setName(currentUser.get().getName());
+                        vo.setAvatar(currentUser.get().getAvatar());
+                        resultList.add(vo);
+                    }
+                });
+            }
+        }
+        return ResultUtils.success(resultList);
     }
 
     private void sendCommentCountChangedEvent(Long id,boolean increment,CountBizType bizType) {
