@@ -28,26 +28,38 @@ public class AccountController {
     private String defaultRedirectUrl;
 
     private static final String REDIRECT_URL_SESSION_ATTRIBUTE = "redirectUrl";
-    private static final String REDIRECT_TO_ERROR_MSG = "errMsg";
+    private static final String ERROR_MSG = "errMsg";
 
     @Autowired
     private AccountApiClient accountApiClient;
-    /**
-     * login page
-     * */
-    @GetMapping("/login")
-    public String login(@Nullable @RequestParam("redirect_url") String redirectUrl,HttpServletRequest request) {
+
+    private void handleInternal(String redirectUrl,HttpServletRequest request){
         java.util.Map<String,?> map = RequestContextUtils.getInputFlashMap(request);
         if(map != null) {
-            Object errMsg = map.get(REDIRECT_TO_ERROR_MSG);
+            Object errMsg = map.get(ERROR_MSG);
             if (errMsg != null) {
-                request.setAttribute(REDIRECT_TO_ERROR_MSG, errMsg);
+                request.setAttribute(ERROR_MSG, errMsg);
             }
         }
         if (redirectUrl != null) {
             request.getSession().setAttribute(REDIRECT_URL_SESSION_ATTRIBUTE, redirectUrl);
         }
+    }
+
+    /**
+     * login page
+     * */
+    @GetMapping("/login")
+    public String login(@Nullable @RequestParam("redirect_url") String redirectUrl,HttpServletRequest request) {
+        handleInternal(redirectUrl,request);
         return "login";
+    }
+
+
+    @GetMapping("/reg")
+    public String reg(@Nullable @RequestParam("redirect_url") String redirectUrl,HttpServletRequest request) {
+        handleInternal(redirectUrl, request);
+        return "reg";
     }
 
     /**
@@ -72,7 +84,7 @@ public class AccountController {
             CookieUtils.setCookie(response, Fly.SSO_COOKIE_KEY, result.getData().getToken(), Fly.WEB_TOKEN_EXPIRE);
             return "redirect:" + getRedirectUrl(request, result.getData().getTicket());
         } else {
-            redirect.addFlashAttribute(REDIRECT_TO_ERROR_MSG, result.getMsg());
+            redirect.addFlashAttribute(ERROR_MSG, result.getMsg());
             Object redirectUrl = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE);
             return "redirect:login" + (StringUtils.isEmpty(redirectUrl) ? "" : "?redirect_url=" + EncodeUtils.encodeUrl(redirectUrl.toString()));
         }
