@@ -21,7 +21,11 @@ public enum CountBizType {
     /**
      * 用户关注量
      * */
-    USER_FOLLOW(4,"uf");
+    USER_FOLLOW(4,"uf"),
+    /**
+     * 用户评论量
+     * */
+    USER_COMMENT(5,"uc");
 
     CountBizType(int code,String key) {
         this.code = code;
