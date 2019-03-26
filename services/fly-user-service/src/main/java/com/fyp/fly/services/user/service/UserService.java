@@ -17,6 +17,8 @@ public interface UserService {
      * */
     JsonResult getUserInfo(Long userId);
 
+    /**
+     * 获取用户列表
+     * */
     JsonResult getUserList(List<String> userIds);
-
 }
