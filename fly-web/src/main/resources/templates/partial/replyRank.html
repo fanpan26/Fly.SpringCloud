@@ -1,0 +1,8 @@
+<dl xmlns:th="http://www.w3.org/1999/xhtml">
+    <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
+    <dd th:each="user:${userList}">
+        <a href="user/home.html">
+            <img th:src="${user.avatar}" src=""><cite th:text="${user.name}"></cite><i th:text="${user.count}+'次回答'"></i>
+        </a>
+    </dd>
+</dl>
