@@ -1,9 +1,13 @@
 server:
   port: 9000
-logging:
-  level:
-    spring:
-      thymeleaf: INFO
+spring:
+  application:
+    name: fly-sso
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0
 # 自定义配置
 fly:
   sso:

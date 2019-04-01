@@ -12,6 +12,12 @@ spring:
       username: panzi
       password: 123456
       fail-fast: true
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
 eureka:
   client:
     serviceUrl:
@@ -21,3 +27,6 @@ management:
     web:
       exposure:
         include: '*'
+logging:
+  level:
+    org.springframework.web.servlet.DispatcherServlet: DEBUG

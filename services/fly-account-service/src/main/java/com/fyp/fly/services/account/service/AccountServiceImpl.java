@@ -91,9 +91,9 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtils.newResult(NOT_EXISTS.getCode(), NOT_EXISTS.getMsg());
         }
         String hashedPassword = passwordHashing.hash(loginName,loginPwd);
-        logger.info("生成的密码为："+ hashedPassword);
         if (account.getLoginPwd().equals(hashedPassword)) {
             setUserLoginStatus(account.getId(),true);
+            userClient.getUserById(account.getId());
             return createTicketResult(account.getId());
         }
         return ResultUtils.newResult(WRONG_PASSWORD.getCode(),WRONG_PASSWORD.getMsg());
