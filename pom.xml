@@ -30,7 +30,6 @@
         <module>fly-config</module>
         <module>fly-sso</module>
         <module>services/fly-common-service</module>
-        <module>fly-zipkin</module>
 
     </modules>
 
