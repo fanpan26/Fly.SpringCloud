@@ -7,7 +7,7 @@ management:
         include: '*'
 spring:
   rabbitmq:
-    host: 127.0.0.1
+    host: 192.168.187.129
     port: 5672
     username: panzi
     password: 123456

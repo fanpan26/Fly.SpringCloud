@@ -1,0 +1,30 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: fly-config-server
+  security:
+    user:
+      name: panzi
+      password: 123456
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/fanpan26/spring-cloud-config.git
+          #search-paths: fly-*-service
+          clone-on-start: true
+management:
+  endpoint:
+    health:
+      show-details: always
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://panzi:123456@192.168.187.129:8761/eureka/,http://panzi:123456@192.168.187.130:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    ip-address: 192.168.187.129
+    instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
+    metadata-map:
+      description: config center

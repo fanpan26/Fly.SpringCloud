@@ -1,0 +1,16 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-server
+eureka:
+  instance:
+    hostname: 192.168.187.130
+    prefer-ip-address: true
+    ip-address: 192.168.187.130
+  client:
+    service-url:
+    # server2 注册到server1 上
+      defaultZone: http://panzi:123456@192.168.187.129:8761/eureka/
+    register-with-eureka: true
+    instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
