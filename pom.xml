@@ -21,6 +21,7 @@
         <module>services/fly-article-service</module>
         <module>services/fly-notice-service</module>
         <module>services/fly-comment-service</module>
+        <module>services/fly-common-service</module>
         <module>services/fly-services-parent</module>
         <module>services/fly-services-discovery</module>
         <module>services/fly-base-service</module>
@@ -29,8 +30,6 @@
         <module>fly-common</module>
         <module>fly-config</module>
         <module>fly-sso</module>
-        <module>services/fly-common-service</module>
-
     </modules>
 
     <dependencyManagement>
