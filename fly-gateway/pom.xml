@@ -36,6 +36,7 @@
         <dependency>
             <groupId>com.fyp</groupId>
             <artifactId>fly-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
