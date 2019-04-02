@@ -9,7 +9,7 @@ eureka:
       defaultZone: http://panzi:123456@192.168.187.129:8761/eureka/,http://panzi:123456@192.168.187.130:8761/eureka/
   instance:
     prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id}:${server.port}
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
     metadata-map:
       description: base service
   zipkin:
