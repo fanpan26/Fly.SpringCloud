@@ -22,8 +22,8 @@ public class SsoApplication {
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setReadTimeout(5000);
-        factory.setConnectTimeout(3000);
+        factory.setReadTimeout(1000);
+        factory.setConnectTimeout(2000);
         return factory;
     }
 
