@@ -3,7 +3,7 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id}:${server.port}
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
     metadata-map:
       description: common service ,count service
 spring:
