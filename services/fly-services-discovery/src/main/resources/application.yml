@@ -4,8 +4,8 @@ eureka:
   client:
     healthCheck:
       enabled: true
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://panzi:123456@localhost:${server.port}/eureka
 spring:
