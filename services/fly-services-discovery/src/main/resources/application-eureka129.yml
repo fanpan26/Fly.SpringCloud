@@ -5,12 +5,15 @@ spring:
     name: eureka-server
 eureka:
   instance:
-    hostname: 192.168.187.129
     prefer-ip-address: true
     ip-address: 192.168.187.129
+    hostname: 192.168.187.129
   client:
     service-url:
-    # server1 注册到server2上
       defaultZone: http://panzi:123456@192.168.187.130:8761/eureka/
     register-with-eureka: true
     instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
+    fetch-registry: true
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 5000
