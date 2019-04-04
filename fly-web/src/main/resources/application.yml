@@ -13,17 +13,12 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 1000
-  zipkin:
-    base-url: http://localhost:9411
-  sleuth:
-    sampler:
-      probability: 1.0
   application:
     name: fly-web
 sso:
-  url: http://localhost:9000
+  url: http://192.168.187.129:9000
 gateway:
-  url: http://localhost:9001
+  url: http://192.168.187.129:9001
   services:
     user: fly-user-service
     base: fly-base-service

@@ -4,7 +4,7 @@ spring:
   application:
     name: fly-sso
   zipkin:
-    base-url: http://localhost:9411
+    base-url: http://192.168.187.129:9411/
   sleuth:
     sampler:
       probability: 1.0
@@ -12,7 +12,7 @@ spring:
 fly:
   sso:
     # 网关地址
-    gateway_url: http://localhost:9001/
+    gateway_url: http://192.168.187.129:9001/
     # 跳转地址
     redirect_url:
       fly_web: http://localhost:8089/
