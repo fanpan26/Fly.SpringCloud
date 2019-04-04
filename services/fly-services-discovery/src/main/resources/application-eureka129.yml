@@ -15,5 +15,5 @@ eureka:
     instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
     fetch-registry: true
   server:
-    enable-self-preservation: true
+    enable-self-preservation: false
     eviction-interval-timer-in-ms: 5000
