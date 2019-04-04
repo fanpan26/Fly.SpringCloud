@@ -5,14 +5,13 @@ spring:
     name: eureka-server
 eureka:
   instance:
-    prefer-ip-address: true
-    ip-address: 192.168.187.130
-    hostname: 192.168.187.130
+    prefer-ip-address: false
+    hostname: eureka1
   client:
     service-url:
-      defaultZone: http://panzi:123456@192.168.187.129:8761/eureka/
+      defaultZone: http://panzi:123456@eureka2:8762/eureka/,http://panzi:123456@eureka1:8761/eureka/
     register-with-eureka: true
-    instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
     fetch-registry: true
   server:
     enable-self-preservation: true
