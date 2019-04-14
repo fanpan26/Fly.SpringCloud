@@ -7,19 +7,18 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md8">
                 <div class="fly-panel" style="margin-bottom: 0;">
-
                     <div class="fly-panel-title fly-filter">
-                        <a href="" class="layui-this">综合</a>
+                        <a href="/column/share/" data-status="all">综合</a>
                         <span class="fly-mid"></span>
-                        <a href="">未结</a>
+                        <a href="/column/share/unsolved/" data-status="unsolved">未结</a>
                         <span class="fly-mid"></span>
-                        <a href="">已结</a>
+                        <a href="/column/share/solved/" data-status="solved">已结</a>
                         <span class="fly-mid"></span>
-                        <a href="">精华</a>
+                        <a href="/column/share/wonderful/" data-status="wonderful">精华</a>
                         <span class="fly-filter-right layui-hide-xs">
-            <a href="" class="layui-this">按最新</a>
-            <span class="fly-mid"></span>
-            <a href="">按热议</a>
+            <!--<a href="" class="layui-this">按最新</a>-->
+            <!--<span class="fly-mid"></span>-->
+            <!--<a href="">按热议</a>-->
           </span>
                     </div>
 
@@ -260,51 +259,6 @@
             <div class="layui-col-md4">
                 <dl class="fly-panel fly-list-one">
                     <dt class="fly-panel-title">本周热议</dt>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-                    <dd>
-                        <a href="">基于 layui 的极简社区页面模版</a>
-                        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                    </dd>
-
-                    <!-- 无数据时 -->
-                    <!--
-                    <div class="fly-none">没有相关数据</div>
-                    -->
                 </dl>
 
                 <div class="fly-panel">
@@ -330,6 +284,20 @@
             </div>
         </div>
     </div>
+</div>
+<div layout:fragment="body_script">
+    <script th:inline="javascript">
+        layui.cache.page = 'jie';
+        layui.use('jquery',function () {
+            var $ = layui.jquery;
+            var status = [[${#httpServletRequest.getAttribute('status')}]];
+            var s = $('.fly-filter').find('a[data-status="'+status+'"]');
+            if (!s.length) {
+                s = $('.fly-filter').find('a').eq(0);
+            }
+            s.addClass('layui-this');
+        });
+    </script>
 </div>
 </body>
 </html>

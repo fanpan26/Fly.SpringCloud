@@ -7,12 +7,12 @@ import com.fyp.fly.web.client.base.BaseApiClient;
 import com.fyp.fly.web.client.comment.CommentApiClient;
 import com.fyp.fly.web.controller.biz.BaseController;
 import com.fyp.fly.web.controller.form.ArticleDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -68,14 +68,6 @@ public class JieController extends BaseController{
         } else {
             return "404";
         }
-    }
-
-    /**
-     * 帖子首页
-     */
-    @GetMapping("/index")
-    public String index() {
-        return "/jie/index";
     }
 
     @GetMapping("/comment/{artId}/{authorId}/{pageIndex}")
