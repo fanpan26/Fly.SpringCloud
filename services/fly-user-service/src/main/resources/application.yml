@@ -3,7 +3,8 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    ip-address: ${spring.cloud.client.ip-address}
+    instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
     metadata-map:
       description: user service,base api,account api
 spring:

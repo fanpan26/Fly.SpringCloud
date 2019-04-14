@@ -11,7 +11,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://panzi:123456@192.168.187.129:8761/eureka/,http://panzi:123456@192.168.187.130:8761/eureka/
+      defaultZone: http://panzi:123456@eureka1:8761/eureka/,http://panzi:123456@eureka2:8761/eureka/
   instance:
     prefer-ip-address: true
     ip-address: ${spring.cloud.client.ip-address}

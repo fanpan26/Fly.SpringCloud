@@ -16,9 +16,9 @@ spring:
   application:
     name: fly-web
 sso:
-  url: http://192.168.187.129:9000
+  url: http://localhost:9000
 gateway:
-  url: http://192.168.187.129:9001
+  url: http://localhost:9001
   services:
     user: fly-user-service
     base: fly-base-service

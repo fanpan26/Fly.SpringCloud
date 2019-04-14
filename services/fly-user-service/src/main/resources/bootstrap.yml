@@ -13,7 +13,7 @@ spring:
       password: 123456
       fail-fast: true
   zipkin:
-    base-url: http://192.168.187.129:9411
+    base-url: http://127.0.0.1:9411
     enabled: true
   sleuth:
     sampler:
@@ -21,7 +21,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://panzi:123456@192.168.187.129:8761/eureka/,http://panzi:123456@192.168.187.130:8761/eureka/
+      defaultZone: http://panzi:123456@eureka2:8762/eureka/,http://panzi:123456@eureka1:8761/eureka/
 management:
   endpoints:
     web:

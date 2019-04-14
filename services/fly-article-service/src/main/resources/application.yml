@@ -3,7 +3,8 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    ip-address: ${spring.cloud.client.ip-address}
+    instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${server.port}
     metadata-map:
       description: article service
 spring:
@@ -19,7 +20,7 @@ spring:
     username: ${mysql.username}
     password: ${mysql.password}
   zipkin:
-    base-url: http://192.168.187.129:9411
+    base-url: http://127.0.0.1:9411
   sleuth:
     sampler:
       probability: 1.0
